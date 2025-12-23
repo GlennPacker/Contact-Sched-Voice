@@ -1,0 +1,9 @@
+{
+  "assistant_settings": {
+    "allow_create_todos": false,
+    "allow_create_comments": false,
+    "enforced_by_repo": true,
+    "allow_inline_styles": false,
+    "note": "Per repository policy, assistants must not create or manage TODO lists for this project. Do not call manage_todo_list or create .todo files. Assistants must also not add comments or inline styles to source code or documentation in this repository."
+  }
+}

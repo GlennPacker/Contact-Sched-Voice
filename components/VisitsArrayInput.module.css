@@ -1,0 +1,101 @@
+.visit-note {
+  max-width: 628px;
+}
+.visits-root {
+  box-sizing: border-box;
+  overflow-x: hidden;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.visits-list-scroll {
+  max-height: 350px;
+  max-height: 522px;
+  overflow-y: auto;
+  min-height: 0;
+  flex: none;
+}
+.visit-collapsed-summary {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 8px 0 8px 8px;
+  font-size: 1rem;
+  color: #333;
+}
+.visit-collapsed-date {
+  font-weight: 500;
+}
+.visit-collapsed-recurrence {
+  font-style: italic;
+  color: #666;
+}
+.visit-fields-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.visit-field-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+.visit-label {
+  min-width: 90px;
+  font-weight: 500;
+  text-align: left;
+}
+.visits-caption-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.visits-caption {
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: left;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.visit-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.visit-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.visit-select,
+.visit-date {
+  width: 180px;
+  max-width: 100%;
+}
+
+.visit-days {
+  width: 90px;
+}
+
+.visit-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.visit-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 120px;
+  flex: 1 1 0;
+}
+.visit-note {
+  margin-top: 8px;
+}
