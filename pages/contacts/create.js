@@ -1,8 +1,8 @@
-import { useRouter } from 'next/router'
-import Link from 'next/link'
+import Contact from '../../components/Contact/Contact'
 import { Container } from 'react-bootstrap'
-import Contact from '../../components/Contact'
+import Link from 'next/link'
 import { addContact } from '../../lib/contactService'
+import { useRouter } from 'next/router'
 
 export default function NewContactPage() {
   const router = useRouter()

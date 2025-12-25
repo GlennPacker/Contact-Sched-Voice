@@ -1,7 +1,7 @@
-
+import { Button, Form } from 'react-bootstrap';
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import Visits from './Visits';
+
+import Visits from '../Visit/Visits';
 import styles from './Addresses.module.scss';
 import { useWatch } from 'react-hook-form';
 

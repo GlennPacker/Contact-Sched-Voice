@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
-import { contactCreateAppointment } from '../lib/calendarService';
-import styles from '../pages/contacts/CreateContact.module.scss';
-import { Form, Button, Alert, Spinner } from 'react-bootstrap'
-import Addresses from './Addresses'
-import { useForm, useFieldArray, useWatch } from 'react-hook-form'
+import { Alert, Button, Form, Spinner } from 'react-bootstrap'
+import { useEffect, useState } from 'react'
+import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 
+import Addresses from '../Address/Addresses'
+import { contactCreateAppointment } from '../../lib/calendarService';
+import styles from '../../pages/contacts/CreateContact.module.scss';
 
 export default function Contact({ initialValues = null, onSubmit, priceReviewDateReadOnly = false }) {
   const defaultPriceReviewDate = (() => {
