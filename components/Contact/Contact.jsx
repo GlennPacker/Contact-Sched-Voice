@@ -14,10 +14,11 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
   })()
 
   const envRates = {
-    fullDay: Number(process.env.NEXT_PUBLIC_RATE_FULL_DAY ?? 0),
-    halfDay: Number(process.env.NEXT_PUBLIC_RATE_HALF_DAY ?? 0),
-    twoHour: Number(process.env.NEXT_PUBLIC_RATE_TWO_HOUR ?? 0),
-    hour: Number(process.env.NEXT_PUBLIC_RATE_HOUR ?? 0),
+    rateFullDay: +(process.env.NEXT_PUBLIC_RATE_FULL_DAY ?? 0),
+    rateHalfDay: +(process.env.NEXT_PUBLIC_RATE_HALF_DAY ?? 0),
+    rateTwoHour: +(process.env.NEXT_PUBLIC_RATE_TWO_HOUR ?? 0),
+    rateHour: +(process.env.NEXT_PUBLIC_RATE_HOUR ?? 0),
+    rateJob: +(process.env.NEXT_PUBLIC_RATE_JOB ?? 0),
   }
 
   function sortVisitsDescending(addresses) {
@@ -44,7 +45,11 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
     : {
         priceReviewDate: defaultPriceReviewDate,
         addresses: [{ address: '' }],
-        rates: { ...envRates }
+        rateFullDay: envRates.rateFullDay,
+        rateHalfDay: envRates.rateHalfDay,
+        rateTwoHour: envRates.rateTwoHour,
+        rateHour: envRates.rateHour,
+        rateJob: envRates.rateJob,
       };
 
   const {
@@ -56,8 +61,9 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
     control,
     formState: { errors, isSubmitting },
   } = useForm({ defaultValues: defaultFormValues })
-  const halfDay = watch('rates.halfDay')
-  const twoHour = watch('rates.twoHour')
+  const priceReviewDateValue = watch('priceReviewDate')
+  const halfDay = watch('rateHalfDay')
+  const twoHour = watch('rateTwoHour')
   const watchedForm = useWatch({ control });
 
   const fullDayBlur = (e) => {
@@ -65,13 +71,13 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
     if(!val) return;
 
     const calcHalf = Math.ceil((val + 10) / 2 / 10) * 10;
-    if (halfDay === envRates.halfDay) {
-        setValue('rates.halfDay', calcHalf, { shouldValidate: true, shouldDirty: true });
+    if (halfDay === envRates.rateHalfDay) {
+      setValue('rateHalfDay', calcHalf, { shouldValidate: true, shouldDirty: true });
     }
 
-    if(twoHour === envRates.twoHour) {
-        const calc = Math.ceil((calcHalf + 10) / 2 / 10) * 10;
-        setValue('rates.twoHour', calc, { shouldValidate: true, shouldDirty: true });
+    if(twoHour === envRates.rateTwoHour) {
+      const calc = Math.ceil((calcHalf + 10) / 2 / 10) * 10;
+      setValue('rateTwoHour', calc, { shouldValidate: true, shouldDirty: true });
     }
   };
 
@@ -89,7 +95,7 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
   const CONTACT_TYPE_OPTIONS = [
     { id: 'facebookGlenn', label: 'Facebook (Glenn)' },
     { id: 'faceBookHandyman', label: 'Facebook (Handyman)' },
-    { id: 'Whatsapp', label: 'WhatsApp' },
+    { id: 'whatsapp', label: 'WhatsApp' },
     { id: 'email', label: 'Email' },
   ]
 
@@ -111,8 +117,13 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
       const payload = {
         name: formData.name,
         contactTypes: contactTypesArray,
-        rates: formData.rates || {},
+        rateFullDay: formData.rateFullDay,
+        rateHalfDay: formData.rateHalfDay,
+        rateTwoHour: formData.rateTwoHour,
+        rateHour: formData.rateHour,
+        rateJob: formData.rateJob,
         priceReviewDate: formData.priceReviewDate,
+        addresses: formData.addresses || [],
       }
 
       const result = await onSubmit(payload)
@@ -189,8 +200,8 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
               <div className="form-field-row">
                 <Form.Label className="small form-field-label">Full day</Form.Label>
                 <div className="form-field-control">
-                  <Form.Control type="number" step="0.01" {...register('rates.fullDay', { valueAsNumber: true })} placeholder="Full day rate" onBlur={fullDayBlur} />
-                  {errors?.rates?.fullDay && <Form.Text className="text-danger">{errors.rates.fullDay.message}</Form.Text>}
+                  <Form.Control type="number" step="0.01" {...register('rateFullDay', { valueAsNumber: true })} placeholder="Full day rate" onBlur={fullDayBlur} />
+                  {errors?.rateFullDay && <Form.Text className="text-danger">{errors.rateFullDay.message}</Form.Text>}
                 </div>
               </div>
             </Form.Group>
@@ -198,8 +209,8 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
               <div className="form-field-row">
                 <Form.Label className="small form-field-label">Half day</Form.Label>
                 <div className="form-field-control">
-                  <Form.Control type="number" {...register('rates.halfDay', { valueAsNumber: true })} placeholder="Half day rate" />
-                  {errors?.rates?.halfDay && <Form.Text className="text-danger">{errors.rates.halfDay.message}</Form.Text>}
+                  <Form.Control type="number" {...register('rateHalfDay', { valueAsNumber: true })} placeholder="Half day rate" />
+                  {errors?.rateHalfDay && <Form.Text className="text-danger">{errors.rateHalfDay.message}</Form.Text>}
                 </div>
               </div>
             </Form.Group>
@@ -207,8 +218,8 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
               <div className="form-field-row">
                 <Form.Label className="small form-field-label">2 hour</Form.Label>
                 <div className="form-field-control">
-                  <Form.Control type="number" {...register('rates.twoHour', { valueAsNumber: true })} placeholder="2 hour rate" />
-                  {errors?.rates?.twoHour && <Form.Text className="text-danger">{errors.rates.twoHour.message}</Form.Text>}
+                  <Form.Control type="number" {...register('rateTwoHour', { valueAsNumber: true })} placeholder="2 hour rate" />
+                  {errors?.rateTwoHour && <Form.Text className="text-danger">{errors.rateTwoHour.message}</Form.Text>}
                 </div>
               </div>
             </Form.Group>
@@ -216,7 +227,7 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
               <div className="form-field-row">
                 <Form.Label className="small form-field-label">Hour</Form.Label>
                 <div className="form-field-control">
-                  <Form.Control type="number" {...register('rates.hour', { valueAsNumber: true })} placeholder="Hourly rate" />
+                  <Form.Control type="number" {...register('rateHour', { valueAsNumber: true })} placeholder="Hourly rate" />
                 </div>
               </div>
             </Form.Group>
@@ -224,21 +235,24 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
               <div className="form-field-row">
                 <Form.Label className="small form-field-label">Job</Form.Label>
                 <div className="form-field-control">
-                  <Form.Control type="number" {...register('rates.job', { valueAsNumber: true })} placeholder="Per job rate" />
+                  <Form.Control type="number" {...register('rateJob', { valueAsNumber: true })} placeholder="Per job rate" />
                 </div>
               </div>
             </Form.Group>
           </Form.Group>
           <Form.Group className="mb-2">
             <div className="form-field-row">
-              <Form.Label className={ `small form-field-label ${priceReviewDateReadOnly ? `u-label-readonly`: ``}`}>Review *</Form.Label>
+              <Form.Label className={ `small form-field-label ${priceReviewDateReadOnly ? `u-label-readonly`: ``}`}>{priceReviewDateReadOnly ? 'Review' : 'Review *'}</Form.Label>
               <div className="form-field-control">
-                <Form.Control
-                  type="date"
-                  readOnly={priceReviewDateReadOnly}
-                  className={`${styles['review-date-input']}${priceReviewDateReadOnly ? ' u-input-readonly' : ''}`}
-                  {...register('priceReviewDate')}
-                />
+                {priceReviewDateReadOnly ? (
+                  <div className={`${styles['review-date-input']} u-input-readonly`}>{priceReviewDateValue}</div>
+                ) : (
+                  <Form.Control
+                    type="date"
+                    className={styles['review-date-input']}
+                    {...register('priceReviewDate')}
+                  />
+                )}
               </div>
             </div>
           </Form.Group>
