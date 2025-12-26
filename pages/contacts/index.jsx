@@ -1,5 +1,8 @@
-import React from 'react'
-import { Table, Alert } from 'react-bootstrap'
+import React, { useState } from 'react'
+import styles from './index.module.scss'
+import { Alert, Button, ButtonGroup } from 'react-bootstrap'
+import Contacts from '../../components/Contacts/Contacts'
+import ContactFilter from '../../components/Contacts/filter/ContactFilter'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { listContacts } from '../../lib/contactService'
@@ -7,49 +10,35 @@ import { listContacts } from '../../lib/contactService'
 export default function ContactsPage({ contacts = [], error = null }) {
   const router = useRouter()
   const navigateToEdit = (id) => router.push(`/contacts/${id}/edit`)
+  const [showFilter, setShowFilter] = useState(false)
 
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1>Contacts</h1>
-        <Link href="/contacts/create">Create contact</Link>
+        <div>
+          <ButtonGroup aria-label="contacts-actions">
+            <Button
+              variant="secondary"
+              size="sm"
+              aria-expanded={showFilter}
+              onClick={() => setShowFilter((s) => !s)}
+            >
+              Search
+            </Button>
+            &nbsp;
+            <Link href="/contacts/create" passHref>
+              <Button variant="secondary" size="sm">Create</Button>
+            </Link>
+          </ButtonGroup>
+        </div>
       </div>
 
-      {error ? (
-        <Alert variant="danger">{error}</Alert>
-      ) : (
-        <Table striped bordered hover responsive>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Addresses</th>
-            </tr>
-          </thead>
-          <tbody>
-            {contacts.map((c) => (
-              <tr
-                key={c.id}
-                role="button"
-                tabIndex={0}
-                onClick={() => navigateToEdit(c.id)}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigateToEdit(c.id) }}
-                style={{ cursor: 'pointer' }}
-              >
-                <td>{c.name}</td>
-                <td>
-                  {c.addresses && c.addresses.length ? (
-                    c.addresses.map((a, i) => (
-                      <div key={i}>{a.address}</div>
-                    ))
-                  ) : (
-                    <span className="text-muted">No addresses</span>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      )}
+      <div className={`${styles.filterCollapse} ${showFilter ? styles.filterCollapseOpen : ''}`}>
+        <ContactFilter />
+      </div>
+
+      <Contacts contacts={contacts} error={error} onActivate={navigateToEdit} />
     </>
   )
 }

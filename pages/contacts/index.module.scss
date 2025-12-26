@@ -1,0 +1,10 @@
+.filterCollapse {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 320ms ease, opacity 220ms ease;
+}
+.filterCollapseOpen {
+  max-height: 240px;
+  opacity: 1;
+}
