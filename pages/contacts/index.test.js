@@ -35,7 +35,7 @@ describe('Contacts page', () => {
         render(<ContactsPage {...props} />)
 
         expect(screen.getByText('Contacts')).toBeInTheDocument()
-        // avoid assuming a table role — check rendered contact content instead
+        // avoid assuming a table role — check rendered contact content instead 
         expect(screen.getByText('Alice')).toBeInTheDocument()
         expect(screen.getByText('123 Main St')).toBeInTheDocument()
         expect(screen.getByText('Bob')).toBeInTheDocument()
