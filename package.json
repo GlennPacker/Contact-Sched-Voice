@@ -9,9 +9,6 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest --coverage --runInBand",
-    "remove-comments": "node scripts/remove-comments.js",
-    "setup-githooks": "git config core.hooksPath .githooks",
-    "prepare": "git config core.hooksPath .githooks || true"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.89.0",
