@@ -2,13 +2,20 @@ import React, { useState } from 'react'
 import { Form, Row, Col, Button } from 'react-bootstrap'
 import styles from './ContactSearch.module.scss'
 
-export default function ContactSearch({ search }) {
+export default function ContactSearch({ search, reset }) {
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
 
     const submit = (e) => {
         e.preventDefault()
         if (search) search({ name, address })
+    }
+
+    const clear = (e) => {
+        e.preventDefault()
+        setName('')
+        setAddress('')
+        if (reset) reset()
     }
 
     return (
@@ -41,6 +48,7 @@ export default function ContactSearch({ search }) {
 
                     <Col xs={12} md={2} className={styles.applyCol}>
                         <Button type="submit" variant="primary" size="sm">Search</Button>
+                        <Button variant="outline-secondary" size="sm" className="ms-2" onClick={clear}>Clear</Button>
                     </Col>
                 </Row>
             </Form>

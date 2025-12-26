@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import styles from '../../components/Contacts/Contacts.module.scss'
+import styles from './index.module.scss'
 import { Alert, Button, ButtonGroup } from 'react-bootstrap'
 import Contacts from '../../components/Contacts/Contacts'
 import ContactSearch from '../../components/Contacts/ContactSearch'
@@ -22,6 +22,10 @@ export default function ContactsPage({ contacts = [], error = null }) {
     } catch (err) {
       console.error(err)
     }
+  }
+
+  const resetSearch = () => {
+    setDisplayedContacts(Array.isArray(contacts) ? contacts : [])
   }
 
   return (
@@ -47,7 +51,7 @@ export default function ContactsPage({ contacts = [], error = null }) {
       </div>
 
       <div className={`${styles.filterCollapse} ${showSearch ? styles.filterCollapseOpen : ''}`}>
-        <ContactSearch search={search} />
+        <ContactSearch search={search} reset={resetSearch} />
       </div>
 
       <Contacts contacts={displayedContacts} error={error} onActivate={navigateToEdit} />
