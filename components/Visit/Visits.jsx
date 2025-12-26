@@ -12,6 +12,9 @@ export default function Visits({ nestIndex, control, register, errors, createCal
   const [calendarError, setCalendarError] = useState({});
   const watchedVisits = useWatch({ control, name: `addresses.${nestIndex}.visits` });
   const [collapsed, setCollapsed] = React.useState(fields.map(() => true));
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDateStr = tomorrow.toISOString().split('T')[0];
   React.useEffect(() => {
     if (!fields.length) {
       add({ date: '', note: '' });
@@ -31,7 +34,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
   };
   const addVisit = () => {
     let newVisit = { date: '' };
-    if (fields.length > 0) {
+    if (fields.length) {
       const sorted = [...fields].sort((a, b) => {
         if (!a.date && !b.date) return 0;
         if (!a.date) return 1;
@@ -39,14 +42,15 @@ export default function Visits({ nestIndex, control, register, errors, createCal
         return b.date.localeCompare(a.date);
       });
       const mostRecent = sorted[0] || {};
-      newVisit = {
-        date: '',
-        note: mostRecent.note || '',
-        recurrence: mostRecent.recurrence || 'does not reoccur',
-        time: mostRecent.time || '',
-        days: mostRecent.days || '',
-        isInside: mostRecent.isInside || false
-      };
+        newVisit = {
+          date: '',
+          days: mostRecent.days || '',
+          isFlexilbe: mostRecent.isFlexilbe || false,
+          isInside: mostRecent.isInside || false,
+          note: mostRecent.note || '',
+          recurrence: mostRecent.recurrence || 'does not reoccur',
+          time: mostRecent.time || ''
+        };
     }
     add(newVisit, { at: 0 });
     setTimeout(() => {
@@ -91,6 +95,16 @@ export default function Visits({ nestIndex, control, register, errors, createCal
                         {...register(`addresses.${nestIndex}.visits.${idx}.date`)}
                         className={styles['visit-date']}
                         value={watched.date || ''}
+                        min={minDateStr}
+                      />
+                    </Form.Group>
+                    <Form.Group className={styles['visit-field-row']}>
+                      <Form.Label className={styles['visit-label']}>Flexible Dates</Form.Label>
+                      <Form.Check
+                        type="checkbox"
+                        {...register(`addresses.${nestIndex}.visits.${idx}.isFlexilbe`)}
+                        className={styles['visit-isFlexible']}
+                        checked={!!watched.isFlexilbe}
                       />
                     </Form.Group>
                     <Form.Group className={styles['visit-field-row']}>

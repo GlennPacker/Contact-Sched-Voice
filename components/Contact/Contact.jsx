@@ -154,7 +154,7 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
             <Form.Label className={styles['section-title']}>Contact types *</Form.Label>
             {CONTACT_TYPE_OPTIONS.map((opt) => {
               const isEmail = opt.id === 'email'
-              const isWhatsapp = opt.id === 'Whatsapp'
+              const isWhatsapp = opt.id === 'whatsapp'
               const isSelected = Boolean(watchedTypes[opt.id]?.selected)
               return (
                 <div key={opt.id} className="mb-3">
