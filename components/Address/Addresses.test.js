@@ -2,10 +2,13 @@
 import React from 'react'
 import { render, screen, fireEvent, cleanup } from '@testing-library/react'
 
-jest.mock('./Address.jsx', () => ({
-    __esModule: true,
-    default: (props) => React.createElement('div', { 'data-testid': 'mock-address' }, `ADDR-${props.idx}`)
-}))
+jest.mock('./Address.jsx', () => {
+    const React = require('react')
+    return {
+        __esModule: true,
+        default: (props) => React.createElement('div', { 'data-testid': 'mock-address' }, `ADDR-${props.idx}`)
+    }
+})
 
 import Addresses from './Addresses.jsx'
 

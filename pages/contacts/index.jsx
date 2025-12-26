@@ -1,9 +1,9 @@
 import React from 'react'
-import { Table } from 'react-bootstrap'
+import { Table, Alert } from 'react-bootstrap'
 import Link from 'next/link'
-import { supabase } from '../../lib/supabaseClient'
+import { listContacts } from '../../lib/contactService'
 
-export default function ContactsPage({ contacts }) {
+export default function ContactsPage({ contacts = [], error = null }) {
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -11,45 +11,44 @@ export default function ContactsPage({ contacts }) {
         <Link href="/contacts/create">Create contact</Link>
       </div>
 
-      <Table striped bordered hover responsive>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Addresses</th>
-          </tr>
-        </thead>
-        <tbody>
-          {contacts.map((c) => (
-            <tr key={c.id}>
-              <td>{c.name}</td>
-              <td>
-                {c.addresses && c.addresses.length > 0 ? (
-                  c.addresses.map((a, i) => (
-                    <div key={i}>{a.address}</div>
-                  ))
-                ) : (
-                  <span className="text-muted">No addresses</span>
-                )}
-              </td>
+      {error ? (
+        <Alert variant="danger">{error}</Alert>
+      ) : (
+        <Table striped bordered hover responsive>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Addresses</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {contacts.map((c) => (
+              <tr key={c.id}>
+                <td>{c.name}</td>
+                <td>
+                  {c.addresses && c.addresses.length ? (
+                    c.addresses.map((a, i) => (
+                      <div key={i}>{a.address}</div>
+                    ))
+                  ) : (
+                    <span className="text-muted">No addresses</span>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
     </>
   )
 }
 
 export async function getServerSideProps() {
-  const { data, error } = await supabase
-    .from('contacts')
-    .select('id, name, addresses(address)')
-    .order('id', { ascending: false })
-    .limit(25)
-
-  if (error) {
-    console.error('Error fetching contacts:', error)
-    return { props: { contacts: [] } }
+  try {
+    const data = await listContacts()
+    return { props: { contacts: data, error: null } }
+  } catch (err) {
+    return { props: { contacts: null, error: err && err.message ? err.message : 'Server error' } }
   }
-
-  return { props: { contacts: data || [] } }
 }
+

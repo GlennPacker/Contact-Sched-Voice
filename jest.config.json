@@ -1,9 +1,15 @@
 {
-  "testEnvironment": "node",
+  "testEnvironment": "jsdom",
   "transform": {
-    "^.+\\.js$": "babel-jest"
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
   },
   "moduleFileExtensions": ["js", "json", "jsx", "ts", "tsx", "node"],
+  "moduleNameMapper": {
+     "\\.module\\.(css|scss)$": "<rootDir>/jest/styleMock.js",
+     "\\.(css|less|sass|scss)$": "<rootDir>/jest/styleMock.js",
+     "\\.(gif|ttf|eot|svg|png)$": "<rootDir>/jest/fileMock.js"
+  },
+  "setupFilesAfterEnv": ["<rootDir>/jest/setupTests.js"],
   "globals": {},
   "preset": null
 }
