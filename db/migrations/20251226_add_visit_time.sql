@@ -1,0 +1,9 @@
+-- Up
+BEGIN;
+ALTER TABLE visits ADD COLUMN "time" TEXT;
+COMMIT;
+
+-- Down
+BEGIN;
+ALTER TABLE visits DROP COLUMN IF EXISTS "time";
+COMMIT;
