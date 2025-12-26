@@ -2,7 +2,11 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 
-import ContactsPage, { getContacts as getServerSideProps } from './index'
+import ContactsPage, { getServerSideProps } from './index'
+
+jest.mock('next/router', () => ({
+    useRouter: () => ({ push: jest.fn() }),
+}))
 
 jest.mock('../../lib/contactService', () => ({
     listContacts: jest.fn(),

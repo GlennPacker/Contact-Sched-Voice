@@ -5,15 +5,14 @@ import { useRouter } from 'next/router'
 
 export default function NewContactPage() {
   const router = useRouter()
-
-  const handleCreate = async (contact) => {
+  const createContact = async (contact) => {
     return await addContact(contact)
   }
   return (
     <div>
       <h1>Create Contact</h1>
 
-      <Contact onSubmit={handleCreate} priceReviewDateReadOnly={true} />
+      <Contact onSubmit={createContact} priceReviewDateReadOnly={true} />
     </div>
   )
 }

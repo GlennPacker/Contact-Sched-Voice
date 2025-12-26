@@ -66,3 +66,14 @@ If anything here is unclear or you want me to expand sections (e.g., add quick c
   - If a requested change would conflict with these policies, explain the conflict briefly and propose an alternative that complies.
 
 These policy references are intentionally brief — ask if you want the exact policy snippets copied into this file for offline reference.
+
+**Navigation helpers**
+
+- Purpose: centralize navigation logic and naming so UIs use consistent helpers instead of duplicating `router.push` calls.
+- Naming convention: use `navigateTo<Destination>` for shared helpers (camelCase function with PascalCase destination), e.g. `navigateToEdit(contactId)` or `navigateToCreateContact()`.
+
+
+- Usage: prefer calling the helper from event handlers in components/pages. For pages that have access to `useRouter()`, pass the `router` instance or wrap helpers in small hooks (e.g., `useNavigate()`), whichever fits the change scope.
+- When to create helpers: make a helper when a navigation pattern is used in 2+ places or when the route string contains templated params.
+
+If you plan to use navigation helpers in edits I make, I'll create `lib/navigation.js` and update callers to use `navigateToEdit` as part of the same change; otherwise I'll prefer explicit `router.push` in small, one-off edits.

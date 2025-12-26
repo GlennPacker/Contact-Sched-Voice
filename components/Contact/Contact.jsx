@@ -6,7 +6,7 @@ import Addresses from '../Address/Addresses'
 import { contactCreateAppointment } from '../../lib/calendarService';
 import styles from '../../pages/contacts/CreateContact.module.scss';
 
-export default function Contact({ initialValues = null, onSubmit, priceReviewDateReadOnly = false }) {
+export default function Contact({ initialValues = null, submit, priceReviewDateReadOnly = false }) {
   const defaultPriceReviewDate = (() => {
     const today = new Date()
     const sixMonths = new Date(today.setMonth(today.getMonth() + 6))
@@ -39,18 +39,18 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
 
   const defaultFormValues = initialValues
     ? {
-        ...initialValues,
-        addresses: sortVisitsDescending(initialValues.addresses)
-      }
+      ...initialValues,
+      addresses: sortVisitsDescending(initialValues.addresses)
+    }
     : {
-        priceReviewDate: defaultPriceReviewDate,
-        addresses: [{ address: '' }],
-        rateFullDay: envRates.rateFullDay,
-        rateHalfDay: envRates.rateHalfDay,
-        rateTwoHour: envRates.rateTwoHour,
-        rateHour: envRates.rateHour,
-        rateJob: envRates.rateJob,
-      };
+      priceReviewDate: defaultPriceReviewDate,
+      addresses: [{ address: '' }],
+      rateFullDay: envRates.rateFullDay,
+      rateHalfDay: envRates.rateHalfDay,
+      rateTwoHour: envRates.rateTwoHour,
+      rateHour: envRates.rateHour,
+      rateJob: envRates.rateJob,
+    };
 
   const {
     register,
@@ -68,14 +68,14 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
 
   const fullDayBlur = (e) => {
     const val = Number(e.target.value);
-    if(!val) return;
+    if (!val) return;
 
     const calcHalf = Math.ceil((val + 10) / 2 / 10) * 10;
     if (halfDay === envRates.rateHalfDay) {
       setValue('rateHalfDay', calcHalf, { shouldValidate: true, shouldDirty: true });
     }
 
-    if(twoHour === envRates.rateTwoHour) {
+    if (twoHour === envRates.rateTwoHour) {
       const calc = Math.ceil((calcHalf + 10) / 2 / 10) * 10;
       setValue('rateTwoHour', calc, { shouldValidate: true, shouldDirty: true });
     }
@@ -126,7 +126,7 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
         addresses: formData.addresses || [],
       }
 
-      const result = await onSubmit(payload)
+      const result = await submit(payload)
 
       if (result?.error) {
         setError(result.error.message || 'Failed to save')
@@ -242,7 +242,7 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
           </Form.Group>
           <Form.Group className="mb-2">
             <div className="form-field-row">
-              <Form.Label className={ `small form-field-label ${priceReviewDateReadOnly ? `u-label-readonly`: ``}`}>{priceReviewDateReadOnly ? 'Review' : 'Review *'}</Form.Label>
+              <Form.Label className={`small form-field-label ${priceReviewDateReadOnly ? `u-label-readonly` : ``}`}>{priceReviewDateReadOnly ? 'Review' : 'Review *'}</Form.Label>
               <div className="form-field-control">
                 {priceReviewDateReadOnly ? (
                   <div className={`${styles['review-date-input']} u-input-readonly`}>{priceReviewDateValue}</div>
@@ -258,17 +258,17 @@ export default function Contact({ initialValues = null, onSubmit, priceReviewDat
           </Form.Group>
         </div>
         <div className="form-grid__col2">
-            <Addresses
-              addressFields={addressFields}
-              register={register}
-              removeAddress={removeAddress}
-              appendAddress={addAddress}
-              errors={errors}
-              control={control}
-              watchedForm={watchedForm}
-              contactName={watchedForm?.name || ''}
-              onCalendarInvite={({ contactName, visit, address }) => contactCreateAppointment({ contactName, visit, address })}
-            />
+          <Addresses
+            addressFields={addressFields}
+            register={register}
+            removeAddress={removeAddress}
+            appendAddress={addAddress}
+            errors={errors}
+            control={control}
+            watchedForm={watchedForm}
+            contactName={watchedForm?.name || ''}
+            onCalendarInvite={({ contactName, visit, address }) => contactCreateAppointment({ contactName, visit, address })}
+          />
         </div>
         <div className="form-grid__actions">
           <Button type="submit" disabled={isSubmitting} variant="primary">

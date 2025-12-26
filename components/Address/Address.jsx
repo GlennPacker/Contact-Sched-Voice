@@ -12,7 +12,7 @@ export default function Address({ field, idx, register, errors, removeAddress, t
 
   const toggleExpand = () => setExpanded(prev => !prev);
 
-  function handleCreateCalendarInvite(visit) {
+  function createCalendarInviteForVisit(visit) {
     const calendarData = {
       contactName,
       visit,
@@ -82,7 +82,7 @@ export default function Address({ field, idx, register, errors, removeAddress, t
           control={control}
           register={register}
           errors={errors}
-          createCalendarInvite={(visit) => handleCreateCalendarInvite(visit)}
+          createCalendarInvite={(visit) => createCalendarInviteForVisit(visit)}
         />
       )}
     </div>
