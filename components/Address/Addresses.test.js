@@ -1,11 +1,7 @@
-/**
- * @jest-environment jsdom
- */
 
 import React from 'react'
 import { render, screen, fireEvent, cleanup } from '@testing-library/react'
 
-// Mock the Address child so tests focus on Addresses behavior
 jest.mock('./Address.jsx', () => ({
     __esModule: true,
     default: (props) => React.createElement('div', { 'data-testid': 'mock-address' }, `ADDR-${props.idx}`)

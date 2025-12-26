@@ -40,7 +40,6 @@ export default function ContactsPage({ contacts }) {
 }
 
 export async function getServerSideProps() {
-    // Fetch top 25 contacts with their addresses
     const { data, error } = await supabase
         .from('contacts')
         .select('id, name, addresses(address)')
