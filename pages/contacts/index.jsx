@@ -1,16 +1,28 @@
-import React, { useState } from 'react'
-import styles from './index.module.scss'
+import React, { useState, useMemo } from 'react'
+import styles from '../../components/Contacts/Contacts.module.scss'
 import { Alert, Button, ButtonGroup } from 'react-bootstrap'
 import Contacts from '../../components/Contacts/Contacts'
-import ContactFilter from '../../components/Contacts/filter/ContactFilter'
+import ContactSearch from '../../components/Contacts/ContactSearch'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { listContacts } from '../../lib/contactService'
+import { listContacts, searchContacts } from '../../lib/contactService'
 
 export default function ContactsPage({ contacts = [], error = null }) {
   const router = useRouter()
   const navigateToEdit = (id) => router.push(`/contacts/${id}/edit`)
-  const [showFilter, setShowFilter] = useState(false)
+  const [showSearch, setShowSearch] = useState(false)
+  const [displayedContacts, setDisplayedContacts] = useState(Array.isArray(contacts) ? contacts : [])
+
+  React.useEffect(() => setDisplayedContacts(Array.isArray(contacts) ? contacts : []), [contacts])
+
+  const search = async ({ name, address }) => {
+    try {
+      const data = await searchContacts({ name, address })
+      setDisplayedContacts(Array.isArray(data) ? data : [])
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
   return (
     <>
@@ -21,8 +33,8 @@ export default function ContactsPage({ contacts = [], error = null }) {
             <Button
               variant="secondary"
               size="sm"
-              aria-expanded={showFilter}
-              onClick={() => setShowFilter((s) => !s)}
+              aria-expanded={showSearch}
+              onClick={() => setShowSearch((s) => !s)}
             >
               Search
             </Button>
@@ -34,11 +46,11 @@ export default function ContactsPage({ contacts = [], error = null }) {
         </div>
       </div>
 
-      <div className={`${styles.filterCollapse} ${showFilter ? styles.filterCollapseOpen : ''}`}>
-        <ContactFilter />
+      <div className={`${styles.filterCollapse} ${showSearch ? styles.filterCollapseOpen : ''}`}>
+        <ContactSearch search={search} />
       </div>
 
-      <Contacts contacts={contacts} error={error} onActivate={navigateToEdit} />
+      <Contacts contacts={displayedContacts} error={error} onActivate={navigateToEdit} />
     </>
   )
 }
