@@ -1,8 +1,9 @@
-import React from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
 import '@testing-library/jest-dom'
 
 import ContactsPage, { getServerSideProps } from './index'
+import { fireEvent, render, screen } from '@testing-library/react'
+
+import React from 'react'
 
 jest.mock('next/router', () => ({
     useRouter: () => ({ push: jest.fn() }),
@@ -35,7 +36,6 @@ describe('Contacts page', () => {
         render(<ContactsPage {...props} />)
 
         expect(screen.getByText('Contacts')).toBeInTheDocument()
-        // avoid assuming a table role — check rendered contact content instead 
         expect(screen.getByText('Alice')).toBeInTheDocument()
         expect(screen.getByText('123 Main St')).toBeInTheDocument()
         expect(screen.getByText('Bob')).toBeInTheDocument()
@@ -53,7 +53,6 @@ describe('Contacts page', () => {
         render(<ContactsPage {...props} />)
 
         expect(screen.getByText('DB failure')).toBeInTheDocument()
-        // no strict table check here either
         expect(screen.queryByText('Alice')).toBeNull()
     })
 })

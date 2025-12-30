@@ -1,8 +1,3 @@
--- Migration: Initial camelCase schema for a fresh database
--- Creates contacts, addresses and visits tables using camelCase column names.
--- This migration assumes a brand-new database (no DROP statements).
-
--- Contacts table (camelCase column names are quoted to preserve case)
 CREATE TABLE "contacts" (
   "id" serial PRIMARY KEY,
   "name" text NOT NULL,
@@ -18,14 +13,12 @@ CREATE TABLE "contacts" (
   "priceReviewDate" date
 );
 
--- Addresses table
 CREATE TABLE "addresses" (
   "id" serial PRIMARY KEY,
   "contactId" integer NOT NULL REFERENCES "contacts"("id") ON DELETE CASCADE,
   "address" text
 );
 
--- Visits table
 CREATE TABLE "visits" (
   "id" serial PRIMARY KEY,
   "addressId" integer NOT NULL REFERENCES "addresses"("id") ON DELETE CASCADE,
@@ -34,8 +27,5 @@ CREATE TABLE "visits" (
   "isInside" boolean DEFAULT false
 );
 
--- Indexes for efficient lookups
 CREATE INDEX IF NOT EXISTS idx_addresses_contactId ON "addresses" ("contactId");
 CREATE INDEX IF NOT EXISTS idx_visits_addressId ON "visits" ("addressId");
-
--- End of migration

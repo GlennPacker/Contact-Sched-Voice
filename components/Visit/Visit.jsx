@@ -17,33 +17,63 @@ export default function Visit({
   minDateStr,
   styles,
 }) {
-  const calendarUrl = createCalendarInvite && watched.date && watched.time ? createCalendarInvite(watched) : '';
+  const calendarUrl = createCalendarInvite && watched.visitDate && watched.time ? createCalendarInvite(watched) : '';
   const showCalendarError = calendarError[idx];
 
   return (
     <div key={field.id} className={`mb-3 ${styles['visit-fields']}`}>
       {collapsed ? (
-        <div className={styles['visit-collapsed-summary']}>
+        <div
+          className={styles['visit-collapsed-summary']}
+          onClick={() => toggleCollapse(idx)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggleCollapse(idx);
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          style={{ cursor: 'pointer' }}
+        >
           <div>
-            <span className={styles['visit-collapsed-date']}>{watched.date || 'No date'}</span>
-            <span className={styles['visit-collapsed-recurrence']}> {watched.recurrence ? `· ${watched.recurrence}` : ''}</span>
-            <div style={{ fontSize: '0.9rem', color: '#444' }}>{watched.note ? watched.note.substring(0, 80) : ''}</div>
+            <span className={styles['visit-collapsed-date']}>{watched.visitDate || 'No date'}</span>
+            <span className={styles['visit-collapsed-recurrence']}> {watched.recurrence && watched.recurrence !== 'does not reoccur' ? `· ${watched.recurrence}` : ''}</span>
+            <div style={{ fontSize: '0.9rem', color: '#444' }}>{watched.notes ? watched.notes.substring(0, 80) : ''}</div>
           </div>
           <div>
-            <Button variant="outline-secondary" size="sm" onClick={() => toggleCollapse(idx)} tabIndex={-1} className="me-2">Open</Button>
-            <Button variant="danger" size="sm" onClick={() => remove(idx)} tabIndex={-1} aria-label={`Remove visit ${idx + 1}`}>Remove</Button>
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                remove(idx);
+              }}
+              tabIndex={-1}
+              aria-label={`Remove visit ${idx + 1}`}
+            >
+              Remove
+            </Button>
           </div>
         </div>
       ) : (
         <>
           <div className={styles['visit-fields-col']}>
             <Form.Group className={styles['visit-field-row']}>
-              <Form.Label className={styles['visit-label']}>Date</Form.Label>
+              <Form.Label
+                className={styles['visit-label']}
+                onClick={collapseAll}
+                role="button"
+                tabIndex={0}
+                style={{ cursor: 'pointer' }}
+              >
+                Date
+              </Form.Label>
               <Form.Control
                 type="date"
-                {...register(`addresses.${nestIndex}.visits.${idx}.date`)}
+                {...register(`addresses.${nestIndex}.visits.${idx}.visitDate`)}
                 className={styles['visit-date']}
-                value={watched.date || ''}
+                value={watched.visitDate || ''}
                 min={minDateStr}
               />
             </Form.Group>
@@ -106,22 +136,14 @@ export default function Visit({
             <Form.Control
               as="textarea"
               rows={2}
-              {...register(`addresses.${nestIndex}.visits.${idx}.note`)}
+              {...register(`addresses.${nestIndex}.visits.${idx}.notes`)}
               placeholder="Note"
               className={styles['visit-note']}
-              value={watched.note || ''}
+              value={watched.notes || ''}
             />
             <div className={styles['visit-field-row']}>
               <span className={styles['visit-label']}></span>
-              <Button
-                variant="outline-secondary"
-                size="sm"
-                onClick={collapseAll}
-                tabIndex={-1}
-                className="me-2"
-              >
-                Collapse
-              </Button>
+
               <Button
                 variant="danger"
                 size="sm"
@@ -152,7 +174,7 @@ export default function Visit({
             </div>
             {showCalendarError && (
               <div style={{ color: 'red', marginLeft: 8, marginTop: 4 }}>
-                {!watched.date && 'Date '}
+                {!watched.visitDate && 'Date '}
                 {!watched.time && 'Time '}
                 Are required to create a calendar invite.
               </div>

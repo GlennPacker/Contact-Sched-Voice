@@ -28,10 +28,10 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
       return {
         ...addr,
         visits: [...addr.visits].sort((a, b) => {
-          if (!a.date && !b.date) return 0;
-          if (!a.date) return 1;
-          if (!b.date) return -1;
-          return b.date.localeCompare(a.date);
+          if (!a.visitDate && !b.visitDate) return 0;
+          if (!a.visitDate) return 1;
+          if (!b.visitDate) return -1;
+          return b.visitDate.localeCompare(a.visitDate);
         })
       };
     });
@@ -132,7 +132,6 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
         setError(result.error.message || 'Failed to save')
       } else {
         setSuccess('Saved successfully.')
-        reset(defaultFormValues)
       }
     } catch (err) {
       setError(err.message || 'An unexpected error occurred')

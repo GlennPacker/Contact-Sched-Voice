@@ -1,9 +1,10 @@
-import React from 'react'
+import { Alert, Table } from 'react-bootstrap'
+import { getAddressesByIds, getAllAddresses } from '../../lib/addressService'
+
 import Link from 'next/link'
-import { Table, Alert } from 'react-bootstrap'
-import { listVisits } from '../../lib/visitService'
+import React from 'react'
 import { getContactsByIds } from '../../lib/contactService'
-import { getAllAddresses, getAddressesByIds } from '../../lib/addressService'
+import { listVisits } from '../../lib/visitService'
 
 export default function VisitsPage({ visits = [], error = null }) {
   if (error) return <Alert variant="danger">{error}</Alert>
@@ -14,7 +15,7 @@ export default function VisitsPage({ visits = [], error = null }) {
         <h1>Upcoming Visits</h1>
       </div>
 
-      {visits.length === 0 ? (
+      {!visits.length ? (
         <Alert variant="info">No upcoming visits</Alert>
       ) : (
         <Table striped bordered hover responsive>
@@ -29,19 +30,19 @@ export default function VisitsPage({ visits = [], error = null }) {
           </thead>
           <tbody>
             {visits.map((v, idx) => (
-              <tr key={`${v.contactId}-${v.addressId}-${v.date}-${idx}`}>
+              <tr key={`${v.contactId}-${v.addressId}-${v.visitDate}-${idx}`}>
                 <td>
                   {v.contactId ? (
                     <Link href={`/contacts/${v.contactId}/edit`} passHref>
-                      <a>{v.contactName || '—'}</a>
+                      {v.contactName || '—'}
                     </Link>
                   ) : (
                     v.contactName || '—'
                   )}
                 </td>
-                <td>{v.addressText || '—'}</td>
+                <td>{v.address || '—'}</td>
                 <td>{v.visitNote || '—'}</td>
-                <td>{v.date || '—'}</td>
+                <td>{v.visitDate || '—'}</td>
                 <td>{v.isInside ? 'Yes' : 'No'}</td>
               </tr>
             ))}
@@ -78,7 +79,7 @@ export async function getServerSideProps() {
         addressId: address.id,
         address: address.address,
         visitNote: v.notes,
-        date: v.date,
+        visitDate: v.visitDate,
         isInside: v.isInside,
       }
     })

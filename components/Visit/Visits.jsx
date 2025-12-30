@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
 import { useFieldArray, useWatch } from 'react-hook-form';
+
 import Visit from './Visit';
 import styles from './Visits.module.scss';
 
@@ -15,13 +16,20 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 
 	useEffect(() => {
 		if (!fields.length) {
-			add({ date: '', note: '' });
+			add({ visitDate: null, notes: '' });
+			return;
 		}
-		if (fields.length === 1) {
-			setCollapsed([false]);
-		} else {
-			setCollapsed(fields.map(() => true));
-		}
+		setCollapsed(prev => {
+			if (fields.length === 1) return [false];
+
+			if (prev && prev.length < fields.length) {
+				return [false, ...Array.from({ length: fields.length - 1 }, () => true)];
+			}
+
+			if (prev && prev.length === fields.length) return prev;
+
+			return fields.map(() => true);
+		});
 	}, [fields, add]);
 
 	const toggleCollapse = (idx) => {
@@ -33,18 +41,18 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	};
 
 	const addVisit = () => {
-		let newVisit = { date: '' };
-		if (fields.length > 0) {
+		let newVisit = { visitDate: null };
+		if (fields.length) {
 			const sorted = [...fields].sort((a, b) => {
-				if (!a.date && !b.date) return 0;
-				if (!a.date) return 1;
-				if (!b.date) return -1;
-				return b.date.localeCompare(a.date);
+				if (!a.visitDate && !b.visitDate) return 0;
+				if (!a.visitDate) return 1;
+				if (!b.visitDate) return -1;
+				return b.visitDate.localeCompare(a.visitDate);
 			});
 			const mostRecent = sorted[0] || {};
 			newVisit = {
-				date: '',
-				note: mostRecent.note || '',
+				visitDate: null,
+				notes: mostRecent.notes || '',
 				recurrence: mostRecent.recurrence || 'does not reoccur',
 				time: mostRecent.time || '',
 				days: mostRecent.days || '',
@@ -53,15 +61,35 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 			};
 		}
 		add(newVisit, { at: 0 });
-		setTimeout(() => {
-			const arrLen = fields.length + 1;
-			setCollapsed(Array.from({ length: arrLen }, (_, i) => i !== 0));
-		}, 0);
+		setCollapsed(prev => [false, ...(Array.isArray(prev) ? prev.map(() => true) : [])]);
 	};
 
 	const tomorrow = new Date();
 	tomorrow.setDate(tomorrow.getDate() + 1);
 	const minDateStr = tomorrow.toISOString().split('T')[0];
+
+	const cutoff = new Date();
+	cutoff.setDate(cutoff.getDate() - 14);
+	const cutoffStr = cutoff.toISOString().split('T')[0];
+
+	const displayIndices = fields
+		.map((f, i) => i)
+		.filter(i => {
+			const watched = watchedVisits?.[i] || {};
+			const dateStr = watched.visitDate ?? fields[i]?.visitDate;
+			if (!dateStr) return true;
+			return dateStr >= cutoffStr;
+		})
+		.sort((ai, bi) => {
+			const a = watchedVisits?.[ai] || fields[ai] || {};
+			const b = watchedVisits?.[bi] || fields[bi] || {};
+			const aDate = a.visitDate;
+			const bDate = b.visitDate;
+			if (!aDate && !bDate) return 0;
+			if (!aDate) return -1; // put undated before dated when sorting asc
+			if (!bDate) return 1;
+			return aDate.localeCompare(bDate);
+		});
 
 	return (
 		<div className={styles['visits-root']}>
@@ -72,7 +100,8 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 				</Button>
 			</div>
 			<div className={styles['visits-list-scroll']}>
-				{fields.map((field, idx) => {
+				{displayIndices.map(idx => {
+					const field = fields[idx];
 					const watched = watchedVisits?.[idx] || {};
 					return (
 						<Visit
