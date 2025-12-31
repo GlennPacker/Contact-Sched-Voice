@@ -94,7 +94,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
 
   const CONTACT_TYPE_OPTIONS = [
     { id: 'facebookGlenn', label: 'Facebook (Glenn)' },
-    { id: 'faceBookHandyman', label: 'Facebook (Handyman)' },
+    { id: 'facebookHandyman', label: 'Facebook (Handyman)' },
     { id: 'whatsapp', label: 'WhatsApp' },
     { id: 'email', label: 'Email' },
   ]
