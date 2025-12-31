@@ -135,7 +135,7 @@ export default function Visit({
             </Form.Group>
             <Form.Control
               as="textarea"
-              rows={2}
+              rows={5}
               {...register(`addresses.${nestIndex}.visits.${idx}.notes`)}
               placeholder="Note"
               className={styles['visit-note']}
