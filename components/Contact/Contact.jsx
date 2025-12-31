@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 
 import Addresses from '../Address/Addresses'
-import { contactCreateAppointment } from '../../lib/calendarService';
+import { contactCreateAppointment } from '../../lib/visitUtils';
 import styles from '../../pages/contacts/CreateContact.module.scss';
 
 export default function Contact({ initialValues = null, submit, priceReviewDateReadOnly = false }) {
