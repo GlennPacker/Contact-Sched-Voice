@@ -12,7 +12,7 @@ export default function NewContactPage() {
     <div>
       <h1>Create Contact</h1>
 
-      <Contact onSubmit={createContact} priceReviewDateReadOnly={true} />
+      <Contact submit={createContact} priceReviewDateReadOnly={true} />
     </div>
   )
 }
