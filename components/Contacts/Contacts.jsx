@@ -6,11 +6,11 @@ export default function Contacts({ contacts = [], error = null, onActivate }) {
     if (error) return <Alert variant="danger">{error}</Alert>
 
     return (
-        <Table striped bordered hover responsive>
+        <Table striped bordered hover responsive className={styles.tableFixed}>
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Addresses</th>
+                    <th className={styles.colName}>Name</th>
+                        <th>Addresses</th>
                 </tr>
             </thead>
             <tbody>

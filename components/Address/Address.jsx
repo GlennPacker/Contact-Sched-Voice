@@ -1,16 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useWatch } from 'react-hook-form';
+import styles from './Address.module.scss';
 
-import Visits from '../Visit/Visits.jsx';
-import styles from './Addresses.module.scss';
-
-export default function Address({ field, idx, register, errors, removeAddress, totalAddresses, contactName, control, onCalendarInvite }) {
-  const [expanded, setExpanded] = useState(true);
+export default function Address({ field, idx, register, errors, removeAddress, totalAddresses, contactName, control, onCalendarInvite, isSelected, onSelect }) {
   const watchedAddresses = useWatch({ control, name: 'addresses' });
   const address = watchedAddresses?.[idx]?.address || '';
-
-  const toggleExpand = () => setExpanded(prev => !prev);
 
   function createCalendarInviteForVisit(visit) {
     const calendarData = {
@@ -23,68 +18,65 @@ export default function Address({ field, idx, register, errors, removeAddress, t
 
   return (
     <div key={field.id} className={styles['address-item']}>
-      <div className="mb-2 d-flex align-items-center gap-2">
-        <Form.Control
-          {...register(`addresses.${idx}.address`, { required: 'Address is required' })}
-          placeholder={`Address #${idx + 1}`}
-          className={styles['address-input-field']}
-          value={address}
-          isInvalid={!!(errors?.addresses && errors.addresses[idx]?.address)}
-        />
-        {errors?.addresses && errors.addresses[idx]?.address && (
-          <Form.Control.Feedback type="invalid">
-            {errors.addresses[idx].address.message}
-          </Form.Control.Feedback>
-        )}
-        <Button
-          variant="outline-primary"
-          size="sm"
-          onClick={() => {
-            if (address) {
-              const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
-              window.open(mapsUrl, '_blank', 'noopener,noreferrer');
-            }
-          }}
-          tabIndex={-1}
-          aria-label="Open in Google Maps"
-          title="View on Google Maps"
-          disabled={!address}
-          className={styles['address-btn-maps']}
-        >
-          🗺️
-        </Button>
-        <Button
-          variant="outline-secondary"
-          size="sm"
-          onClick={toggleExpand}
-          tabIndex={-1}
-          aria-label={expanded ? 'Collapse visits' : 'Expand visits'}
-          title={expanded ? 'Hide visits' : 'Show visits'}
-          className={styles['address-btn-expand']}
-        >
-          {`Visits ${expanded ? '−' : '+'}`}
-        </Button>
-        {totalAddresses > 1 && (
+      <div className={`${styles['address-row']} mb-2`}>
+        <div className={styles['address-cell-main']}>
+          <Form.Control
+            {...register(`addresses.${idx}.address`, { required: 'Address is required' })}
+            placeholder={`Address #${idx + 1}`}
+            className={styles['address-input-field']}
+            isInvalid={!!(errors?.addresses && errors.addresses[idx]?.address)}
+          />
+          {errors?.addresses && errors.addresses[idx]?.address && (
+            <Form.Control.Feedback type="invalid">
+              {errors.addresses[idx].address.message}
+            </Form.Control.Feedback>
+          )}
+        </div>
+        <div className={styles['address-cell-actions']}>
           <Button
-            variant="danger"
+            variant="outline-primary"
             size="sm"
-            onClick={() => removeAddress(idx)}
+            onClick={() => {
+              if (address) {
+                const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+                window.open(mapsUrl, '_blank', 'noopener,noreferrer');
+              }
+            }}
             tabIndex={-1}
-            aria-label={`Remove address ${idx + 1}`}
+            aria-label="Open in Google Maps"
+            title="View on Google Maps"
+            disabled={!address}
+            className={styles['address-btn-maps']}
           >
-            Remove
+            🗺️
           </Button>
-        )}
+          {totalAddresses > 1 && (
+            <Button
+              variant={isSelected ? 'primary' : 'outline-primary'}
+              size="sm"
+              onClick={onSelect}
+              tabIndex={-1}
+              aria-label={`Select address ${idx + 1}`}
+              title={isSelected ? 'Selected address' : 'Select address to view visits'}
+              className={styles['address-btn-select']}
+            >
+              {isSelected ? 'Selected' : 'Select'}
+            </Button>
+          )}
+          {totalAddresses > 1 && (
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => removeAddress(idx)}
+              tabIndex={-1}
+              aria-label={`Remove address ${idx + 1}`}
+            >
+              Remove
+            </Button>
+          )}
+        </div>
       </div>
-      {expanded && (
-        <Visits
-          nestIndex={idx}
-          control={control}
-          register={register}
-          errors={errors}
-          createCalendarInvite={(visit) => createCalendarInviteForVisit(visit)}
-        />
-      )}
+      {/* Visits moved to be rendered under the addresses list by the parent component. */}
     </div>
   );
 }

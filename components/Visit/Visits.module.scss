@@ -4,6 +4,17 @@
 .visit-note {
 	margin-top: 8px;
 }
+
+.visit-summary-text {
+	font-size: 0.9rem;
+	color: #444;
+}
+
+.calendar-error {
+	color: red;
+	margin-left: 8px;
+	margin-top: 4px;
+}
 .visits-root {
 	box-sizing: border-box;
 	overflow-x: hidden;

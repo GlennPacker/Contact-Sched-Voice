@@ -1,4 +1,5 @@
 import Contact from '../../../components/Contact/Contact'
+import styles from './EditContact.module.scss'
 import Link from 'next/link'
 import { getContact, updateContact } from '../../../lib/contactService'
 
@@ -7,7 +8,7 @@ export default function EditContactPage({ initialValues = null, error = null, id
         return (
             <div>
                 <h1>Edit Contact</h1>
-                <div style={{ color: 'red' }}>{error}</div>
+                <div className={styles.error}>{error}</div>
                 <p>
                     <Link href="/contacts">Back to contacts</Link>
                 </p>

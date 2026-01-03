@@ -24,7 +24,7 @@ export default function Visit({
     <div key={field.id} className={`mb-3 ${styles['visit-fields']}`}>
       {collapsed ? (
         <div
-          className={styles['visit-collapsed-summary']}
+          className={`${styles['visit-collapsed-summary']} ${styles['visit-cursor-pointer']}`}
           onClick={() => toggleCollapse(idx)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' || e.key === ' ') {
@@ -34,12 +34,11 @@ export default function Visit({
           }}
           role="button"
           tabIndex={0}
-          style={{ cursor: 'pointer' }}
         >
           <div>
             <span className={styles['visit-collapsed-date']}>{watched.visitDate || 'No date'}</span>
             <span className={styles['visit-collapsed-recurrence']}> {watched.recurrence && watched.recurrence !== 'does not reoccur' ? `· ${watched.recurrence}` : ''}</span>
-            <div style={{ fontSize: '0.9rem', color: '#444' }}>{watched.notes ? watched.notes.substring(0, 80) : ''}</div>
+            <div className={styles['visit-summary-text']}>{watched.notes ? watched.notes.substring(0, 80) : ''}</div>
           </div>
           <div>
             <Button
@@ -61,11 +60,10 @@ export default function Visit({
           <div className={styles['visit-fields-col']}>
             <Form.Group className={styles['visit-field-row']}>
               <Form.Label
-                className={styles['visit-label']}
+                className={`${styles['visit-label']} ${styles['visit-cursor-pointer']}`}
                 onClick={collapseAll}
                 role="button"
                 tabIndex={0}
-                style={{ cursor: 'pointer' }}
               >
                 Date
               </Form.Label>
@@ -173,7 +171,7 @@ export default function Visit({
               </a>
             </div>
             {showCalendarError && (
-              <div style={{ color: 'red', marginLeft: 8, marginTop: 4 }}>
+              <div className={styles['calendar-error']}>
                 {!watched.visitDate && 'Date '}
                 {!watched.time && 'Time '}
                 Are required to create a calendar invite.
