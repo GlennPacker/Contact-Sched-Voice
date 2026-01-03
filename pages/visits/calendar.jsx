@@ -21,7 +21,6 @@ const localizer = dateFnsLocalizer({ format, parse, startOfWeek: (date) => start
 export default function VisitsCalendarPage({ events = [] }) {
   const router = useRouter()
 
-  // Rehydrate event date strings into Date objects for the calendar component
   const parsedEvents = (events || []).map(e => ({
     ...e,
     start: new Date(e.start),

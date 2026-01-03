@@ -76,7 +76,7 @@ export default function Address({ field, idx, register, errors, removeAddress, t
           )}
         </div>
       </div>
-      {/* Visits moved to be rendered under the addresses list by the parent component. */}
+
     </div>
   );
 }

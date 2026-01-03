@@ -10,7 +10,7 @@ export default function Contacts({ contacts = [], error = null, onActivate }) {
             <thead>
                 <tr>
                     <th className={styles.colName}>Name</th>
-                        <th>Addresses</th>
+                    <th>Addresses</th>
                 </tr>
             </thead>
             <tbody>

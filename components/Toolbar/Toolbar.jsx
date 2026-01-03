@@ -1,12 +1,13 @@
 import React from 'react'
 import { Navbar, Nav, Container } from 'react-bootstrap'
 import Link from 'next/link'
+import styles from './Toolbar.module.scss'
 
 export default function Toolbar() {
     return (
         <Navbar bg="light" expand="sm" className="mb-3 w-100">
             <Container fluid>
-                <div className="toolbar-inner">
+                <div className={styles['toolbar-inner']}>
                     <Link href="/" passHref legacyBehavior>
                         <Navbar.Brand>H Andy</Navbar.Brand>
                     </Link>

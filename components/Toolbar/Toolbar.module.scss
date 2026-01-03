@@ -1,0 +1,22 @@
+ .toolbar-inner {
+  width: 80vw;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+ }
+
+ .toolbar-inner :global(.navbar-collapse) {
+  display: flex !important;
+  align-items: center;
+ }
+
+ .toolbar-inner :global(.navbar-toggler) {
+  margin-left: 0.5rem;
+ }
+
+ .toolbar-inner :global(.nav) {
+  margin-left: auto;
+ }

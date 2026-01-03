@@ -33,7 +33,7 @@ export default function VisitsPage({ visits = [], error = null }) {
             <tr>
               <th className={indexStyles.colName}>Name</th>
               <th className={indexStyles.colAddress}>Address</th>
-              <th /* Notes: no fixed width so it expands to fill remaining space */>Notes</th>
+              <th>Notes</th>
               <th className={indexStyles.colDate}>Date</th>
               <th className={indexStyles.colInside}>Inside</th>
             </tr>

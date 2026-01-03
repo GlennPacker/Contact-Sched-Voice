@@ -9,7 +9,6 @@ export default function Addresses({ addressFields, register, removeAddress, appe
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   useEffect(() => {
-    // ensure selectedIndex remains valid if addresses change
     if (selectedIndex >= addressFields.length) {
       setSelectedIndex(Math.max(0, addressFields.length - 1))
     }

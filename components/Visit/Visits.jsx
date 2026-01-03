@@ -86,7 +86,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 			const aDate = a.visitDate;
 			const bDate = b.visitDate;
 			if (!aDate && !bDate) return 0;
-			if (!aDate) return -1; // put undated before dated when sorting asc
+			if (!aDate) return -1;
 			if (!bDate) return 1;
 			return aDate.localeCompare(bDate);
 		});
