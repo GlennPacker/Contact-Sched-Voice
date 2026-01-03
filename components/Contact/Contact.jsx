@@ -103,10 +103,12 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
 
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(null)
+  const [warnings, setWarnings] = useState([])
 
   const formSubmit = async (formData) => {
     setError(null)
     setSuccess(null)
+    setWarnings([])
 
     try {
       const contactTypesArray = Object.entries(formData.contactTypes || {}).reduce((acc, [key, val]) => {
@@ -130,8 +132,14 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
 
       if (result?.error) {
         setError(result.error.message || 'Failed to save')
+        if (result?.data && Array.isArray(result.data.warnings) && result.data.warnings.length) {
+          setWarnings(result.data.warnings)
+        }
       } else {
         setSuccess('Saved successfully.')
+        if (result?.data && Array.isArray(result.data.warnings) && result.data.warnings.length) {
+          setWarnings(result.data.warnings)
+        }
       }
     } catch (err) {
       setError(err.message || 'An unexpected error occurred')
@@ -141,6 +149,13 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
   return (
     <>
       {error && <Alert variant="danger">{error}</Alert>}
+      {warnings && !!warnings.length && (
+        <Alert variant="info">
+          {warnings.map((w, i) => (
+            <div key={i}>{w}</div>
+          ))}
+        </Alert>
+      )}
       {success && <Alert variant="success">{success}</Alert>}
       <Form onSubmit={handleSubmit(formSubmit)} className="form-grid">
         <div className="form-grid__col1">
