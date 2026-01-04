@@ -66,7 +66,7 @@ export default function Addresses({ addressFields, register, removeAddress, appe
       )}
 
       {addressFields.length > 1 && (
-        <Tabs activeKey={selectedIndex} onSelect={(k) => setSelectedIndex(Number(k))} className="mt-3">
+        <Tabs activeKey={selectedIndex} onSelect={(k) => setSelectedIndex(+k)} className="mt-3">
           {addressFields.map((field, idx) => {
             const addressText = (watchedAddresses?.[idx]?.address || '').trim()
             const title = addressText ? (addressText.length > 25 ? `${addressText.slice(0, 25)}…` : addressText) : `Address ${idx + 1}`

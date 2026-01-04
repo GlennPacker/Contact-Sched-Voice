@@ -1,0 +1,21 @@
+module.exports = {
+  extends: ["next/core-web-vitals", "eslint:recommended", "plugin:react/recommended"],
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: "module",
+    ecmaFeatures: { jsx: true },
+  },
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+    jest: true,
+  },
+  rules: {
+    "react/react-in-jsx-scope": "off",
+    "no-console": ["warn", { allow: ["warn", "error"] }],
+    "no-comments": "error",
+    "no-number-constructor": "error",
+  },
+  settings: { react: { version: "detect" } },
+}

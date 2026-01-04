@@ -1,8 +1,3 @@
-node_modules
-.next
-coverage
-dist
-public
-.env.local
-.env.development.local
-.env.test.local
+# Ignored patterns migrated to eslint.config.js `ignores`.
+# You can safely remove this file.
+
