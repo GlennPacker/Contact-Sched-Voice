@@ -51,19 +51,7 @@ export default function Address({ field, idx, register, errors, removeAddress, t
           >
             🗺️
           </Button>
-          {totalAddresses > 1 && (
-            <Button
-              variant={isSelected ? 'primary' : 'outline-primary'}
-              size="sm"
-              onClick={onSelect}
-              tabIndex={-1}
-              aria-label={`Select address ${idx + 1}`}
-              title={isSelected ? 'Selected address' : 'Select address to view visits'}
-              className={styles['address-btn-select']}
-            >
-              {isSelected ? 'Selected' : 'Select'}
-            </Button>
-          )}
+          {totalAddresses > 1 && null}
           {totalAddresses > 1 && (
             <Button
               variant="danger"

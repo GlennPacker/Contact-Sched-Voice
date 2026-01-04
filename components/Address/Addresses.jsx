@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Tabs, Tab } from 'react-bootstrap';
+import { useWatch } from 'react-hook-form'
 
 import styles from './Addresses.module.scss';
 import Address from './Address.jsx';
@@ -7,6 +8,14 @@ import Visits from '../Visit/Visits.jsx';
 
 export default function Addresses({ addressFields, register, removeAddress, appendAddress: addAddress, errors, control, contactName, onCalendarInvite }) {
   const [selectedIndex, setSelectedIndex] = useState(0)
+  let watchedAddresses = []
+  try {
+    if (control && typeof control._getWatch === 'function') {
+      watchedAddresses = useWatch({ control, name: 'addresses' }) || []
+    }
+  } catch (e) {
+    watchedAddresses = []
+  }
 
   useEffect(() => {
     if (selectedIndex >= addressFields.length) {
@@ -36,8 +45,6 @@ export default function Addresses({ addressFields, register, removeAddress, appe
             contactName={contactName}
             control={control}
             onCalendarInvite={onCalendarInvite}
-            isSelected={addressFields.length === 1 ? true : selectedIndex === idx}
-            onSelect={() => setSelectedIndex(idx)}
           />
         ))}
       </div>
@@ -46,17 +53,38 @@ export default function Addresses({ addressFields, register, removeAddress, appe
         <Form.Text className="text-danger">{errors.addresses.message}</Form.Text>
       )}
 
-      {(addressFields.length > 0) && (
+      {addressFields.length === 1 && (
         <div className="mt-3">
           <Visits
-            key={selectedIndex}
-            nestIndex={selectedIndex}
+            nestIndex={0}
             control={control}
             register={register}
             errors={errors}
             createCalendarInvite={onCalendarInvite}
           />
         </div>
+      )}
+
+      {addressFields.length > 1 && (
+        <Tabs activeKey={selectedIndex} onSelect={(k) => setSelectedIndex(Number(k))} className="mt-3">
+          {addressFields.map((field, idx) => {
+            const addressText = (watchedAddresses?.[idx]?.address || '').trim()
+            const title = addressText ? (addressText.length > 25 ? `${addressText.slice(0, 25)}…` : addressText) : `Address ${idx + 1}`
+            return (
+              <Tab eventKey={idx} title={title} key={field.id}>
+                <div className="mt-3">
+                  <Visits
+                    nestIndex={idx}
+                    control={control}
+                    register={register}
+                    errors={errors}
+                    createCalendarInvite={onCalendarInvite}
+                  />
+                </div>
+              </Tab>
+            )
+          })}
+        </Tabs>
       )}
     </Form.Group>
   )
