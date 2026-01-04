@@ -1,9 +1,6 @@
 import reactPlugin from 'eslint-plugin-react'
-import { createRequire } from 'module'
-
-const require = createRequire(import.meta.url)
-const noCommentsRule = require('./tools/eslint-rules/no-comments.cjs')
-const noNumberConstructorRule = require('./tools/eslint-rules/no-number-constructor.cjs')
+import noCommentsRule from './tools/eslint-rules/no-comments.js'
+import noNumberConstructorRule from './tools/eslint-rules/no-number-constructor.js'
 
 export default [
   {
