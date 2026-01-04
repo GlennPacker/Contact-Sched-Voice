@@ -4,7 +4,7 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 
 import Addresses from '../Address/Addresses'
 import { contactCreateAppointment } from '../../lib/visitUtils';
-import styles from '../../pages/contacts/CreateContact.module.scss';
+import styles from './Contact.module.scss';
 
 export default function Contact({ initialValues = null, submit, priceReviewDateReadOnly = false }) {
   const defaultPriceReviewDate = (() => {
@@ -157,8 +157,8 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
         </Alert>
       )}
       {success && <Alert variant="success">{success}</Alert>}
-      <Form onSubmit={handleSubmit(formSubmit)} className="form-grid">
-        <div className="form-grid__col1">
+      <Form onSubmit={handleSubmit(formSubmit)} className={styles['form-grid']}>
+        <div className={styles['form-grid__col1']}>
           <Form.Group className="mb-3" controlId="name">
             <Form.Label className={styles['section-title']}>Name *</Form.Label>
             <Form.Control {...register('name', { required: 'Name is required' })} placeholder="Full name" />
@@ -211,55 +211,55 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
           <Form.Group className="mb-3" controlId="rates">
             <Form.Label className={styles['section-title']}>Rates *</Form.Label>
             <Form.Group className="mb-2">
-              <div className="form-field-row">
-                <Form.Label className="small form-field-label">Full day</Form.Label>
-                <div className="form-field-control">
+              <div className={styles['form-field-row']}>
+                <Form.Label className={`small ${styles['form-field-label']}`}>Full day</Form.Label>
+                <div className={styles['form-field-control']}>
                   <Form.Control type="number" step="0.01" {...register('rateFullDay', { valueAsNumber: true })} placeholder="Full day rate" onBlur={fullDayBlur} />
                   {errors?.rateFullDay && <Form.Text className="text-danger">{errors.rateFullDay.message}</Form.Text>}
                 </div>
               </div>
             </Form.Group>
             <Form.Group className="mb-2">
-              <div className="form-field-row">
-                <Form.Label className="small form-field-label">Half day</Form.Label>
-                <div className="form-field-control">
+              <div className={styles['form-field-row']}>
+                <Form.Label className={`small ${styles['form-field-label']}`}>Half day</Form.Label>
+                <div className={styles['form-field-control']}>
                   <Form.Control type="number" {...register('rateHalfDay', { valueAsNumber: true })} placeholder="Half day rate" />
                   {errors?.rateHalfDay && <Form.Text className="text-danger">{errors.rateHalfDay.message}</Form.Text>}
                 </div>
               </div>
             </Form.Group>
             <Form.Group className="mb-2">
-              <div className="form-field-row">
-                <Form.Label className="small form-field-label">2 hour</Form.Label>
-                <div className="form-field-control">
+              <div className={styles['form-field-row']}>
+                <Form.Label className={`small ${styles['form-field-label']}`}>2 hour</Form.Label>
+                <div className={styles['form-field-control']}>
                   <Form.Control type="number" {...register('rateTwoHour', { valueAsNumber: true })} placeholder="2 hour rate" />
                   {errors?.rateTwoHour && <Form.Text className="text-danger">{errors.rateTwoHour.message}</Form.Text>}
                 </div>
               </div>
             </Form.Group>
             <Form.Group className="mb-2">
-              <div className="form-field-row">
-                <Form.Label className="small form-field-label">Hour</Form.Label>
-                <div className="form-field-control">
+              <div className={styles['form-field-row']}>
+                <Form.Label className={`small ${styles['form-field-label']}`}>Hour</Form.Label>
+                <div className={styles['form-field-control']}>
                   <Form.Control type="number" {...register('rateHour', { valueAsNumber: true })} placeholder="Hourly rate" />
                 </div>
               </div>
             </Form.Group>
             <Form.Group className="mb-2">
-              <div className="form-field-row">
-                <Form.Label className="small form-field-label">Job</Form.Label>
-                <div className="form-field-control">
+              <div className={styles['form-field-row']}>
+                <Form.Label className={`small ${styles['form-field-label']}`}>Job</Form.Label>
+                <div className={styles['form-field-control']}>
                   <Form.Control type="number" {...register('rateJob', { valueAsNumber: true })} placeholder="Per job rate" />
                 </div>
               </div>
             </Form.Group>
           </Form.Group>
           <Form.Group className="mb-2">
-            <div className="form-field-row">
-              <Form.Label className={`small form-field-label ${priceReviewDateReadOnly ? `u-label-readonly` : ``}`}>{priceReviewDateReadOnly ? 'Review' : 'Review *'}</Form.Label>
-              <div className="form-field-control">
+            <div className={styles['form-field-row']}>
+              <Form.Label className={`small ${styles['form-field-label']} ${priceReviewDateReadOnly ? styles['u-label-readonly'] : ''}`}>{priceReviewDateReadOnly ? 'Review' : 'Review *'}</Form.Label>
+              <div className={styles['form-field-control']}>
                 {priceReviewDateReadOnly ? (
-                  <div className={`${styles['review-date-input']} u-input-readonly`}>{priceReviewDateValue}</div>
+                  <div className={`${styles['review-date-input']} ${styles['u-input-readonly']}`}>{priceReviewDateValue}</div>
                 ) : (
                   <Form.Control
                     type="date"
@@ -271,7 +271,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
             </div>
           </Form.Group>
         </div>
-        <div className="form-grid__col2">
+        <div className={styles['form-grid__col2']}>
           <Addresses
             addressFields={addressFields}
             register={register}
@@ -284,7 +284,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
             onCalendarInvite={({ contactName, visit, address }) => contactCreateAppointment({ contactName, visit, address })}
           />
         </div>
-        <div className="form-grid__actions">
+        <div className={styles['form-grid__actions']}>
           <Button type="submit" disabled={isSubmitting} variant="primary">
             {isSubmitting ? (
               <>

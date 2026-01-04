@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import styles from './index.module.scss'
-import { Alert, Button, ButtonGroup } from 'react-bootstrap'
+import { Button, ButtonGroup } from 'react-bootstrap'
 import Contacts from '../../components/Contacts/Contacts'
 import ContactSearch from '../../components/Contacts/ContactSearch'
 import Link from 'next/link'
@@ -64,7 +64,7 @@ export async function getServerSideProps() {
     const data = await listContacts()
     return { props: { contacts: data, error: null } }
   } catch (err) {
-    return { props: { contacts: null, error: err && err.message ? err.message : 'Server error' } }
+    return { props: { contacts: null, error: err?.message || 'Server error' } }
   }
 }
 

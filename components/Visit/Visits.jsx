@@ -7,8 +7,8 @@ import styles from './Visits.module.scss';
 
 export default function Visits({ nestIndex, control, register, errors, createCalendarInvite }) {
 	let fields = [];
-	let add = () => {};
-	let remove = () => {};
+	let add = () => { };
+	let remove = () => { };
 	const [localFields, setLocalFields] = useState([{ visitDate: null, notes: '' }]);
 	const addLocal = React.useCallback((item) => setLocalFields(prev => (Array.isArray(prev) ? [item, ...prev] : [item])), [setLocalFields]);
 	const removeLocal = React.useCallback((idx) => setLocalFields(prev => prev.filter((_, i) => i !== idx)), [setLocalFields]);
