@@ -5,52 +5,11 @@ import { useFieldArray, useForm, useWatch } from 'react-hook-form'
 import Addresses from '../Address/Addresses'
 import { contactCreateAppointment } from '../../lib/visitUtils';
 import styles from './Contact.module.scss';
+import { getDefaultFormValues, computeRateAdjustments, buildPayloadFromForm, getEnvRates } from '../../lib/contactFormService'
 
 export default function Contact({ initialValues = null, submit, priceReviewDateReadOnly = false }) {
-  const defaultPriceReviewDate = (() => {
-    const today = new Date()
-    const sixMonths = new Date(today.setMonth(today.getMonth() + 6))
-    return sixMonths.toISOString().split('T')[0]
-  })()
-
-  const envRates = {
-    rateFullDay: +(process.env.NEXT_PUBLIC_RATE_FULL_DAY ?? 0),
-    rateHalfDay: +(process.env.NEXT_PUBLIC_RATE_HALF_DAY ?? 0),
-    rateTwoHour: +(process.env.NEXT_PUBLIC_RATE_TWO_HOUR ?? 0),
-    rateHour: +(process.env.NEXT_PUBLIC_RATE_HOUR ?? 0),
-    rateJob: +(process.env.NEXT_PUBLIC_RATE_JOB ?? 0),
-  }
-
-  function sortVisitsDescending(addresses) {
-    if (!Array.isArray(addresses)) return addresses;
-    return addresses.map(addr => {
-      if (!Array.isArray(addr.visits)) return addr;
-      return {
-        ...addr,
-        visits: [...addr.visits].sort((a, b) => {
-          if (!a.visitDate && !b.visitDate) return 0;
-          if (!a.visitDate) return 1;
-          if (!b.visitDate) return -1;
-          return b.visitDate.localeCompare(a.visitDate);
-        })
-      };
-    });
-  }
-
-  const defaultFormValues = initialValues
-    ? {
-      ...initialValues,
-      addresses: sortVisitsDescending(initialValues.addresses)
-    }
-    : {
-      priceReviewDate: defaultPriceReviewDate,
-      addresses: [{ address: '' }],
-      rateFullDay: envRates.rateFullDay,
-      rateHalfDay: envRates.rateHalfDay,
-      rateTwoHour: envRates.rateTwoHour,
-      rateHour: envRates.rateHour,
-      rateJob: envRates.rateJob,
-    };
+  const envRates = getEnvRates()
+  const defaultFormValues = getDefaultFormValues(initialValues)
 
   const {
     register,
@@ -67,19 +26,12 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
   const watchedForm = useWatch({ control });
 
   const fullDayBlur = (e) => {
-    const val = Number(e.target.value);
-    if (!val) return;
-
-    const calcHalf = Math.ceil((val + 10) / 2 / 10) * 10;
-    if (halfDay === envRates.rateHalfDay) {
-      setValue('rateHalfDay', calcHalf, { shouldValidate: true, shouldDirty: true });
-    }
-
-    if (twoHour === envRates.rateTwoHour) {
-      const calc = Math.ceil((calcHalf + 10) / 2 / 10) * 10;
-      setValue('rateTwoHour', calc, { shouldValidate: true, shouldDirty: true });
-    }
-  };
+    const val = +e.target.value
+    if (!val) return
+    const updates = computeRateAdjustments(val, halfDay, twoHour)
+    if (!updates.rateHalfDay) etValue('rateHalfDay', updates.rateHalfDay, { shouldValidate: true, shouldDirty: true })
+    if (!updates.rateTwoHour) setValue('rateTwoHour', updates.rateTwoHour, { shouldValidate: true, shouldDirty: true })
+  }
 
   const { fields: addressFields, append: addAddress, remove: removeAddress } = useFieldArray({
     control,
@@ -111,23 +63,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
     setWarnings([])
 
     try {
-      const contactTypesArray = Object.entries(formData.contactTypes || {}).reduce((acc, [key, val]) => {
-        if (val && val.selected) acc.push({ contactType: key, metadata: val.metadata ?? '' })
-        return acc
-      }, [])
-
-      const payload = {
-        name: formData.name,
-        contactTypes: contactTypesArray,
-        rateFullDay: formData.rateFullDay,
-        rateHalfDay: formData.rateHalfDay,
-        rateTwoHour: formData.rateTwoHour,
-        rateHour: formData.rateHour,
-        rateJob: formData.rateJob,
-        priceReviewDate: formData.priceReviewDate,
-        addresses: formData.addresses || [],
-      }
-
+      const payload = buildPayloadFromForm(formData)
       const result = await submit(payload)
 
       if (result?.error) {
