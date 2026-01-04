@@ -7,7 +7,7 @@ import styles from './Visits.module.scss';
 import {
 	getTomorrowMinDate,
 	makeNewVisitFromMostRecent,
-	getVisibleVisitPositions,
+	orderVisits,
 	defaultCollapsedFor,
 } from '../../lib/visitFormService';
 
@@ -59,7 +59,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 
 	const minDateStr = getTomorrowMinDate();
 
-	const displayIndices = getVisibleVisitPositions({ fields, watchedVisits, cutoffDays: 14 });
+	const orderedVisits = orderVisits({ fields, watchedVisits, cutoffDays: 14 });
 
 	return (
 		<div className={styles['visits-root']}>
@@ -70,17 +70,15 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 				</Button>
 			</div>
 			<div className={styles['visits-list-scroll']}>
-				{displayIndices.map(idx => {
+				{orderedVisits.map(idx => {
 					const field = fields[idx];
-					const key = field?.id ?? idx;
-					const watched = watchedVisits?.[idx] || {};
 					return (
 						<Visit
-							key={key}
+							key={field.id ?? idx}
 							field={field}
 							idx={idx}
 							nestIndex={nestIndex}
-							watched={watched}
+							watched={watchedVisits?.[idx] || {}}
 							collapsed={collapsed[idx]}
 							toggleCollapse={toggleCollapse}
 							remove={remove}

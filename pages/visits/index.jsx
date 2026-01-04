@@ -3,26 +3,89 @@ import indexStyles from './Index.module.scss'
 import { getAddressesByIds, getAllAddresses } from '../../lib/addressService'
 
 import Link from 'next/link'
-import React from 'react'
+import React, { useState, useMemo } from 'react'
 import { getContactsByIds } from '../../lib/contactService'
 import { listVisits } from '../../lib/visitService'
+import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar'
 
 export default function VisitsPage({ visits = [], error = null }) {
   if (error) return <Alert variant="danger">{error}</Alert>
+  const [sortField, setSortField] = useState(null)
+  const [sortDir, setSortDir] = useState('none') // 'asc' | 'desc' | 'none'
+
+  const cycleDir = (current) => (current === 'none' ? 'asc' : current === 'asc' ? 'desc' : 'none')
+
+  const handleSortClick = (field) => {
+    if (sortField !== field) {
+      setSortField(field)
+      setSortDir('asc')
+      return
+    }
+    setSortDir((d) => cycleDir(d))
+    if (sortField === field && cycleDir(sortDir) === 'none') {
+      setSortField(null)
+    }
+  }
+
+  const renderSortIcon = (field) => {
+    if (sortField !== field || sortDir === 'none') return (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+        <path d="M2 8h12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      </svg>
+    )
+    if (sortDir === 'asc') {
+      return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+          <path d="M8 4l4 6H4l4-6z" fill="currentColor" />
+        </svg>
+      )
+    }
+    return (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+        <path d="M8 12l-4-6h8l-4 6z" fill="currentColor" />
+      </svg>
+    )
+  }
+
+  const sortedVisits = useMemo(() => {
+    if (!sortField || sortDir === 'none') return visits
+    const mapper = (v) => {
+      switch (sortField) {
+        case 'name':
+          return (v.contactName || '').toLowerCase()
+        case 'address':
+          return (v.address || '').toLowerCase()
+        case 'notes':
+          return (v.visitNote || '').toLowerCase()
+        case 'date':
+          return v.visitDate || ''
+        case 'inside':
+          return v.isInside ? 1 : 0
+        default:
+          return ''
+      }
+    }
+
+    const sorted = [...visits].sort((a, b) => {
+      const A = mapper(a)
+      const B = mapper(b)
+      if (A === B) return 0
+      if (sortField === 'inside' || typeof A === 'number') {
+        return sortDir === 'asc' ? A - B : B - A
+      }
+      return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1)
+    })
+
+    return sorted
+  }, [visits, sortField, sortDir])
 
   return (
     <>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1>Upcoming Visits</h1>
-        <Link href="/visits/calendar" passHref>
-          <Button variant="secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="me-2" viewBox="0 0 24 24" aria-hidden>
-              <path d="M7 10h5v5H7z" />
-              <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H5V9h14v9z" />
-            </svg>
-            Calendar
-          </Button>
-        </Link>
+        <div>
+          <VisitsToolbar />
+        </div>
       </div>
 
       {!visits.length ? (

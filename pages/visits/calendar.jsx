@@ -1,8 +1,7 @@
 import React from 'react'
 import calStyles from './Calendar.module.scss'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
-import { Button } from 'react-bootstrap'
+import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar'
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
@@ -16,16 +15,10 @@ import { getAddressesByIds } from '../../lib/addressService'
 import { getContactsByIds } from '../../lib/contactService'
 
 const locales = { 'en-US': enUS }
-const localizer = dateFnsLocalizer({ format, parse, startOfWeek: (date) => startOfWeek(date, { weekStartsOn: 1 }), getDay, locales })
+const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales })
 
 export default function VisitsCalendarPage({ events = [] }) {
   const router = useRouter()
-
-  const parsedEvents = (events || []).map(e => ({
-    ...e,
-    start: new Date(e.start),
-    end: new Date(e.end),
-  }))
 
   const handleSelectEvent = (event) => {
     const contactId = event.resource && event.resource.contactId
@@ -35,21 +28,15 @@ export default function VisitsCalendarPage({ events = [] }) {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <h1>Upcoming Visits — Calendar</h1>
-        <Link href="/visits" passHref>
-          <Button variant="secondary">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-list-ul me-2" viewBox="0 0 16 16" aria-hidden>
-              <path fillRule="evenodd" d="M5 12.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5z" />
-              <path d="M2 3.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM2 7.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0zM2 11.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
-            </svg>
-            Upcomming Visits
-          </Button>
-        </Link>
+        <h1>Visits Calendar</h1>
+        <div>
+          <VisitsToolbar />
+        </div>
       </div>
       <div className={calStyles.calendarWrapper}>
         <Calendar
           localizer={localizer}
-          events={parsedEvents}
+          events={events.map((e) => ({ ...e, start: new Date(e.start), end: new Date(e.end) }))}
           startAccessor="start"
           endAccessor="end"
           onSelectEvent={handleSelectEvent}
