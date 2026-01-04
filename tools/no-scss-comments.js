@@ -58,7 +58,6 @@ function main() {
     }
   }
   if (hasErrors) process.exit(2)
-  console.log('No SCSS comments found.')
 }
 
 main()
