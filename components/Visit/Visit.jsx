@@ -71,7 +71,7 @@ export default function Visit({
                 type="date"
                 {...register(`addresses.${nestIndex}.visits.${idx}.visitDate`)}
                 className={styles['visit-date']}
-                value={watched.visitDate || ''}
+                defaultValue={watched.visitDate || ''}
                 min={minDateStr}
               />
             </Form.Group>
@@ -81,7 +81,7 @@ export default function Visit({
                 type="checkbox"
                 {...register(`addresses.${nestIndex}.visits.${idx}.isFlexilbe`)}
                 className={styles['visit-isFlexible']}
-                checked={!!watched.isFlexilbe}
+                defaultChecked={!!watched.isFlexilbe}
               />
             </Form.Group>
             <Form.Group className={styles['visit-field-row']}>
@@ -89,7 +89,7 @@ export default function Visit({
               <Form.Select
                 {...register(`addresses.${nestIndex}.visits.${idx}.time`)}
                 className={styles['visit-time']}
-                value={watched.time || ''}
+                defaultValue={watched.time || ''}
               >
                 <option value="">Select time</option>
                 <option value="full day">Full day</option>
@@ -105,7 +105,7 @@ export default function Visit({
                   type="text"
                   {...register(`addresses.${nestIndex}.visits.${idx}.days`)}
                   className={styles['visit-days']}
-                  value={watched.days || ''}
+                  defaultValue={watched.days || ''}
                 />
               </Form.Group>
             )}
@@ -114,7 +114,7 @@ export default function Visit({
               <Form.Select
                 {...register(`addresses.${nestIndex}.visits.${idx}.recurrence`)}
                 className={styles['visit-recurrence']}
-                value={watched.recurrence || ''}
+                defaultValue={watched.recurrence || ''}
               >
                 <option value="does not reoccur">Does not reoccur</option>
                 <option value="2 weeks">2 weeks</option>
@@ -128,7 +128,7 @@ export default function Visit({
                 type="checkbox"
                 {...register(`addresses.${nestIndex}.visits.${idx}.isInside`)}
                 className={styles['visit-isInside']}
-                checked={!!watched.isInside}
+                defaultChecked={!!watched.isInside}
               />
             </Form.Group>
             <Form.Control
@@ -137,7 +137,7 @@ export default function Visit({
               {...register(`addresses.${nestIndex}.visits.${idx}.notes`)}
               placeholder="Note"
               className={styles['visit-note']}
-              value={watched.notes || ''}
+              defaultValue={watched.notes || ''}
             />
             <div className={styles['visit-field-row']}>
               <span className={styles['visit-label']}></span>

@@ -4,6 +4,12 @@ import { useFieldArray, useWatch } from 'react-hook-form';
 
 import Visit from './Visit';
 import styles from './Visits.module.scss';
+import {
+	getTomorrowMinDate,
+	makeNewVisitFromMostRecent,
+	getVisibleVisitPositions,
+	defaultCollapsedFor,
+} from '../../lib/visitFormService';
 
 export default function Visits({ nestIndex, control, register, errors, createCalendarInvite }) {
 	let fields = [];
@@ -24,7 +30,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	}
 	const [calendarError, setCalendarError] = useState({});
 	const watchedVisits = (control && typeof control._getFieldArray === 'function') ? useWatch({ control, name: `addresses.${nestIndex}.visits` }) : fields;
-	const [collapsed, setCollapsed] = useState(fields.map(() => true));
+	const [collapsed, setCollapsed] = useState(defaultCollapsedFor(fields.length));
 
 	useEffect(() => {
 		if (!fields.length) {
@@ -32,15 +38,8 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 			return;
 		}
 		setCollapsed(prev => {
-			if (fields.length === 1) return [false];
-
-			if (prev && prev.length < fields.length) {
-				return [false, ...Array.from({ length: fields.length - 1 }, () => true)];
-			}
-
 			if (prev && prev.length === fields.length) return prev;
-
-			return fields.map(() => true);
+			return defaultCollapsedFor(fields.length);
 		});
 	}, [fields, add]);
 
@@ -53,55 +52,14 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	};
 
 	const addVisit = () => {
-		let newVisit = { visitDate: null };
-		if (fields.length) {
-			const sorted = [...fields].sort((a, b) => {
-				if (!a.visitDate && !b.visitDate) return 0;
-				if (!a.visitDate) return 1;
-				if (!b.visitDate) return -1;
-				return b.visitDate.localeCompare(a.visitDate);
-			});
-			const mostRecent = sorted[0] || {};
-			newVisit = {
-				visitDate: null,
-				notes: mostRecent.notes || '',
-				recurrence: mostRecent.recurrence || 'does not reoccur',
-				time: mostRecent.time || '',
-				days: mostRecent.days || '',
-				isInside: mostRecent.isInside || false,
-				isFlexilbe: mostRecent.isFlexilbe || false
-			};
-		}
+		const newVisit = makeNewVisitFromMostRecent(fields);
 		add(newVisit, { at: 0 });
 		setCollapsed(prev => [false, ...(Array.isArray(prev) ? prev.map(() => true) : [])]);
 	};
 
-	const tomorrow = new Date();
-	tomorrow.setDate(tomorrow.getDate() + 1);
-	const minDateStr = tomorrow.toISOString().split('T')[0];
+	const minDateStr = getTomorrowMinDate();
 
-	const cutoff = new Date();
-	cutoff.setDate(cutoff.getDate() - 14);
-	const cutoffStr = cutoff.toISOString().split('T')[0];
-
-	const displayIndices = fields
-		.map((f, i) => i)
-		.filter(i => {
-			const watched = watchedVisits?.[i] || {};
-			const dateStr = watched.visitDate ?? fields[i]?.visitDate;
-			if (!dateStr) return true;
-			return dateStr >= cutoffStr;
-		})
-		.sort((ai, bi) => {
-			const a = watchedVisits?.[ai] || fields[ai] || {};
-			const b = watchedVisits?.[bi] || fields[bi] || {};
-			const aDate = a.visitDate;
-			const bDate = b.visitDate;
-			if (!aDate && !bDate) return 0;
-			if (!aDate) return -1;
-			if (!bDate) return 1;
-			return aDate.localeCompare(bDate);
-		});
+	const displayIndices = getVisibleVisitPositions({ fields, watchedVisits, cutoffDays: 14 });
 
 	return (
 		<div className={styles['visits-root']}>
@@ -114,10 +72,11 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 			<div className={styles['visits-list-scroll']}>
 				{displayIndices.map(idx => {
 					const field = fields[idx];
+					const key = field?.id ?? idx;
 					const watched = watchedVisits?.[idx] || {};
 					return (
 						<Visit
-							key={field.id}
+							key={key}
 							field={field}
 							idx={idx}
 							nestIndex={nestIndex}
