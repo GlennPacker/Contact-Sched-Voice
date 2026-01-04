@@ -6,12 +6,24 @@ import Visit from './Visit';
 import styles from './Visits.module.scss';
 
 export default function Visits({ nestIndex, control, register, errors, createCalendarInvite }) {
-	const { fields, append: add, remove } = useFieldArray({
-		control,
-		name: `addresses.${nestIndex}.visits`
-	});
+	let fields = [];
+	let add = () => {};
+	let remove = () => {};
+	const [localFields, setLocalFields] = useState([{ visitDate: null, notes: '' }]);
+	const addLocal = React.useCallback((item) => setLocalFields(prev => (Array.isArray(prev) ? [item, ...prev] : [item])), [setLocalFields]);
+	const removeLocal = React.useCallback((idx) => setLocalFields(prev => prev.filter((_, i) => i !== idx)), [setLocalFields]);
+	if (control && typeof control._getFieldArray === 'function') {
+		const res = useFieldArray({ control, name: `addresses.${nestIndex}.visits` });
+		fields = res.fields;
+		add = res.append;
+		remove = res.remove;
+	} else {
+		fields = localFields;
+		add = addLocal;
+		remove = removeLocal;
+	}
 	const [calendarError, setCalendarError] = useState({});
-	const watchedVisits = useWatch({ control, name: `addresses.${nestIndex}.visits` });
+	const watchedVisits = (control && typeof control._getFieldArray === 'function') ? useWatch({ control, name: `addresses.${nestIndex}.visits` }) : fields;
 	const [collapsed, setCollapsed] = useState(fields.map(() => true));
 
 	useEffect(() => {
