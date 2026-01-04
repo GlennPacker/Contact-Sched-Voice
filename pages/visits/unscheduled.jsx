@@ -1,4 +1,4 @@
-import { Alert, Table, Button, Form } from 'react-bootstrap'
+import { Alert, Form } from 'react-bootstrap'
 import indexStyles from './Index.module.scss'
 import { getAddressesByIds } from '../../lib/addressService'
 
@@ -7,6 +7,7 @@ import React, { useState } from 'react'
 import { getContactsByIds } from '../../lib/contactService'
 import { listUnscheduledVisits } from '../../lib/visitService'
 import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar'
+import VisitsTable from '../../components/VisitsTable/VisitsTable'
 
 export default function UnscheduledVisitsPage({ visits = [], error = null }) {
   if (error) return <Alert variant="danger">{error}</Alert>
@@ -39,36 +40,7 @@ export default function UnscheduledVisitsPage({ visits = [], error = null }) {
       {!displayed.length ? (
         <Alert variant="info">No unscheduled visits</Alert>
       ) : (
-        <Table striped bordered hover responsive className={indexStyles.visitsTable}>
-          <thead>
-            <tr>
-              <th className={indexStyles.colName}>Name</th>
-              <th className={indexStyles.colAddress}>Address</th>
-              <th>Notes</th>
-              <th className={indexStyles.colDate}>Earliest</th>
-              <th className={indexStyles.colInside}>Inside</th>
-            </tr>
-          </thead>
-          <tbody>
-            {displayed.map((v, idx) => (
-              <tr key={`${v.id}-${v.addressId}-${idx}`}>
-                <td>
-                  {v.contactId ? (
-                    <Link href={`/contacts/${v.contactId}/edit`} passHref>
-                      {v.contactName || '—'}
-                    </Link>
-                  ) : (
-                    v.contactName || '—'
-                  )}
-                </td>
-                <td>{v.address || '—'}</td>
-                <td>{v.visitNote || '—'}</td>
-                <td>{v.earliestDate || '—'}</td>
-                <td>{v.isInside ? 'Yes' : 'No'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <VisitsTable visits={displayed} dateField="earliestDate" dateLabel="Earliest" />
       )}
     </>
   )
