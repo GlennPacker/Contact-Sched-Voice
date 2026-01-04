@@ -14,7 +14,7 @@ export default function Toolbar() {
                     <Navbar.Toggle aria-controls="main-nav" />
                     <Navbar.Collapse id="main-nav">
                         <Nav className="ms-auto">
-                            <Link href="/visits" passHref legacyBehavior>
+                            <Link href="/visits/calendar" passHref legacyBehavior>
                                 <Nav.Link>Visits</Nav.Link>
                             </Link>
                             <Link href="/contacts" passHref legacyBehavior>
