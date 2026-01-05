@@ -1,15 +1,15 @@
 import { Button, Form } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
+import {
+	defaultCollapsedFor,
+	getTomorrowMinDate,
+	makeNewVisitFromMostRecent,
+	orderVisits,
+} from '../../lib/visitFormService';
 import { useFieldArray, useWatch } from 'react-hook-form';
 
 import Visit from './Visit';
 import styles from './Visits.module.scss';
-import {
-	getTomorrowMinDate,
-	makeNewVisitFromMostRecent,
-	orderVisits,
-	defaultCollapsedFor,
-} from '../../lib/visitFormService';
 
 export default function Visits({ nestIndex, control, register, errors, createCalendarInvite }) {
 	let fields = [];
@@ -35,10 +35,12 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	useEffect(() => {
 		if (!fields.length) {
 			add({ visitDate: null, notes: '' });
+
 			return;
 		}
 		setCollapsed(prev => {
 			if (prev && prev.length === fields.length) return prev;
+
 			return defaultCollapsedFor(fields.length);
 		});
 	}, [fields, add]);
@@ -72,6 +74,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 			<div className={styles['visits-list-scroll']}>
 				{orderedVisits.map(idx => {
 					const field = fields[idx];
+
 					return (
 						<Visit
 							key={field.id ?? idx}

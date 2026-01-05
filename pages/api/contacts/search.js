@@ -23,6 +23,7 @@ export default async function handler(req, res) {
         : false;
 
       const score = (matchName ? 1 : 0) + (matchAddress ? 1 : 0);
+
       return { contact: c, score };
     });
 
@@ -30,6 +31,7 @@ export default async function handler(req, res) {
       .filter(s => s.score)
       .sort((a, b) => {
         if (b.score !== a.score) return b.score - a.score;
+
         return (a.contact.name || '').localeCompare(b.contact.name || '');
       })
       .map(s => s.contact);

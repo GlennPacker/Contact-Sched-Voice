@@ -1,11 +1,11 @@
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
+import { buildPayloadFromForm, computeRateAdjustments, getDefaultFormValues, getEnvRates } from '../../lib/contactFormService';
 import { useEffect, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 
 import Addresses from '../Address/Addresses';
 import { contactCreateAppointment } from '../../lib/visitUtils';
 import styles from './Contact.module.scss';
-import { getDefaultFormValues, computeRateAdjustments, buildPayloadFromForm, getEnvRates } from '../../lib/contactFormService';
 
 export default function Contact({ initialValues = null, submit, priceReviewDateReadOnly = false }) {
   const envRates = getEnvRates();
@@ -106,6 +106,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
               const isEmail = opt.id === 'email';
               const isWhatsapp = opt.id === 'whatsapp';
               const isSelected = Boolean(watchedTypes[opt.id]?.selected);
+
               return (
                 <div key={opt.id} className="mb-3">
                   <Form.Check type="checkbox" id={`ct-${opt.id}`} label={opt.label} {...register(`contactTypes.${opt.id}.selected`)} />

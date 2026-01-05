@@ -1,11 +1,12 @@
-import React, { useState, useMemo } from 'react';
-import styles from './index.module.scss';
 import { Button, ButtonGroup } from 'react-bootstrap';
-import Contacts from '../../components/Contacts/Contacts';
-import ContactSearch from '../../components/Contacts/ContactSearch';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import React, { useMemo, useState } from 'react';
 import { listContacts, searchContacts } from '../../lib/contactService';
+
+import ContactSearch from '../../components/Contacts/ContactSearch';
+import Contacts from '../../components/Contacts/Contacts';
+import Link from 'next/link';
+import styles from './index.module.scss';
+import { useRouter } from 'next/router';
 
 export default function ContactsPage({ contacts = [], error = null }) {
   const router = useRouter();
@@ -62,6 +63,7 @@ export default function ContactsPage({ contacts = [], error = null }) {
 export async function getServerSideProps() {
   try {
     const data = await listContacts();
+
     return { props: { contacts: data, error: null } };
   } catch (err) {
     return { props: { contacts: null, error: err?.message || 'Server error' } };

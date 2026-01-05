@@ -14,6 +14,7 @@ function walk(dir, fileList = []) {
       fileList.push(full);
     }
   }
+
   return fileList;
 }
 
@@ -36,6 +37,7 @@ function checkFile(filePath) {
     }
   });
   if (lineMatches.length) results.push({ type: 'line', matches: lineMatches });
+
   return results;
 }
 

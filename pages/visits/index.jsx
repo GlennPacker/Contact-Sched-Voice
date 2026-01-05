@@ -1,10 +1,10 @@
 import { Alert } from 'react-bootstrap';
 import React from 'react';
-import { listVisits } from '../../lib/visitService';
+import VisitsTable from '../../components/VisitsTable/VisitsTable';
+import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
 import { getAddressesByIds } from '../../lib/addressService';
 import { getContactsByIds } from '../../lib/contactService';
-import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
-import VisitsTable from '../../components/VisitsTable/VisitsTable';
+import { listVisits } from '../../lib/visitService';
 
 export default function VisitsPage({ visits = [], error = null }) {
   if (error) return <Alert variant="danger">{error}</Alert>;
@@ -43,6 +43,7 @@ export async function getServerSideProps() {
     const visits = (allVisits || []).map(v => {
       const addr = addressMap[v.addressId] || {};
       const contact = addr ? contactMap[addr.contactId] : null;
+
       return {
         id: v.id,
         contactId: contact && contact.id,

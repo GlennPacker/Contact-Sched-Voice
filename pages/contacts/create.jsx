@@ -8,6 +8,7 @@ export default function NewContactPage() {
   const createContact = async contact => {
     return await addContact(contact);
   };
+
   return (
     <div>
       <h1>Create Contact</h1>

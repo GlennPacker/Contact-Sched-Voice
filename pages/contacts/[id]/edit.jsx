@@ -1,7 +1,8 @@
-import Contact from '../../../components/Contact/Contact';
-import styles from './EditContact.module.scss';
-import Link from 'next/link';
 import { getContact, updateContact } from '../../../lib/contactService';
+
+import Contact from '../../../components/Contact/Contact';
+import Link from 'next/link';
+import styles from './EditContact.module.scss';
 
 export default function EditContactPage({ initialValues = null, error = null, id }) {
     if (error) {
@@ -32,6 +33,7 @@ export async function getServerSideProps({ params }) {
     const id = params.id;
     try {
         const data = await getContact(id);
+
         return { props: { initialValues: data, id } };
     } catch (err) {
         return { props: { initialValues: null, error: err && err.message ? err.message : 'Server error' } };

@@ -1,18 +1,19 @@
-import React from 'react';
-import calStyles from './Calendar.module.scss';
-import { useRouter } from 'next/router';
-import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
-import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-import startOfWeek from 'date-fns/startOfWeek';
-import getDay from 'date-fns/getDay';
-import { enUS } from 'date-fns/locale';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import { listVisits } from '../../lib/visitService';
+import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+
+import React from 'react';
+import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
+import calStyles from './Calendar.module.scss';
+import { enUS } from 'date-fns/locale';
+import format from 'date-fns/format';
 import { getAddressesByIds } from '../../lib/addressService';
 import { getContactsByIds } from '../../lib/contactService';
+import getDay from 'date-fns/getDay';
+import { listVisits } from '../../lib/visitService';
+import parse from 'date-fns/parse';
+import startOfWeek from 'date-fns/startOfWeek';
+import { useRouter } from 'next/router';
 
 const locales = { 'en-US': enUS };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
@@ -67,6 +68,7 @@ export async function getServerSideProps() {
       const start = new Date(v.visitDate + 'T00:00:00');
       const end = new Date(start);
       end.setDate(end.getDate() + 1);
+
       return { title, start: start.toISOString(), end: end.toISOString(), allDay: true, resource: { visit: v, contactId: contact && contact.id } };
     });
 

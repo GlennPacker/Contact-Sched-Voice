@@ -1,10 +1,10 @@
+import { Button, Form, Tab, Tabs } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Tabs, Tab } from 'react-bootstrap';
-import { useWatch } from 'react-hook-form';
 
-import styles from './Addresses.module.scss';
 import Address from './Address.jsx';
 import Visits from '../Visit/Visits.jsx';
+import styles from './Addresses.module.scss';
+import { useWatch } from 'react-hook-form';
 
 export default function Addresses({ addressFields, register, removeAddress, appendAddress: addAddress, errors, control, contactName, onCalendarInvite }) {
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -70,6 +70,7 @@ export default function Addresses({ addressFields, register, removeAddress, appe
           {addressFields.map((field, idx) => {
             const addressText = (watchedAddresses?.[idx]?.address || '').trim();
             const title = addressText ? (addressText.length > 25 ? `${addressText.slice(0, 25)}…` : addressText) : `Address ${idx + 1}`;
+
             return (
               <Tab eventKey={idx} title={title} key={field.id}>
                 <div className="mt-3">

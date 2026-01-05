@@ -1,13 +1,13 @@
 import { Alert, Form } from 'react-bootstrap';
-import indexStyles from './Index.module.scss';
-import { getAddressesByIds } from '../../lib/addressService';
+import React, { useState } from 'react';
 
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { getContactsByIds } from '../../lib/contactService';
-import { listUnscheduledVisits } from '../../lib/visitService';
-import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
 import VisitsTable from '../../components/VisitsTable/VisitsTable';
+import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
+import { getAddressesByIds } from '../../lib/addressService';
+import { getContactsByIds } from '../../lib/contactService';
+import indexStyles from './Index.module.scss';
+import { listUnscheduledVisits } from '../../lib/visitService';
 
 export default function UnscheduledVisitsPage({ visits = [], error = null }) {
   if (error) return <Alert variant="danger">{error}</Alert>;
@@ -16,8 +16,7 @@ export default function UnscheduledVisitsPage({ visits = [], error = null }) {
   const today = new Date().toISOString().split('T')[0];
 
   const displayed = visits.filter(v => {
-    if (!v.earliestDate || v.earliestDate <= today) return true;
-    return showFuture;
+    return (!v.earliestDate || v.earliestDate <= today) || showFuture;
   });
 
   return (

@@ -26,9 +26,11 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
     if (m && m[1]) {
       const last = m[1];
       const idx = addr.lastIndexOf(last);
-      return addr.slice(idx).trim();
+      
+return addr.slice(idx).trim();
     }
-    return addr.trim();
+    
+return addr.trim();
   };
 
   const uniqueNames = useMemo(() => {
@@ -41,7 +43,8 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
       const label = formatAddressForSelect(v.address);
       if (label) set.set(label, label);
     });
-    return [...set.values()].sort();
+    
+return [...set.values()].sort();
   }, [visits]);
 
   const filtered = useMemo(() => {
@@ -57,7 +60,8 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
         if (filters.inside === 'yes' && !v.isInside) return false;
         if (filters.inside === 'no' && v.isInside) return false;
       }
-      return true;
+      
+return true;
     });
   }, [visits, filters, dateField]);
 
@@ -73,11 +77,13 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
           return '';
       }
     };
-    return [...filtered].sort((a, b) => {
+    
+return [...filtered].sort((a, b) => {
       const A = mapper(a);
       const B = mapper(b);
       if (A === B) return 0;
-      return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1);
+      
+return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1);
     });
   }, [filtered, sortField, sortDir, dateField]);
 

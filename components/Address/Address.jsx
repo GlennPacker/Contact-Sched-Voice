@@ -1,8 +1,9 @@
-import React from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { useWatch } from 'react-hook-form';
+
+import React from 'react';
 import Visits from '../Visit/Visits.jsx';
 import styles from './Address.module.scss';
+import { useWatch } from 'react-hook-form';
 
 export default function Address({ field, idx, register, errors, removeAddress, totalAddresses, contactName, control, onCalendarInvite, isSelected, onSelect }) {
   const watchedAddresses = useWatch({ control, name: 'addresses' });
@@ -14,6 +15,7 @@ export default function Address({ field, idx, register, errors, removeAddress, t
       visit,
       address: address
     };
+
     return onCalendarInvite(calendarData);
   }
 
