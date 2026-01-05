@@ -1,15 +1,15 @@
-import { Alert, Button, Form, Spinner } from 'react-bootstrap'
-import { useEffect, useState } from 'react'
-import { useFieldArray, useForm, useWatch } from 'react-hook-form'
+import { Alert, Button, Form, Spinner } from 'react-bootstrap';
+import { useEffect, useState } from 'react';
+import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 
-import Addresses from '../Address/Addresses'
+import Addresses from '../Address/Addresses';
 import { contactCreateAppointment } from '../../lib/visitUtils';
 import styles from './Contact.module.scss';
-import { getDefaultFormValues, computeRateAdjustments, buildPayloadFromForm, getEnvRates } from '../../lib/contactFormService'
+import { getDefaultFormValues, computeRateAdjustments, buildPayloadFromForm, getEnvRates } from '../../lib/contactFormService';
 
 export default function Contact({ initialValues = null, submit, priceReviewDateReadOnly = false }) {
-  const envRates = getEnvRates()
-  const defaultFormValues = getDefaultFormValues(initialValues)
+  const envRates = getEnvRates();
+  const defaultFormValues = getDefaultFormValues(initialValues);
 
   const {
     register,
@@ -19,68 +19,68 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
     setValue,
     control,
     formState: { errors, isSubmitting },
-  } = useForm({ defaultValues: defaultFormValues })
-  const priceReviewDateValue = watch('priceReviewDate')
-  const halfDay = watch('rateHalfDay')
-  const twoHour = watch('rateTwoHour')
+  } = useForm({ defaultValues: defaultFormValues });
+  const priceReviewDateValue = watch('priceReviewDate');
+  const halfDay = watch('rateHalfDay');
+  const twoHour = watch('rateTwoHour');
   const watchedForm = useWatch({ control });
 
   const fullDayBlur = e => {
-    const val = +e.target.value
-    if (!val) return
-    const updates = computeRateAdjustments(val, halfDay, twoHour)
-    if (!updates.rateHalfDay) etValue('rateHalfDay', updates.rateHalfDay, { shouldValidate: true, shouldDirty: true })
-    if (!updates.rateTwoHour) setValue('rateTwoHour', updates.rateTwoHour, { shouldValidate: true, shouldDirty: true })
-  }
+    const val = +e.target.value;
+    if (!val) return;
+    const updates = computeRateAdjustments(val, halfDay, twoHour);
+    if (!updates.rateHalfDay) etValue('rateHalfDay', updates.rateHalfDay, { shouldValidate: true, shouldDirty: true });
+    if (!updates.rateTwoHour) setValue('rateTwoHour', updates.rateTwoHour, { shouldValidate: true, shouldDirty: true });
+  };
 
   const { fields: addressFields, append: addAddress, remove: removeAddress } = useFieldArray({
     control,
     name: 'addresses',
-  })
+  });
 
   useEffect(() => {
     if (!addressFields.length) {
-      addAddress({ address: '' })
+      addAddress({ address: '' });
     }
-  }, [addressFields, addAddress])
+  }, [addressFields, addAddress]);
 
   const CONTACT_TYPE_OPTIONS = [
     { id: 'facebookGlenn', label: 'Facebook (Glenn)' },
     { id: 'facebookHandyman', label: 'Facebook (Handyman)' },
     { id: 'whatsapp', label: 'WhatsApp' },
     { id: 'email', label: 'Email' },
-  ]
+  ];
 
-  const watchedTypes = watch('contactTypes') || {}
+  const watchedTypes = watch('contactTypes') || {};
 
-  const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(null)
-  const [warnings, setWarnings] = useState([])
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [warnings, setWarnings] = useState([]);
 
   const formSubmit = async formData => {
-    setError(null)
-    setSuccess(null)
-    setWarnings([])
+    setError(null);
+    setSuccess(null);
+    setWarnings([]);
 
     try {
-      const payload = buildPayloadFromForm(formData)
-      const result = await submit(payload)
+      const payload = buildPayloadFromForm(formData);
+      const result = await submit(payload);
 
       if (result?.error) {
-        setError(result.error.message || 'Failed to save')
+        setError(result.error.message || 'Failed to save');
         if (result?.data && Array.isArray(result.data.warnings) && result.data.warnings.length) {
-          setWarnings(result.data.warnings)
+          setWarnings(result.data.warnings);
         }
       } else {
-        setSuccess('Saved successfully.')
+        setSuccess('Saved successfully.');
         if (result?.data && Array.isArray(result.data.warnings) && result.data.warnings.length) {
-          setWarnings(result.data.warnings)
+          setWarnings(result.data.warnings);
         }
       }
     } catch (err) {
-      setError(err.message || 'An unexpected error occurred')
+      setError(err.message || 'An unexpected error occurred');
     }
-  }
+  };
 
   return (
     <>
@@ -103,9 +103,9 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
           <Form.Group className="mb-3" controlId="contactTypes">
             <Form.Label className={styles['section-title']}>Contact types *</Form.Label>
             {CONTACT_TYPE_OPTIONS.map(opt => {
-              const isEmail = opt.id === 'email'
-              const isWhatsapp = opt.id === 'whatsapp'
-              const isSelected = Boolean(watchedTypes[opt.id]?.selected)
+              const isEmail = opt.id === 'email';
+              const isWhatsapp = opt.id === 'whatsapp';
+              const isSelected = Boolean(watchedTypes[opt.id]?.selected);
               return (
                 <div key={opt.id} className="mb-3">
                   <Form.Check type="checkbox" id={`ct-${opt.id}`} label={opt.label} {...register(`contactTypes.${opt.id}.selected`)} />
@@ -141,7 +141,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
                     </>
                   )}
                 </div>
-              )
+              );
             })}
           </Form.Group>
           <Form.Group className="mb-3" controlId="rates">
@@ -233,5 +233,5 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
         </div>
       </Form>
     </>
-  )
+  );
 }

@@ -1,19 +1,19 @@
-import React from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import { Button } from 'react-bootstrap'
+import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { Button } from 'react-bootstrap';
 
 export default function VisitsToolbar() {
-  const router = useRouter()
-  const path = router.pathname
+  const router = useRouter();
+  const path = router.pathname;
 
   const items = [
     { href: '/visits', label: 'Visits', icon: '/icons/visits.svg' },
     { href: '/visits/calendar', label: 'Calendar', icon: '/icons/calendar.svg' },
     { href: '/visits/unscheduled', label: 'Unscheduled', icon: '/icons/unscheduled.svg' },
-  ]
+  ];
 
-  const toolbarItems = items.filter(navigation => navigation.href !== path)
+  const toolbarItems = items.filter(navigation => navigation.href !== path);
 
   return (
     <div className="d-flex">
@@ -26,5 +26,5 @@ export default function VisitsToolbar() {
         </Link>
       ))}
     </div>
-  )
+  );
 }

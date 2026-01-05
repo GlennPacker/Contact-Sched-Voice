@@ -1,7 +1,7 @@
-import React from 'react'
-import { Navbar, Nav, Container } from 'react-bootstrap'
-import Link from 'next/link'
-import styles from './Toolbar.module.scss'
+import React from 'react';
+import { Navbar, Nav, Container } from 'react-bootstrap';
+import Link from 'next/link';
+import styles from './Toolbar.module.scss';
 
 export default function Toolbar() {
     return (
@@ -28,5 +28,5 @@ export default function Toolbar() {
                 </div>
             </Container>
         </Navbar>
-    )
+    );
 }

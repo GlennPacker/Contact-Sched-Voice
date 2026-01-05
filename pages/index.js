@@ -1,6 +1,6 @@
-import Link from 'next/link'
-import { Button } from 'react-bootstrap'
-import styles from './index.module.css'
+import Link from 'next/link';
+import { Button } from 'react-bootstrap';
+import styles from './index.module.css';
 
 export default function Home() {
   return (
@@ -16,5 +16,5 @@ export default function Home() {
         </div>
       </div>
     </main>
-  )
+  );
 }

@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Tabs, Tab } from 'react-bootstrap';
-import { useWatch } from 'react-hook-form'
+import { useWatch } from 'react-hook-form';
 
 import styles from './Addresses.module.scss';
 import Address from './Address.jsx';
 import Visits from '../Visit/Visits.jsx';
 
 export default function Addresses({ addressFields, register, removeAddress, appendAddress: addAddress, errors, control, contactName, onCalendarInvite }) {
-  const [selectedIndex, setSelectedIndex] = useState(0)
-  let watchedAddresses = []
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  let watchedAddresses = [];
   try {
     if (control && typeof control._getWatch === 'function') {
-      watchedAddresses = useWatch({ control, name: 'addresses' }) || []
+      watchedAddresses = useWatch({ control, name: 'addresses' }) || [];
     }
   } catch (e) {
-    watchedAddresses = []
+    watchedAddresses = [];
   }
 
   useEffect(() => {
     if (selectedIndex >= addressFields.length) {
-      setSelectedIndex(Math.max(0, addressFields.length - 1))
+      setSelectedIndex(Math.max(0, addressFields.length - 1));
     }
-  }, [addressFields.length])
+  }, [addressFields.length]);
 
   return (
     <Form.Group className="mb-3">
@@ -68,8 +68,8 @@ export default function Addresses({ addressFields, register, removeAddress, appe
       {addressFields.length > 1 && (
         <Tabs activeKey={selectedIndex} onSelect={k => setSelectedIndex(+k)} className="mt-3">
           {addressFields.map((field, idx) => {
-            const addressText = (watchedAddresses?.[idx]?.address || '').trim()
-            const title = addressText ? (addressText.length > 25 ? `${addressText.slice(0, 25)}…` : addressText) : `Address ${idx + 1}`
+            const addressText = (watchedAddresses?.[idx]?.address || '').trim();
+            const title = addressText ? (addressText.length > 25 ? `${addressText.slice(0, 25)}…` : addressText) : `Address ${idx + 1}`;
             return (
               <Tab eventKey={idx} title={title} key={field.id}>
                 <div className="mt-3">
@@ -82,10 +82,10 @@ export default function Addresses({ addressFields, register, removeAddress, appe
                   />
                 </div>
               </Tab>
-            )
+            );
           })}
         </Tabs>
       )}
     </Form.Group>
-  )
+  );
 }

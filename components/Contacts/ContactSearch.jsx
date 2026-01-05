@@ -1,22 +1,22 @@
-import React, { useState } from 'react'
-import { Form, Row, Col, Button } from 'react-bootstrap'
-import styles from './ContactSearch.module.scss'
+import React, { useState } from 'react';
+import { Form, Row, Col, Button } from 'react-bootstrap';
+import styles from './ContactSearch.module.scss';
 
 export default function ContactSearch({ search, reset }) {
-    const [name, setName] = useState('')
-    const [address, setAddress] = useState('')
+    const [name, setName] = useState('');
+    const [address, setAddress] = useState('');
 
     const submit = e => {
-        e.preventDefault()
-        if (search) search({ name, address })
-    }
+        e.preventDefault();
+        if (search) search({ name, address });
+    };
 
     const clear = e => {
-        e.preventDefault()
-        setName('')
-        setAddress('')
-        if (reset) reset()
-    }
+        e.preventDefault();
+        setName('');
+        setAddress('');
+        if (reset) reset();
+    };
 
     return (
         <div className={styles.container}>
@@ -53,5 +53,5 @@ export default function ContactSearch({ search, reset }) {
                 </Row>
             </Form>
         </div>
-    )
+    );
 }

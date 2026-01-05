@@ -14,9 +14,9 @@ export default {
     return {
       CallExpression(node) {
         if (node.callee && node.callee.type === 'Identifier' && node.callee.name === 'Number') {
-          context.report({ node, messageId: 'useUnaryPlus' })
+          context.report({ node, messageId: 'useUnaryPlus' });
         }
       }
-    }
+    };
   }
-}
+};

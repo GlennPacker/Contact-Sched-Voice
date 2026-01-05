@@ -1,9 +1,9 @@
-import React from 'react'
-import { Table, Alert } from 'react-bootstrap'
-import styles from './Contacts.module.scss'
+import React from 'react';
+import { Table, Alert } from 'react-bootstrap';
+import styles from './Contacts.module.scss';
 
 export default function Contacts({ contacts = [], error = null, onActivate }) {
-    if (error) return <Alert variant="danger">{error}</Alert>
+    if (error) return <Alert variant="danger">{error}</Alert>;
 
     return (
         <Table striped bordered hover responsive className={styles.tableFixed}>
@@ -20,7 +20,7 @@ export default function Contacts({ contacts = [], error = null, onActivate }) {
                         role="button"
                         tabIndex={0}
                         onClick={() => onActivate && onActivate(c.id)}
-                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onActivate && onActivate(c.id) }}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onActivate && onActivate(c.id); }}
                         className={styles.clickableRow}
                     >
                         <td>{c.name}</td>
@@ -37,5 +37,5 @@ export default function Contacts({ contacts = [], error = null, onActivate }) {
                 ))}
             </tbody>
         </Table>
-    )
+    );
 }

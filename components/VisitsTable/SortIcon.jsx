@@ -1,14 +1,14 @@
-import React from 'react'
+import React from 'react';
 
-const cycleDir = current => (current === 'none' ? 'asc' : current === 'asc' ? 'desc' : 'none')
+const cycleDir = current => (current === 'none' ? 'asc' : current === 'asc' ? 'desc' : 'none');
 
 export default function SortIcon({ field, activeField, activeDir, onChange }) {
-  const isActive = activeField === field && activeDir !== 'none'
+  const isActive = activeField === field && activeDir !== 'none';
 
   const handleClick = () => {
-    const next = activeField !== field ? 'asc' : cycleDir(activeDir)
-    if (onChange) onChange(field, next)
-  }
+    const next = activeField !== field ? 'asc' : cycleDir(activeDir);
+    if (onChange) onChange(field, next);
+  };
 
   if (!isActive) {
     return (
@@ -17,7 +17,7 @@ export default function SortIcon({ field, activeField, activeDir, onChange }) {
           <path d="M2 8h12" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
         </svg>
       </button>
-    )
+    );
   }
 
   if (activeDir === 'asc') {
@@ -27,7 +27,7 @@ export default function SortIcon({ field, activeField, activeDir, onChange }) {
           <path d="M8 4l4 6H4l4-6z" fill="currentColor" />
         </svg>
       </button>
-    )
+    );
   }
 
   return (
@@ -36,5 +36,5 @@ export default function SortIcon({ field, activeField, activeDir, onChange }) {
         <path d="M8 12l-4-6h8l-4 6z" fill="currentColor" />
       </svg>
     </button>
-  )
+  );
 }

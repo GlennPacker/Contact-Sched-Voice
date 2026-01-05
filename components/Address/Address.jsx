@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useWatch } from 'react-hook-form';
-import Visits from '../Visit/Visits.jsx'
+import Visits from '../Visit/Visits.jsx';
 import styles from './Address.module.scss';
 
 export default function Address({ field, idx, register, errors, removeAddress, totalAddresses, contactName, control, onCalendarInvite, isSelected, onSelect }) {

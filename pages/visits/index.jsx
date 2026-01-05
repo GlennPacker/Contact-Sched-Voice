@@ -1,13 +1,13 @@
-import { Alert } from 'react-bootstrap'
-import React from 'react'
-import { listVisits } from '../../lib/visitService'
-import { getAddressesByIds } from '../../lib/addressService'
-import { getContactsByIds } from '../../lib/contactService'
-import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar'
-import VisitsTable from '../../components/VisitsTable/VisitsTable'
+import { Alert } from 'react-bootstrap';
+import React from 'react';
+import { listVisits } from '../../lib/visitService';
+import { getAddressesByIds } from '../../lib/addressService';
+import { getContactsByIds } from '../../lib/contactService';
+import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
+import VisitsTable from '../../components/VisitsTable/VisitsTable';
 
 export default function VisitsPage({ visits = [], error = null }) {
-  if (error) return <Alert variant="danger">{error}</Alert>
+  if (error) return <Alert variant="danger">{error}</Alert>;
 
   return (
     <>
@@ -24,25 +24,25 @@ export default function VisitsPage({ visits = [], error = null }) {
         <VisitsTable visits={visits} dateField="visitDate" dateLabel="Date" />
       )}
     </>
-  )
+  );
 }
 
 export async function getServerSideProps() {
   try {
-    const today = new Date().toISOString().split('T')[0]
-    const allVisits = await listVisits({ fromDate: today, order: 'asc', limit: 25 })
+    const today = new Date().toISOString().split('T')[0];
+    const allVisits = await listVisits({ fromDate: today, order: 'asc', limit: 25 });
 
-    const addressIds = [...new Set((allVisits || []).map(v => v.addressId))]
-    const addresses = addressIds.length ? await getAddressesByIds(addressIds) : []
-    const contactIds = [...new Set((addresses || []).map(a => a.contactId))]
-    const contacts = contactIds.length ? await getContactsByIds(contactIds) : []
+    const addressIds = [...new Set((allVisits || []).map(v => v.addressId))];
+    const addresses = addressIds.length ? await getAddressesByIds(addressIds) : [];
+    const contactIds = [...new Set((addresses || []).map(a => a.contactId))];
+    const contacts = contactIds.length ? await getContactsByIds(contactIds) : [];
 
-    const addressMap = Object.fromEntries((addresses || []).map(a => [a.id, a]))
-    const contactMap = Object.fromEntries((contacts || []).map(c => [c.id, c]))
+    const addressMap = Object.fromEntries((addresses || []).map(a => [a.id, a]));
+    const contactMap = Object.fromEntries((contacts || []).map(c => [c.id, c]));
 
     const visits = (allVisits || []).map(v => {
-      const addr = addressMap[v.addressId] || {}
-      const contact = addr ? contactMap[addr.contactId] : null
+      const addr = addressMap[v.addressId] || {};
+      const contact = addr ? contactMap[addr.contactId] : null;
       return {
         id: v.id,
         contactId: contact && contact.id,
@@ -52,11 +52,11 @@ export async function getServerSideProps() {
         visitNote: v.notes,
         visitDate: v.visitDate,
         isInside: v.isInside,
-      }
-    })
+      };
+    });
 
-    return { props: { visits, error: null } }
+    return { props: { visits, error: null } };
   } catch (err) {
-    return { props: { visits: [], error: err && err.message ? err.message : 'Server error' } }
+    return { props: { visits: [], error: err && err.message ? err.message : 'Server error' } };
   }
 }

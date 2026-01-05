@@ -1,84 +1,85 @@
-import React, { useMemo, useState } from 'react'
-import Link from 'next/link'
-import { Table } from 'react-bootstrap'
-import indexStyles from '../../pages/visits/Index.module.scss'
-import SortIcon from './SortIcon'
+import React, { useMemo, useState } from 'react';
+
+import Link from 'next/link';
+import SortIcon from './SortIcon';
+import { Table } from 'react-bootstrap';
+import indexStyles from '../../pages/visits/Index.module.scss';
 
 export default function VisitsTable({ visits = [], dateField = 'visitDate', dateLabel = 'Date', onSortChange }) {
-  const [sortField, setSortField] = useState(null)
-  const [sortDir, setSortDir] = useState('none')
-  const [filters, setFilters] = useState({ name: '', address: '', notes: '', date: '', inside: '' })
+  const [sortField, setSortField] = useState(null);
+  const [sortDir, setSortDir] = useState('none');
+  const [filters, setFilters] = useState({ name: '', address: '', notes: '', date: '', inside: '' });
   const handleSortChange = (field, dir) => {
     if (dir === 'none') {
-      setSortField(null)
-      setSortDir('none')
+      setSortField(null);
+      setSortDir('none');
     } else {
-      setSortField(field)
-      setSortDir(dir)
+      setSortField(field);
+      setSortDir(dir);
     }
-    if (onSortChange) onSortChange(field, dir)
-  }
+    if (onSortChange) onSortChange(field, dir);
+  };
 
   const formatAddressForSelect = addr => {
-    if (!addr) return ''
-    const m = addr.match(/(\d+)(?!.*\d)/)
+    if (!addr) return '';
+    const m = addr.match(/(\d+)(?!.*\d)/);
     if (m && m[1]) {
-      const last = m[1]
-      const idx = addr.lastIndexOf(last)
-      return addr.slice(idx).trim()
+      const last = m[1];
+      const idx = addr.lastIndexOf(last);
+      return addr.slice(idx).trim();
     }
-    return addr.trim()
-  }
+    return addr.trim();
+  };
 
   const uniqueNames = useMemo(() => {
-    return [...new Set((visits || []).map(v => v.contactName).filter(Boolean))].sort()
-  }, [visits])
+    return [...new Set((visits || []).map(v => v.contactName).filter(Boolean))].sort();
+  }, [visits]);
 
   const uniqueAddressOptions = useMemo(() => {
-    const set = new Map()
-      ; (visits || []).forEach(v => {
-        const label = formatAddressForSelect(v.address)
-        if (label) set.set(label, label)
-      })
-    return [...set.values()].sort()
-  }, [visits])
+    const set = new Map();
+    (visits || []).forEach(v => {
+      const label = formatAddressForSelect(v.address);
+      if (label) set.set(label, label);
+    });
+    return [...set.values()].sort();
+  }, [visits]);
 
   const filtered = useMemo(() => {
     return (visits || []).filter(v => {
-      if (filters.name && !(v.contactName || '').toLowerCase().includes(filters.name.toLowerCase())) return false
+      if (filters.name && !(v.contactName || '').toLowerCase().includes(filters.name.toLowerCase())) return false;
       if (filters.address) {
-        const label = formatAddressForSelect(v.address)
-        if (label !== filters.address) return false
+        const label = formatAddressForSelect(v.address);
+        if (label !== filters.address) return false;
       }
-      if (filters.notes && !(v.visitNote || '').toLowerCase().includes(filters.notes.toLowerCase())) return false
-      if (filters.date && (v[dateField] || '') !== filters.date) return false
+      if (filters.notes && !(v.visitNote || '').toLowerCase().includes(filters.notes.toLowerCase())) return false;
+      if (filters.date && (v[dateField] || '') !== filters.date) return false;
       if (filters.inside) {
-        if (filters.inside === 'yes' && !v.isInside) return false
-        if (filters.inside === 'no' && v.isInside) return false
+        if (filters.inside === 'yes' && !v.isInside) return false;
+        if (filters.inside === 'no' && v.isInside) return false;
       }
-      return true
-    })
-  }, [visits, filters, dateField])
+      return true;
+    });
+  }, [visits, filters, dateField]);
 
   const sorted = useMemo(() => {
-    if (!sortField || sortDir === 'none') return filtered
+    if (!sortField || sortDir === 'none') return filtered;
     const mapper = v => {
       switch (sortField) {
         case 'name':
-          return (v.contactName || '').toLowerCase()
+          return (v.contactName || '').toLowerCase();
         case 'date':
-          return v[dateField] || ''
+          return v[dateField] || '';
         default:
-          return ''
+          return '';
       }
-    }
+    };
     return [...filtered].sort((a, b) => {
-      const A = mapper(a)
-      const B = mapper(b)
-      if (A === B) return 0
-      return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1)
-    })
-  }, [filtered, sortField, sortDir, dateField])
+      const A = mapper(a);
+      const B = mapper(b);
+      if (A === B) return 0;
+      return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1);
+    });
+  }, [filtered, sortField, sortDir, dateField]);
 
   return (
     <Table striped bordered hover responsive className={indexStyles.visitsTable}>
@@ -144,5 +145,5 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
         ))}
       </tbody>
     </Table>
-  )
+  );
 }
