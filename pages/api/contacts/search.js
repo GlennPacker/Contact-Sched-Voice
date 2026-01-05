@@ -13,13 +13,13 @@ export default async function handler(req, res) {
       return res.status(200).json(list)
     }
 
-    const scored = list.map((c) => {
+    const scored = list.map(c => {
       const nameVal = (c.name || '').toLowerCase()
       const matchName = nameTerm ? nameVal.indexOf(nameTerm) !== -1 : false
 
       const addresses = Array.isArray(c.addresses) ? c.addresses : []
       const matchAddress = addressTerm
-        ? addresses.some((a) => (a && a.address ? ('' + a.address).toLowerCase().indexOf(addressTerm) !== -1 : false))
+        ? addresses.some(a => (a && a.address ? ('' + a.address).toLowerCase().indexOf(addressTerm) !== -1 : false))
         : false
 
       const score = (matchName ? 1 : 0) + (matchAddress ? 1 : 0)
@@ -27,12 +27,12 @@ export default async function handler(req, res) {
     })
 
     const results = scored
-      .filter((s) => s.score)
+      .filter(s => s.score)
       .sort((a, b) => {
         if (b.score !== a.score) return b.score - a.score
         return (a.contact.name || '').localeCompare(b.contact.name || '')
       })
-      .map((s) => s.contact)
+      .map(s => s.contact)
 
     return res.status(200).json(results)
   } catch (err) {

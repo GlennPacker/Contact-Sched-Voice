@@ -6,12 +6,12 @@ export default function ContactSearch({ search, reset }) {
     const [name, setName] = useState('')
     const [address, setAddress] = useState('')
 
-    const submit = (e) => {
+    const submit = e => {
         e.preventDefault()
         if (search) search({ name, address })
     }
 
-    const clear = (e) => {
+    const clear = e => {
         e.preventDefault()
         setName('')
         setAddress('')
@@ -28,7 +28,7 @@ export default function ContactSearch({ search, reset }) {
                             <Form.Control
                                 type="text"
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={e => setName(e.target.value)}
                                 placeholder="Filter by name"
                             />
                         </Form.Group>
@@ -40,7 +40,7 @@ export default function ContactSearch({ search, reset }) {
                             <Form.Control
                                 type="text"
                                 value={address}
-                                onChange={(e) => setAddress(e.target.value)}
+                                onChange={e => setAddress(e.target.value)}
                                 placeholder="Filter by address"
                             />
                         </Form.Group>

@@ -6,7 +6,7 @@ jest.mock('./Address.jsx', () => {
     const React = require('react')
     return {
         __esModule: true,
-        default: (props) => React.createElement('div', { 'data-testid': 'mock-address' }, `ADDR-${props.idx}`)
+        default: props => React.createElement('div', { 'data-testid': 'mock-address' }, `ADDR-${props.idx}`)
     }
 })
 

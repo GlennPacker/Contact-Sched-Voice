@@ -26,7 +26,7 @@ export default function Visit({
         <div
           className={`${styles['visit-collapsed-summary']} ${styles['visit-cursor-pointer']}`}
           onClick={() => toggleCollapse(idx)}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             if (e.key === 'Enter' || e.key === ' ') {
               e.preventDefault();
               toggleCollapse(idx);
@@ -44,7 +44,7 @@ export default function Visit({
             <Button
               variant="danger"
               size="sm"
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 remove(idx);
               }}

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const cycleDir = (current) => (current === 'none' ? 'asc' : current === 'asc' ? 'desc' : 'none')
+const cycleDir = current => (current === 'none' ? 'asc' : current === 'asc' ? 'desc' : 'none')
 
 export default function SortIcon({ field, activeField, activeDir, onChange }) {
   const isActive = activeField === field && activeDir !== 'none'

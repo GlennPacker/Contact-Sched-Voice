@@ -14,13 +14,13 @@ export default function Contacts({ contacts = [], error = null, onActivate }) {
                 </tr>
             </thead>
             <tbody>
-                {contacts.map((c) => (
+                {contacts.map(c => (
                     <tr
                         key={c.id}
                         role="button"
                         tabIndex={0}
                         onClick={() => onActivate && onActivate(c.id)}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onActivate && onActivate(c.id) }}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onActivate && onActivate(c.id) }}
                         className={styles.clickableRow}
                     >
                         <td>{c.name}</td>

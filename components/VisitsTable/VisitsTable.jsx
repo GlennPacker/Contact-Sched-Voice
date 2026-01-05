@@ -19,7 +19,7 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
     if (onSortChange) onSortChange(field, dir)
   }
 
-  const formatAddressForSelect = (addr) => {
+  const formatAddressForSelect = addr => {
     if (!addr) return ''
     const m = addr.match(/(\d+)(?!.*\d)/)
     if (m && m[1]) {
@@ -31,12 +31,12 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
   }
 
   const uniqueNames = useMemo(() => {
-    return [...new Set((visits || []).map((v) => v.contactName).filter(Boolean))].sort()
+    return [...new Set((visits || []).map(v => v.contactName).filter(Boolean))].sort()
   }, [visits])
 
   const uniqueAddressOptions = useMemo(() => {
     const set = new Map()
-      ; (visits || []).forEach((v) => {
+      ; (visits || []).forEach(v => {
         const label = formatAddressForSelect(v.address)
         if (label) set.set(label, label)
       })
@@ -44,7 +44,7 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
   }, [visits])
 
   const filtered = useMemo(() => {
-    return (visits || []).filter((v) => {
+    return (visits || []).filter(v => {
       if (filters.name && !(v.contactName || '').toLowerCase().includes(filters.name.toLowerCase())) return false
       if (filters.address) {
         const label = formatAddressForSelect(v.address)
@@ -62,7 +62,7 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
 
   const sorted = useMemo(() => {
     if (!sortField || sortDir === 'none') return filtered
-    const mapper = (v) => {
+    const mapper = v => {
       switch (sortField) {
         case 'name':
           return (v.contactName || '').toLowerCase()
@@ -102,25 +102,25 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
         </tr>
         <tr>
           <th>
-            <select className="form-select form-select-sm" value={filters.name} onChange={(e) => setFilters((f) => ({ ...f, name: e.target.value }))}>
+            <select className="form-select form-select-sm" value={filters.name} onChange={e => setFilters(f => ({ ...f, name: e.target.value }))}>
               <option value="">All</option>
-              {uniqueNames.map((n) => <option key={n} value={n}>{n}</option>)}
+              {uniqueNames.map(n => <option key={n} value={n}>{n}</option>)}
             </select>
           </th>
           <th>
-            <select className="form-select form-select-sm" value={filters.address} onChange={(e) => setFilters((f) => ({ ...f, address: e.target.value }))}>
+            <select className="form-select form-select-sm" value={filters.address} onChange={e => setFilters(f => ({ ...f, address: e.target.value }))}>
               <option value="">All</option>
-              {uniqueAddressOptions.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+              {uniqueAddressOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
             </select>
           </th>
           <th>
-            <input type="text" className="form-control form-control-sm" placeholder="Filter notes" value={filters.notes} onChange={(e) => setFilters((f) => ({ ...f, notes: e.target.value }))} />
+            <input type="text" className="form-control form-control-sm" placeholder="Filter notes" value={filters.notes} onChange={e => setFilters(f => ({ ...f, notes: e.target.value }))} />
           </th>
           <th>
-            <input type="date" className="form-control form-control-sm" value={filters.date} onChange={(e) => setFilters((f) => ({ ...f, date: e.target.value }))} />
+            <input type="date" className="form-control form-control-sm" value={filters.date} onChange={e => setFilters(f => ({ ...f, date: e.target.value }))} />
           </th>
           <th>
-            <select className="form-select form-select-sm" value={filters.inside} onChange={(e) => setFilters((f) => ({ ...f, inside: e.target.value }))}>
+            <select className="form-select form-select-sm" value={filters.inside} onChange={e => setFilters(f => ({ ...f, inside: e.target.value }))}>
               <option value="">All</option>
               <option value="yes">Yes</option>
               <option value="no">No</option>

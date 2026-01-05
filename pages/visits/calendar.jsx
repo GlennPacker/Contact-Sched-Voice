@@ -20,7 +20,7 @@ const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales
 export default function VisitsCalendarPage({ events = [] }) {
   const router = useRouter()
 
-  const handleSelectEvent = (event) => {
+  const handleSelectEvent = event => {
     const contactId = event.resource && event.resource.contactId
     if (contactId) router.push(`/contacts/${contactId}/edit`)
   }
@@ -36,7 +36,7 @@ export default function VisitsCalendarPage({ events = [] }) {
       <div className={calStyles.calendarWrapper}>
         <Calendar
           localizer={localizer}
-          events={events.map((e) => ({ ...e, start: new Date(e.start), end: new Date(e.end) }))}
+          events={events.map(e => ({ ...e, start: new Date(e.start), end: new Date(e.end) }))}
           startAccessor="start"
           endAccessor="end"
           onSelectEvent={handleSelectEvent}
@@ -52,15 +52,15 @@ export async function getServerSideProps() {
     const today = new Date().toISOString().split('T')[0]
     const allVisits = await listVisits({ fromDate: today, order: 'asc', limit: 500 })
 
-    const addressIds = [...new Set(allVisits.map((v) => v.addressId))]
+    const addressIds = [...new Set(allVisits.map(v => v.addressId))]
     const addresses = addressIds.length ? await getAddressesByIds(addressIds) : []
-    const contactIds = [...new Set((addresses || []).map((a) => a.contactId))]
+    const contactIds = [...new Set((addresses || []).map(a => a.contactId))]
     const contacts = contactIds.length ? await getContactsByIds(contactIds) : []
 
-    const addressMap = Object.fromEntries((addresses || []).map((a) => [a.id, a]))
-    const contactMap = Object.fromEntries((contacts || []).map((c) => [c.id, c]))
+    const addressMap = Object.fromEntries((addresses || []).map(a => [a.id, a]))
+    const contactMap = Object.fromEntries((contacts || []).map(c => [c.id, c]))
 
-    const events = (allVisits || []).map((v) => {
+    const events = (allVisits || []).map(v => {
       const addr = addressMap[v.addressId]
       const contact = addr ? contactMap[addr.contactId] : null
       const title = `${(contact && contact.name) || 'Unknown'} — ${(addr && addr.address) || ''}`

@@ -9,7 +9,7 @@ import { listContacts, searchContacts } from '../../lib/contactService'
 
 export default function ContactsPage({ contacts = [], error = null }) {
   const router = useRouter()
-  const navigateToEdit = (id) => router.push(`/contacts/${id}/edit`)
+  const navigateToEdit = id => router.push(`/contacts/${id}/edit`)
   const [showSearch, setShowSearch] = useState(false)
   const [displayedContacts, setDisplayedContacts] = useState(Array.isArray(contacts) ? contacts : [])
 
@@ -38,7 +38,7 @@ export default function ContactsPage({ contacts = [], error = null }) {
               variant="secondary"
               size="sm"
               aria-expanded={showSearch}
-              onClick={() => setShowSearch((s) => !s)}
+              onClick={() => setShowSearch(s => !s)}
             >
               Search
             </Button>

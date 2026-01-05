@@ -14,4 +14,4 @@ if (process.platform === 'win32') {
   proc = spawn(eslintBin, args, { stdio: 'inherit' })
 }
 
-proc.on('close', (code) => process.exit(code))
+proc.on('close', code => process.exit(code))

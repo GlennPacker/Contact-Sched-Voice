@@ -83,6 +83,6 @@ describe('Visit component', () => {
     fireEvent.click(addAnchor)
     expect(setCalendarError).toHaveBeenCalled()
 
-    expect(getByText((c) => c.includes('Are required to create a calendar invite.'))).toBeTruthy()
+    expect(getByText(c => c.includes('Are required to create a calendar invite.'))).toBeTruthy()
   })
 })

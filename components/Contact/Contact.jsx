@@ -25,7 +25,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
   const twoHour = watch('rateTwoHour')
   const watchedForm = useWatch({ control });
 
-  const fullDayBlur = (e) => {
+  const fullDayBlur = e => {
     const val = +e.target.value
     if (!val) return
     const updates = computeRateAdjustments(val, halfDay, twoHour)
@@ -57,7 +57,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
   const [success, setSuccess] = useState(null)
   const [warnings, setWarnings] = useState([])
 
-  const formSubmit = async (formData) => {
+  const formSubmit = async formData => {
     setError(null)
     setSuccess(null)
     setWarnings([])
@@ -102,7 +102,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
           </Form.Group>
           <Form.Group className="mb-3" controlId="contactTypes">
             <Form.Label className={styles['section-title']}>Contact types *</Form.Label>
-            {CONTACT_TYPE_OPTIONS.map((opt) => {
+            {CONTACT_TYPE_OPTIONS.map(opt => {
               const isEmail = opt.id === 'email'
               const isWhatsapp = opt.id === 'whatsapp'
               const isSelected = Boolean(watchedTypes[opt.id]?.selected)

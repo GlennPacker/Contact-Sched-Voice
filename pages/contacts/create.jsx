@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 
 export default function NewContactPage() {
   const router = useRouter()
-  const createContact = async (contact) => {
+  const createContact = async contact => {
     return await addContact(contact)
   }
   return (

@@ -16,7 +16,7 @@ export default function EditContactPage({ initialValues = null, error = null, id
         )
     }
 
-    const submit = async (contact) => {
+    const submit = async contact => {
         return await updateContact(id, contact)
     }
 

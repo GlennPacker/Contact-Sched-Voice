@@ -16,8 +16,8 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	let add = () => { };
 	let remove = () => { };
 	const [localFields, setLocalFields] = useState([{ visitDate: null, notes: '' }]);
-	const addLocal = React.useCallback((item) => setLocalFields(prev => (Array.isArray(prev) ? [item, ...prev] : [item])), [setLocalFields]);
-	const removeLocal = React.useCallback((idx) => setLocalFields(prev => prev.filter((_, i) => i !== idx)), [setLocalFields]);
+	const addLocal = React.useCallback(item => setLocalFields(prev => (Array.isArray(prev) ? [item, ...prev] : [item])), [setLocalFields]);
+	const removeLocal = React.useCallback(idx => setLocalFields(prev => prev.filter((_, i) => i !== idx)), [setLocalFields]);
 	if (control && typeof control._getFieldArray === 'function') {
 		const res = useFieldArray({ control, name: `addresses.${nestIndex}.visits` });
 		fields = res.fields;
@@ -43,7 +43,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 		});
 	}, [fields, add]);
 
-	const toggleCollapse = (idx) => {
+	const toggleCollapse = idx => {
 		setCollapsed(prev => prev.map((_, i) => i === idx ? false : true));
 	};
 

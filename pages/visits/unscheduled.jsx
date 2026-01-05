@@ -15,7 +15,7 @@ export default function UnscheduledVisitsPage({ visits = [], error = null }) {
   const [showFuture, setShowFuture] = useState(false)
   const today = new Date().toISOString().split('T')[0]
 
-  const displayed = visits.filter((v) => {
+  const displayed = visits.filter(v => {
     if (!v.earliestDate || v.earliestDate <= today) return true
     return showFuture
   })
@@ -30,7 +30,7 @@ export default function UnscheduledVisitsPage({ visits = [], error = null }) {
             id="show-future-earliest"
             label="Show future earliest dates"
             checked={showFuture}
-            onChange={(e) => setShowFuture(e.target.checked)}
+            onChange={e => setShowFuture(e.target.checked)}
             className="me-3"
           />
           <VisitsToolbar />
@@ -50,15 +50,15 @@ export async function getServerSideProps() {
   try {
     const allVisits = await listUnscheduledVisits()
 
-    const addressIds = [...new Set(allVisits.map((v) => v.addressId))]
+    const addressIds = [...new Set(allVisits.map(v => v.addressId))]
     const addresses = addressIds.length ? await getAddressesByIds(addressIds) : []
-    const contactIds = [...new Set(addresses.map((a) => a.contactId))]
+    const contactIds = [...new Set(addresses.map(a => a.contactId))]
     const contacts = contactIds.length ? await getContactsByIds(contactIds) : []
 
-    const addressMap = Object.fromEntries((addresses || []).map((a) => [a.id, a]))
-    const contactMap = Object.fromEntries((contacts || []).map((c) => [c.id, c]))
+    const addressMap = Object.fromEntries((addresses || []).map(a => [a.id, a]))
+    const contactMap = Object.fromEntries((contacts || []).map(c => [c.id, c]))
 
-    const visits = allVisits.map((v) => {
+    const visits = allVisits.map(v => {
       const address = addressMap[v.addressId] || {}
       const contact = contactMap[address.contactId] || {}
 

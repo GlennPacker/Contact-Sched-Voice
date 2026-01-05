@@ -12,7 +12,7 @@ export default {
       Program(node) {
         const sourceCode = context.getSourceCode();
         const comments = sourceCode.getAllComments();
-        comments.forEach((comment) => {
+        comments.forEach(comment => {
           context.report({ loc: comment.loc, message: 'Comments are not allowed in this repository.' });
         });
       },
