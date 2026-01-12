@@ -33,9 +33,7 @@ export default function VisitsCalendarPage({ events = [] }) {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1>Visits Calendar</h1>
-        <div>
-          <VisitsToolbar />
-        </div>
+        <VisitsToolbar />
       </div>
       <div className={calStyles.calendarWrapper}>
         <Calendar
