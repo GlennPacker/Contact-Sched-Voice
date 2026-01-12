@@ -19,7 +19,7 @@ export default async function handler(req, res) {
 
       const addresses = Array.isArray(c.addresses) ? c.addresses : [];
       const matchAddress = addressTerm
-        ? addresses.some(a => (a && a.address ? ('' + a.address).toLowerCase().indexOf(addressTerm) !== -1 : false))
+        ? addresses.some(a => (a?.address ? ('' + a.address).toLowerCase().indexOf(addressTerm) !== -1 : false))
         : false;
 
       const score = (matchName ? 1 : 0) + (matchAddress ? 1 : 0);

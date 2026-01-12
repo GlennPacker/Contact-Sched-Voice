@@ -76,6 +76,6 @@ export async function getServerSideProps() {
 
     return { props: { visits, error: null } };
   } catch (err) {
-    return { props: { visits: [], error: err && err.message ? err.message : 'Server error' } };
+    return { props: { visits: [], error: err?.message || 'Server error' } };
   }
 }

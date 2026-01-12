@@ -36,6 +36,6 @@ export async function getServerSideProps({ params }) {
 
         return { props: { initialValues: data, id } };
     } catch (err) {
-        return { props: { initialValues: null, error: err && err.message ? err.message : 'Server error' } };
+        return { props: { initialValues: null, error: err?.message || 'Server error' } };
     }
 }

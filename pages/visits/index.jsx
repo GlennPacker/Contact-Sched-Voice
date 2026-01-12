@@ -46,10 +46,10 @@ export async function getServerSideProps() {
 
       return {
         id: v.id,
-        contactId: contact && contact.id,
-        contactName: contact && contact.name,
-        addressId: addr && addr.id,
-        address: addr && addr.address,
+        contactId: contact?.id,
+        contactName: contact?.name,
+        addressId: addr?.id,
+        address: addr?.address,
         visitNote: v.notes,
         visitDate: v.visitDate,
         isInside: v.isInside,

@@ -77,7 +77,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 
 					return (
 						<Visit
-							key={field.id ?? idx}
+							key={field.id || idx}
 							field={field}
 							idx={idx}
 							nestIndex={nestIndex}

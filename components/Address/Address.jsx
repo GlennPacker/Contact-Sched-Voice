@@ -27,9 +27,9 @@ export default function Address({ field, idx, register, errors, removeAddress, t
             {...register(`addresses.${idx}.address`, { required: 'Address is required' })}
             placeholder={`Address #${idx + 1}`}
             className={styles['address-input-field']}
-            isInvalid={!!(errors?.addresses && errors.addresses[idx]?.address)}
+            isInvalid={!!errors?.addresses?.[idx]?.address}
           />
-          {errors?.addresses && errors.addresses[idx]?.address && (
+          {errors?.addresses?.[idx]?.address && (
             <Form.Control.Feedback type="invalid">
               {errors.addresses[idx].address.message}
             </Form.Control.Feedback>

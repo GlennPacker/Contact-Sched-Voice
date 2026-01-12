@@ -1,5 +1,6 @@
+import { Alert, Table } from 'react-bootstrap';
+
 import React from 'react';
-import { Table, Alert } from 'react-bootstrap';
 import styles from './Contacts.module.scss';
 
 export default function Contacts({ contacts = [], error = null, onActivate }) {
@@ -19,13 +20,13 @@ export default function Contacts({ contacts = [], error = null, onActivate }) {
                         key={c.id}
                         role="button"
                         tabIndex={0}
-                        onClick={() => onActivate && onActivate(c.id)}
-                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onActivate && onActivate(c.id); }}
+                        onClick={() => onActivate?.(c.id)}
+                        onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') onActivate?.(c.id); }}
                         className={styles.clickableRow}
                     >
                         <td>{c.name}</td>
                         <td>
-                            {c.addresses && c.addresses.length ? (
+                            {c.addresses?.length ? (
                                 c.addresses.map((a, i) => (
                                     <div key={i}>{a.address}</div>
                                 ))

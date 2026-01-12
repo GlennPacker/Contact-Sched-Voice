@@ -1,5 +1,6 @@
-import React from 'react';
 import { Button, Form } from 'react-bootstrap';
+
+import React from 'react';
 
 export default function Visit({
   field,
@@ -17,7 +18,7 @@ export default function Visit({
   minDateStr,
   styles,
 }) {
-  const calendarUrl = createCalendarInvite && watched.visitDate && watched.time ? createCalendarInvite(watched) : '';
+  const calendarUrl = (watched.visitDate && watched.time) ? (createCalendarInvite?.(watched) || '') : '';
   const showCalendarError = calendarError[idx];
 
   return (
