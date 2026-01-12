@@ -30,7 +30,7 @@ export default function VisitsCalendarPage({ events = [] }) {
   };
 
   return (
-    <div>
+    <>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1>Visits Calendar</h1>
         <VisitsToolbar />
@@ -46,7 +46,7 @@ export default function VisitsCalendarPage({ events = [] }) {
         />
       </div>
       <CalendarToast onClose={() => setToastData(null)} data={toastData} />
-    </div>
+    </>
   );
 }
 

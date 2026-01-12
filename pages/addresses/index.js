@@ -1,9 +1,11 @@
-export default function AddressListPage() {
+import React from 'react';
+import Addresses from '../../components/Address/Addresses';
 
+export default function AddressListPage() {
   return (
-    <div>
-      <h1>Address List</h1>
-      <p>This page will display a list of addresses.</p>
-    </div>
+    <>
+      <h1>Addresses</h1>
+      <Addresses />
+    </>
   );
 }

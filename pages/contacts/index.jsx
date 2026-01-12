@@ -33,22 +33,20 @@ export default function ContactsPage({ contacts = [], error = null }) {
     <>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1>Contacts</h1>
-        <div>
-          <ButtonGroup aria-label="contacts-actions">
-            <Button
-              variant="secondary"
-              size="sm"
-              aria-expanded={showSearch}
-              onClick={() => setShowSearch(s => !s)}
-            >
-              Search
-            </Button>
-            &nbsp;
-            <Link href="/contacts/create" passHref>
-              <Button variant="secondary" size="sm">Create</Button>
-            </Link>
-          </ButtonGroup>
-        </div>
+        <ButtonGroup aria-label="contacts-actions">
+          <Button
+            variant="secondary"
+            size="sm"
+            aria-expanded={showSearch}
+            onClick={() => setShowSearch(s => !s)}
+          >
+            Search
+          </Button>
+          &nbsp;
+          <Link href="/contacts/create" passHref>
+            <Button variant="secondary" size="sm">Create</Button>
+          </Link>
+        </ButtonGroup>
       </div>
 
       <div className={`${styles.filterCollapse} ${showSearch ? styles.filterCollapseOpen : ''}`}>

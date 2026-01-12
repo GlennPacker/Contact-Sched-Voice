@@ -1,29 +1,28 @@
 import { Button, Form } from 'react-bootstrap';
-
 import React from 'react';
 
 export default function Visit({
   field,
   idx,
   nestIndex,
-  watched,
+  watched = {},
   collapsed,
   toggleCollapse,
   remove,
   register,
   createCalendarInvite,
-  calendarError,
+  calendarError = {},
   setCalendarError,
   collapseAll,
   minDateStr,
-  styles,
+  styles = {},
 }) {
-  const calendarUrl = (watched.visitDate && watched.time) ? (createCalendarInvite?.(watched) || '') : '';
-  const showCalendarError = calendarError[idx];
+  const calendarUrl = watched.visitDate && watched.time ? (createCalendarInvite?.(watched) || '') : '';
+  const showCalendarError = calendarError && calendarError[idx];
 
-  return (
-    <div key={field.id} className={`mb-3 ${styles['visit-fields']}`}>
-      {collapsed ? (
+  if (collapsed) {
+    return (
+      <div className={`mb-3 ${styles['visit-fields']}`} key={field.id}>
         <div
           className={`${styles['visit-collapsed-summary']} ${styles['visit-cursor-pointer']}`}
           onClick={() => toggleCollapse(idx)}
@@ -38,7 +37,7 @@ export default function Visit({
         >
           <div>
             <span className={styles['visit-collapsed-date']}>{watched.visitDate || 'No date'}</span>
-            <span className={styles['visit-collapsed-recurrence']}> {watched.recurrence && watched.recurrence !== 'does not reoccur' ? `· ${watched.recurrence}` : ''}</span>
+            <span className={styles['visit-collapsed-recurrence']}>{watched.recurrence}</span>
             <div className={styles['visit-summary-text']}>{watched.notes ? watched.notes.substring(0, 80) : ''}</div>
           </div>
           <div>
@@ -56,131 +55,141 @@ export default function Visit({
             </Button>
           </div>
         </div>
-      ) : (
-        <>
-          <div className={styles['visit-fields-col']}>
-            <Form.Group className={styles['visit-field-row']}>
-              <Form.Label
-                className={`${styles['visit-label']} ${styles['visit-cursor-pointer']}`}
-                onClick={collapseAll}
-                role="button"
-                tabIndex={0}
-              >
-                Date
-              </Form.Label>
-              <Form.Control
-                type="date"
-                {...register(`addresses.${nestIndex}.visits.${idx}.visitDate`)}
-                className={styles['visit-date']}
-                defaultValue={watched.visitDate || ''}
-                min={minDateStr}
-              />
-            </Form.Group>
-            <Form.Group className={styles['visit-field-row']}>
-              <Form.Label className={styles['visit-label']}>Flexible Dates</Form.Label>
-              <Form.Check
-                type="checkbox"
-                {...register(`addresses.${nestIndex}.visits.${idx}.isFlexilbe`)}
-                className={styles['visit-isFlexible']}
-                defaultChecked={!!watched.isFlexilbe}
-              />
-            </Form.Group>
-            <Form.Group className={styles['visit-field-row']}>
-              <Form.Label className={styles['visit-label']}>Time</Form.Label>
-              <Form.Select
-                {...register(`addresses.${nestIndex}.visits.${idx}.time`)}
-                className={styles['visit-time']}
-                defaultValue={watched.time || ''}
-              >
-                <option value="">Select time</option>
-                <option value="full day">Full day</option>
-                <option value="1/2 day">1/2 day</option>
-                <option value="2 hours">2 hours</option>
-                <option value="multiday">Multiday</option>
-              </Form.Select>
-            </Form.Group>
-            {watched.time === 'multiday' && (
-              <Form.Group className={styles['visit-field-row']}>
-                <Form.Label className={styles['visit-label']}>Days</Form.Label>
-                <Form.Control
-                  type="text"
-                  {...register(`addresses.${nestIndex}.visits.${idx}.days`)}
-                  className={styles['visit-days']}
-                  defaultValue={watched.days || ''}
-                />
-              </Form.Group>
-            )}
-            <Form.Group className={styles['visit-field-row']}>
-              <Form.Label className={styles['visit-label']}>Recurrence</Form.Label>
-              <Form.Select
-                {...register(`addresses.${nestIndex}.visits.${idx}.recurrence`)}
-                className={styles['visit-recurrence']}
-                defaultValue={watched.recurrence || ''}
-              >
-                <option value="does not reoccur">Does not reoccur</option>
-                <option value="2 weeks">2 weeks</option>
-                <option value="3 weeks">3 weeks</option>
-                <option value="4 weeks (monthly)">4 weeks (monthly)</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className={styles['visit-field-row']}>
-              <Form.Label className={styles['visit-label']}>Inside?</Form.Label>
-              <Form.Check
-                type="checkbox"
-                {...register(`addresses.${nestIndex}.visits.${idx}.isInside`)}
-                className={styles['visit-isInside']}
-                defaultChecked={!!watched.isInside}
-              />
-            </Form.Group>
-            <Form.Control
-              as="textarea"
-              rows={5}
-              {...register(`addresses.${nestIndex}.visits.${idx}.notes`)}
-              placeholder="Note"
-              className={styles['visit-note']}
-              defaultValue={watched.notes || ''}
-            />
-            <div className={styles['visit-field-row']}>
-              <span className={styles['visit-label']}></span>
+      </div>
+    );
+  }
 
-              <Button
-                variant="danger"
-                size="sm"
-                onClick={() => remove(idx)}
-                tabIndex={-1}
-                aria-label={`Remove visit ${idx + 1}`}
-              >
-                Remove
-              </Button>
-              <a
-                href={calendarUrl || '#'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn btn-outline-primary btn-sm ms-2"
-                aria-label="Add to Google Calendar"
-                disabled={!calendarUrl}
-                onClick={e => {
-                  if (!calendarUrl) {
-                    e.preventDefault();
-                    setCalendarError(prev => ({ ...prev, [idx]: true }));
-                  } else {
-                    setCalendarError(prev => ({ ...prev, [idx]: false }));
-                  }
-                }}
-              >
-                Add to Google Calendar
-              </a>
-            </div>
-            {showCalendarError && (
-              <div className={styles['calendar-error']}>
-                {!watched.visitDate && 'Date '}
-                {!watched.time && 'Time '}
-                Are required to create a calendar invite.
-              </div>
-            )}
+  return (
+    <div className={`mb-3 ${styles['visit-fields']}`} key={field.id}>
+      <div className={styles['visit-fields-col']}>
+        <Form.Group className={styles['visit-field-row']}>
+          <Form.Label
+            className={`${styles['visit-label']} ${styles['visit-cursor-pointer']}`}
+            onClick={collapseAll}
+            role="button"
+            tabIndex={0}
+          >
+            Date
+          </Form.Label>
+          <Form.Control
+            type="date"
+            {...register(`addresses.${nestIndex}.visits.${idx}.visitDate`)}
+            className={styles['visit-date']}
+            defaultValue={watched.visitDate || ''}
+            min={minDateStr}
+          />
+        </Form.Group>
+
+        <Form.Group className={styles['visit-field-row']}>
+          <Form.Label className={styles['visit-label']}>Flexible Dates</Form.Label>
+          <Form.Check
+            type="checkbox"
+            {...register(`addresses.${nestIndex}.visits.${idx}.isFlexilbe`)}
+            className={styles['visit-isFlexible']}
+            defaultChecked={!!watched.isFlexilbe}
+          />
+        </Form.Group>
+
+        <Form.Group className={styles['visit-field-row']}>
+          <Form.Label className={styles['visit-label']}>Time</Form.Label>
+          <Form.Select
+            {...register(`addresses.${nestIndex}.visits.${idx}.time`)}
+            className={styles['visit-time']}
+            defaultValue={watched.time || ''}
+          >
+            <option value="">Select time</option>
+            <option value="full day">Full day</option>
+            <option value="1/2 day">1/2 day</option>
+            <option value="2 hours">2 hours</option>
+            <option value="multiday">Multiday</option>
+          </Form.Select>
+        </Form.Group>
+
+        {watched.time === 'multiday' && (
+          <Form.Group className={styles['visit-field-row']}>
+            <Form.Label className={styles['visit-label']}>Days</Form.Label>
+            <Form.Control
+              type="text"
+              {...register(`addresses.${nestIndex}.visits.${idx}.days`)}
+              className={styles['visit-days']}
+              defaultValue={watched.days || ''}
+            />
+          </Form.Group>
+        )}
+
+        <Form.Group className={styles['visit-field-row']}>
+          <Form.Label className={styles['visit-label']}>Recurrence</Form.Label>
+          <Form.Select
+            {...register(`addresses.${nestIndex}.visits.${idx}.recurrence`)}
+            className={styles['visit-recurrence']}
+            defaultValue={watched.recurrence || ''}
+          >
+            <option value="does not reoccur">Does not reoccur</option>
+            <option value="2 weeks">2 weeks</option>
+            <option value="3 weeks">3 weeks</option>
+            <option value="4 weeks (monthly)">4 weeks (monthly)</option>
+          </Form.Select>
+        </Form.Group>
+
+        <Form.Group className={styles['visit-field-row']}>
+          <Form.Label className={styles['visit-label']}>Inside?</Form.Label>
+          <Form.Check
+            type="checkbox"
+            {...register(`addresses.${nestIndex}.visits.${idx}.isInside`)}
+            className={styles['visit-isInside']}
+            defaultChecked={!!watched.isInside}
+          />
+        </Form.Group>
+
+        <Form.Control
+          as="textarea"
+          rows={5}
+          {...register(`addresses.${nestIndex}.visits.${idx}.notes`)}
+          placeholder="Note"
+          className={styles['visit-note']}
+          defaultValue={watched.notes || ''}
+        />
+
+        <div className={styles['visit-field-row']}>
+          <span className={styles['visit-label']}></span>
+
+          <Button
+            variant="danger"
+            size="sm"
+            onClick={() => remove(idx)}
+            tabIndex={-1}
+            aria-label={`Remove visit ${idx + 1}`}
+          >
+            Remove
+          </Button>
+
+          <a
+            href={calendarUrl || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-outline-primary btn-sm ms-2"
+            aria-label="Add to Google Calendar"
+            onClick={e => {
+              if (!calendarUrl) {
+                e.preventDefault();
+                setCalendarError(prev => ({ ...prev, [idx]: true }));
+              } else {
+                setCalendarError(prev => ({ ...prev, [idx]: false }));
+              }
+            }}
+          >
+            Add to Google Calendar
+          </a>
+        </div>
+
+        {showCalendarError && (
+          <div className={styles['calendar-error']}>
+            {!watched.visitDate && 'Date '}
+            {!watched.time && 'Time '}
+            Are required to create a calendar invite.
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 }

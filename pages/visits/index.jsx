@@ -13,9 +13,7 @@ export default function VisitsPage({ visits = [], error = null }) {
     <>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h1>Upcoming Visits</h1>
-        <div>
-          <VisitsToolbar />
-        </div>
+        <VisitsToolbar />
       </div>
 
       {!visits.length ? (
