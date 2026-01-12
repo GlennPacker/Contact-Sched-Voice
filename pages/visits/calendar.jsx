@@ -26,10 +26,7 @@ export default function VisitsCalendarPage({ events = [] }) {
   const [toastData, setToastData] = useState(null);
 
   const handleSelectEvent = ({ resource }) => {
-    if (!resource?.visit) return;
-    const futureVisits = resource.futureVisits ?? null;
-
-    setToastData({ contact: resource.contact, address: resource.address, visit: resource.visit, futureVisits });
+    setToastData(resource);
   };
 
   return (
@@ -50,7 +47,7 @@ export default function VisitsCalendarPage({ events = [] }) {
           popup
         />
       </div>
-      <CalendarToast show={!!toastData} onClose={() => setToastData(null)} data={toastData} />
+      <CalendarToast onClose={() => setToastData(null)} data={toastData} />
     </div>
   );
 }

@@ -43,7 +43,7 @@ export default function CalendarToast({ onClose, data }) {
             <strong>Upcoming visits</strong>
             <div className={styles.upcomingList}>
               {futureVisits?.length ? (
-                futureVisitsmap((d, i) => (
+                futureVisits.map((d, i) => (
                   <div key={i} className={styles.upcomingItem}>{d}</div>
                 ))
               ) : (

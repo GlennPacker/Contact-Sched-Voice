@@ -8,7 +8,6 @@ import { contactCreateAppointment } from '../../lib/visitUtils';
 import styles from './Contact.module.scss';
 
 export default function Contact({ initialValues = null, submit, priceReviewDateReadOnly = false }) {
-  const envRates = getEnvRates();
   const defaultFormValues = getDefaultFormValues(initialValues);
 
   const {
