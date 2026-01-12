@@ -11,9 +11,6 @@ export default function CalendarToast({ onClose, data }) {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const edit = () => router.push(`/contacts/${contact.id}/edit`);
-
-
   async function makeApiCall(apiFn) {
     setError(null);
     setLoading(true);
@@ -28,12 +25,20 @@ export default function CalendarToast({ onClose, data }) {
   }
 
   return (
-    <div className={styles.toastWrapper} role="dialog" aria-modal="true">
+    <div
+      className={styles.toastWrapper}
+      role="dialog"
+      aria-modal="true"
+    >
       <div className={styles.toastHeader}>
         <strong>{contact.name}</strong>
         <div className={styles.sub}>{address.address}</div>
 
-        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
+        <button
+          className={styles.closeBtn}
+          onClick={onClose}
+          aria-label="Close"
+        >
           ✕
         </button>
       </div>
@@ -58,8 +63,11 @@ export default function CalendarToast({ onClose, data }) {
         >
           🗑📅 Delete future
         </button>
-
-        <button type="button" className="btn btn-sm btn-outline-primary me-2" onClick={edit}>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-primary me-2"
+          onClick={() => router.push(`/contacts/${contact.id}/edit`)}
+        >
           Edit
         </button>
       </div>
@@ -89,7 +97,10 @@ export default function CalendarToast({ onClose, data }) {
             <div className={styles.upcomingList}>
               {futureVisits?.length ? (
                 futureVisits.map((d, i) => (
-                  <div key={i} className={styles.upcomingItem}>
+                  <div
+                    key={i}
+                    className={styles.upcomingItem}
+                  >
                     {d}
                   </div>
                 ))
