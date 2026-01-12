@@ -1,5 +1,4 @@
 import Contact from '../../components/Contact/Contact';
-import Link from 'next/link';
 import { addContact } from '../../lib/contactService';
 import { useRouter } from 'next/router';
 
@@ -10,11 +9,13 @@ export default function NewContactPage() {
   };
 
   return (
-    <div>
+    <>
       <h1>Create Contact</h1>
 
       <Contact submit={createContact} priceReviewDateReadOnly={true} />
-      <>
-        <h1>Create Contact</h1>
-        <ContactForm />
-      </>
+
+      <h1>Create Contact</h1>
+      <ContactForm />
+    </>
+  )
+};
