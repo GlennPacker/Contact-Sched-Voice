@@ -2,7 +2,7 @@ import { Alert } from 'react-bootstrap';
 import React from 'react';
 import VisitsTable from '../../components/VisitsTable/VisitsTable';
 import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
-import { getAddressesByIds } from '../../lib/addressService';
+import * as addressService from '../../lib/addressService';
 import { getContactsByIds } from '../../lib/contactService';
 import { listVisits } from '../../lib/visitService';
 
@@ -34,7 +34,7 @@ export async function getServerSideProps() {
     const allVisits = await listVisits({ fromDate: today, order: 'asc', limit: 25 });
 
     const addressIds = [...new Set((allVisits || []).map(v => v.addressId))];
-    const addresses = addressIds.length ? await getAddressesByIds(addressIds) : [];
+    const addresses = addressIds.length ? await addressService.getById(addressIds) : [];
     const contactIds = [...new Set((addresses || []).map(a => a.contactId))];
     const contacts = contactIds.length ? await getContactsByIds(contactIds) : [];
 

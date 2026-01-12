@@ -68,6 +68,36 @@ export default function CalendarToast({ onClose, data }) {
         </button>
         <button
           type="button"
+          className="btn btn-sm btn-outline-danger me-2"
+            onClick={async () => {
+            if (!address || !address.id || !visit || !visit.visitDate) return;
+            setError(null);
+            setLoading(true);
+            try {
+              const res = await fetch('/api/calendar/cancelVisits', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ visitId: visit.id, fromDate: visit.visitDate }),
+              });
+              if (!res.ok) {
+                const payload = await res.json();
+                setError(payload?.error || 'Failed to delete future visits');
+                setLoading(false);
+                return;
+              }
+              router.reload();
+            } catch (err) {
+              setError(err?.message || 'Network error');
+            } finally {
+              setLoading(false);
+            }
+          }}
+          disabled={loading}
+          aria-label="Delete all future visits">
+          🗑📅 Delete future
+        </button>
+        <button
+          type="button"
           className="btn btn-sm btn-outline-primary me-2"
           onClick={edit}>
           Edit
