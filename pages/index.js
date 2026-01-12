@@ -10,7 +10,9 @@ export default function Home() {
         <p>This is a minimal Next.js scaffold. Run <code>npm run dev</code> to start the dev server.</p>
 
         <div className="u-cta">
-          <Link href="/contacts/create" passHref>
+          <Link
+            href="/contacts/create"
+            passHref>
             <Button variant="primary">Create Contact</Button>
           </Link>
         </div>

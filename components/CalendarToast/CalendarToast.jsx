@@ -15,7 +15,7 @@ export default function CalendarToast({ onClose, data }) {
   };
 
   const cancel = async () => {
-    if (!visit || !visit.id) return;
+    if (!visit?.id) return;
     setError(null);
     setLoading(true);
     try {
@@ -39,22 +39,37 @@ export default function CalendarToast({ onClose, data }) {
   };
 
   return (
-    <div className={styles.toastWrapper} role="dialog" aria-modal="true">
+    <div
+      className={styles.toastWrapper}
+      role="dialog"
+      aria-modal="true">
+
       <div className={styles.toastHeader}>
-        <div>
-          <strong>{contact.name}</strong>
-          <div className={styles.sub}>{address.address}</div>
-        </div>
-        <div>
-          <button className={styles.closeBtn} onClick={onClose} aria-label="Close">✕</button>
-        </div>
+        <strong>{contact.name}</strong>
+        <div className={styles.sub}>{address.address}</div>
+
+        <button
+          className={styles.closeBtn}
+          onClick={onClose}
+          aria-label="Close"
+        >
+          ✕
+        </button>
       </div>
 
       <div className={styles.toolbar}>
-        <button type="button" className="btn btn-sm btn-outline-danger me-2" onClick={cancel} disabled={loading} aria-label="Cancel visit">
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-danger me-2"
+          onClick={cancel}
+          disabled={loading}
+          aria-label="Cancel visit">
           🗑 Cancel
         </button>
-        <button type="button" className="btn btn-sm btn-outline-primary me-2" onClick={edit}>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-primary me-2"
+          onClick={edit}>
           Edit
         </button>
       </div>
@@ -64,8 +79,12 @@ export default function CalendarToast({ onClose, data }) {
       <div className={styles.toastBody}>
         <div className={styles.bodyTable}>
           <div className={styles.leftCol}>
-            <div className={styles.row}><strong>Date:</strong> {visit.visitDate}</div>
-            <div className={styles.row}><strong>Time:</strong> {visit.time}</div>
+            <div className={styles.row}>
+              <strong>Date:</strong> {visit.visitDate}
+            </div>
+            <div className={styles.row}>
+              <strong>Time:</strong> {visit.time}
+            </div>
             <div className={styles.row}><strong>Recurrence:</strong> {visit.recurrence}</div>
             <div className={styles.row}><strong>Notes:</strong></div>
             <div className={styles.notes}>{visit.notes}</div>
@@ -75,7 +94,9 @@ export default function CalendarToast({ onClose, data }) {
             <div className={styles.upcomingList}>
               {futureVisits?.length ? (
                 futureVisits.map((d, i) => (
-                  <div key={i} className={styles.upcomingItem}>{d}</div>
+                  <div
+                    key={i}
+                    className={styles.upcomingItem}>{d}</div>
                 ))
               ) : (
                 <div className={styles.upcomingEmpty}>No upcoming visits</div>

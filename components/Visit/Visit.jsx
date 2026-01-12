@@ -22,7 +22,9 @@ export default function Visit({
 
   if (collapsed) {
     return (
-      <div className={`mb-3 ${styles['visit-fields']}`} key={field.id}>
+      <div
+        className={`mb-3 ${styles['visit-fields']}`}
+        key={field.id}>
         <div
           className={`${styles['visit-collapsed-summary']} ${styles['visit-cursor-pointer']}`}
           onClick={() => toggleCollapse(idx)}
@@ -60,7 +62,9 @@ export default function Visit({
   }
 
   return (
-    <div className={`mb-3 ${styles['visit-fields']}`} key={field.id}>
+    <div
+      className={`mb-3 ${styles['visit-fields']}`}
+      key={field.id}>
       <div className={styles['visit-fields-col']}>
         <Form.Group className={styles['visit-field-row']}>
           <Form.Label

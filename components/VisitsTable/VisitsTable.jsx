@@ -26,11 +26,11 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
     if (m && m[1]) {
       const last = m[1];
       const idx = addr.lastIndexOf(last);
-      
-return addr.slice(idx).trim();
+
+      return addr.slice(idx).trim();
     }
-    
-return addr.trim();
+
+    return addr.trim();
   };
 
   const uniqueNames = useMemo(() => {
@@ -43,8 +43,8 @@ return addr.trim();
       const label = formatAddressForSelect(v.address);
       if (label) set.set(label, label);
     });
-    
-return [...set.values()].sort();
+
+    return [...set.values()].sort();
   }, [visits]);
 
   const filtered = useMemo(() => {
@@ -60,8 +60,8 @@ return [...set.values()].sort();
         if (filters.inside === 'yes' && !v.isInside) return false;
         if (filters.inside === 'no' && v.isInside) return false;
       }
-      
-return true;
+
+      return true;
     });
   }, [visits, filters, dateField]);
 
@@ -77,24 +77,33 @@ return true;
           return '';
       }
     };
-    
-return [...filtered].sort((a, b) => {
+
+    return [...filtered].sort((a, b) => {
       const A = mapper(a);
       const B = mapper(b);
       if (A === B) return 0;
-      
-return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1);
+
+      return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1);
     });
   }, [filtered, sortField, sortDir, dateField]);
 
   return (
-    <Table striped bordered hover responsive className={indexStyles.visitsTable}>
+    <Table
+      striped
+      bordered
+      hover
+      responsive
+      className={indexStyles.visitsTable}>
       <thead>
         <tr>
           <th className={indexStyles.colName}>
             <div className="d-flex align-items-center">
               <span className="me-2">Name</span>
-              <SortIcon field="name" activeField={sortField} activeDir={sortDir} onChange={handleSortChange} />
+              <SortIcon
+                field="name"
+                activeField={sortField}
+                activeDir={sortDir}
+                onChange={handleSortChange} />
             </div>
           </th>
           <th className={indexStyles.colAddress}>Address</th>
@@ -102,32 +111,58 @@ return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1);
           <th className={indexStyles.colDate}>
             <div className="d-flex align-items-center">
               <span className="me-2">{dateLabel}</span>
-              <SortIcon field="date" activeField={sortField} activeDir={sortDir} onChange={handleSortChange} />
+              <SortIcon
+                field="date"
+                activeField={sortField}
+                activeDir={sortDir}
+                onChange={handleSortChange} />
             </div>
           </th>
           <th className={indexStyles.colInside}>Inside</th>
         </tr>
         <tr>
           <th>
-            <select className="form-select form-select-sm" value={filters.name} onChange={e => setFilters(f => ({ ...f, name: e.target.value }))}>
+            <select
+              className="form-select form-select-sm"
+              value={filters.name}
+              onChange={e => setFilters(f => ({ ...f, name: e.target.value }))}>
               <option value="">All</option>
-              {uniqueNames.map(n => <option key={n} value={n}>{n}</option>)}
+              {uniqueNames.map(n => <option
+                key={n}
+                value={n}>{n}</option>)}
             </select>
           </th>
           <th>
-            <select className="form-select form-select-sm" value={filters.address} onChange={e => setFilters(f => ({ ...f, address: e.target.value }))}>
+            <select
+              className="form-select form-select-sm"
+              value={filters.address}
+              onChange={e => setFilters(f => ({ ...f, address: e.target.value }))}>
               <option value="">All</option>
-              {uniqueAddressOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+              {uniqueAddressOptions.map(opt => <option
+                key={opt}
+                value={opt}>{opt}</option>)}
             </select>
           </th>
           <th>
-            <input type="text" className="form-control form-control-sm" placeholder="Filter notes" value={filters.notes} onChange={e => setFilters(f => ({ ...f, notes: e.target.value }))} />
+            <input
+              type="text"
+              className="form-control form-control-sm"
+              placeholder="Filter notes"
+              value={filters.notes}
+              onChange={e => setFilters(f => ({ ...f, notes: e.target.value }))} />
           </th>
           <th>
-            <input type="date" className="form-control form-control-sm" value={filters.date} onChange={e => setFilters(f => ({ ...f, date: e.target.value }))} />
+            <input
+              type="date"
+              className="form-control form-control-sm"
+              value={filters.date}
+              onChange={e => setFilters(f => ({ ...f, date: e.target.value }))} />
           </th>
           <th>
-            <select className="form-select form-select-sm" value={filters.inside} onChange={e => setFilters(f => ({ ...f, inside: e.target.value }))}>
+            <select
+              className="form-select form-select-sm"
+              value={filters.inside}
+              onChange={e => setFilters(f => ({ ...f, inside: e.target.value }))}>
               <option value="">All</option>
               <option value="yes">Yes</option>
               <option value="no">No</option>
@@ -140,7 +175,9 @@ return sortDir === 'asc' ? (A < B ? -1 : 1) : (A > B ? -1 : 1);
           <tr key={`${v.contactId || v.id}-${v.addressId}-${v[dateField]}-${idx}`}>
             <td>
               {v.contactId ? (
-                <Link href={`/contacts/${v.contactId}/edit`} passHref>{v.contactName || '—'}</Link>
+                <Link
+                  href={`/contacts/${v.contactId}/edit`}
+                  passHref>{v.contactName || '—'}</Link>
               ) : (v.contactName || '—')}
             </td>
             <td>{v.address || '—'}</td>

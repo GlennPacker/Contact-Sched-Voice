@@ -92,14 +92,22 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
         </Alert>
       )}
       {success && <Alert variant="success">{success}</Alert>}
-      <Form onSubmit={handleSubmit(formSubmit)} className={styles['form-grid']}>
+      <Form
+        onSubmit={handleSubmit(formSubmit)}
+        className={styles['form-grid']}>
         <div className={styles['form-grid__col1']}>
-          <Form.Group className="mb-3" controlId="name">
+          <Form.Group
+            className="mb-3"
+            controlId="name">
             <Form.Label className={styles['section-title']}>Name *</Form.Label>
-            <Form.Control {...register('name', { required: 'Name is required' })} placeholder="Full name" />
+            <Form.Control
+              {...register('name', { required: 'Name is required' })}
+              placeholder="Full name" />
             {errors.name && <Form.Text className="text-danger">{errors.name.message}</Form.Text>}
           </Form.Group>
-          <Form.Group className="mb-3" controlId="contactTypes">
+          <Form.Group
+            className="mb-3"
+            controlId="contactTypes">
             <Form.Label className={styles['section-title']}>Contact types *</Form.Label>
             {CONTACT_TYPE_OPTIONS.map(opt => {
               const isEmail = opt.id === 'email';
@@ -107,8 +115,14 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
               const isSelected = Boolean(watchedTypes[opt.id]?.selected);
 
               return (
-                <div key={opt.id} className="mb-3">
-                  <Form.Check type="checkbox" id={`ct-${opt.id}`} label={opt.label} {...register(`contactTypes.${opt.id}.selected`)} />
+                <div
+                  key={opt.id}
+                  className="mb-3">
+                  <Form.Check
+                    type="checkbox"
+                    id={`ct-${opt.id}`}
+                    label={opt.label}
+                    {...register(`contactTypes.${opt.id}.selected`)} />
                   {isSelected && isEmail && (
                     <>
                       <Form.Control
@@ -144,13 +158,20 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
               );
             })}
           </Form.Group>
-          <Form.Group className="mb-3" controlId="rates">
+          <Form.Group
+            className="mb-3"
+            controlId="rates">
             <Form.Label className={styles['section-title']}>Rates *</Form.Label>
             <Form.Group className="mb-2">
               <div className={styles['form-field-row']}>
                 <Form.Label className={`small ${styles['form-field-label']}`}>Full day</Form.Label>
                 <div className={styles['form-field-control']}>
-                  <Form.Control type="number" step="0.01" {...register('rateFullDay', { valueAsNumber: true })} placeholder="Full day rate" onBlur={fullDayBlur} />
+                  <Form.Control
+                    type="number"
+                    step="0.01"
+                    {...register('rateFullDay', { valueAsNumber: true })}
+                    placeholder="Full day rate"
+                    onBlur={fullDayBlur} />
                   {errors?.rateFullDay && <Form.Text className="text-danger">{errors.rateFullDay.message}</Form.Text>}
                 </div>
               </div>
@@ -159,7 +180,10 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
               <div className={styles['form-field-row']}>
                 <Form.Label className={`small ${styles['form-field-label']}`}>Half day</Form.Label>
                 <div className={styles['form-field-control']}>
-                  <Form.Control type="number" {...register('rateHalfDay', { valueAsNumber: true })} placeholder="Half day rate" />
+                  <Form.Control
+                    type="number"
+                    {...register('rateHalfDay', { valueAsNumber: true })}
+                    placeholder="Half day rate" />
                   {errors?.rateHalfDay && <Form.Text className="text-danger">{errors.rateHalfDay.message}</Form.Text>}
                 </div>
               </div>
@@ -168,7 +192,10 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
               <div className={styles['form-field-row']}>
                 <Form.Label className={`small ${styles['form-field-label']}`}>2 hour</Form.Label>
                 <div className={styles['form-field-control']}>
-                  <Form.Control type="number" {...register('rateTwoHour', { valueAsNumber: true })} placeholder="2 hour rate" />
+                  <Form.Control
+                    type="number"
+                    {...register('rateTwoHour', { valueAsNumber: true })}
+                    placeholder="2 hour rate" />
                   {errors?.rateTwoHour && <Form.Text className="text-danger">{errors.rateTwoHour.message}</Form.Text>}
                 </div>
               </div>
@@ -177,7 +204,10 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
               <div className={styles['form-field-row']}>
                 <Form.Label className={`small ${styles['form-field-label']}`}>Hour</Form.Label>
                 <div className={styles['form-field-control']}>
-                  <Form.Control type="number" {...register('rateHour', { valueAsNumber: true })} placeholder="Hourly rate" />
+                  <Form.Control
+                    type="number"
+                    {...register('rateHour', { valueAsNumber: true })}
+                    placeholder="Hourly rate" />
                 </div>
               </div>
             </Form.Group>
@@ -185,7 +215,10 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
               <div className={styles['form-field-row']}>
                 <Form.Label className={`small ${styles['form-field-label']}`}>Job</Form.Label>
                 <div className={styles['form-field-control']}>
-                  <Form.Control type="number" {...register('rateJob', { valueAsNumber: true })} placeholder="Per job rate" />
+                  <Form.Control
+                    type="number"
+                    {...register('rateJob', { valueAsNumber: true })}
+                    placeholder="Per job rate" />
                 </div>
               </div>
             </Form.Group>
@@ -221,10 +254,18 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
           />
         </div>
         <div className={styles['form-grid__actions']}>
-          <Button type="submit" disabled={isSubmitting} variant="primary">
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            variant="primary">
             {isSubmitting ? (
               <>
-                <Spinner as="span" animation="border" size="sm" role="status" aria-hidden /> Saving...
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden /> Saving...
               </>
             ) : (
               'Save'

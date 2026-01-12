@@ -39,7 +39,10 @@ export default function UnscheduledVisitsPage({ visits = [], error = null }) {
       {!displayed.length ? (
         <Alert variant="info">No unscheduled visits</Alert>
       ) : (
-        <VisitsTable visits={displayed} dateField="earliestDate" dateLabel="Earliest" />
+        <VisitsTable
+          visits={displayed}
+          dateField="earliestDate"
+          dateLabel="Earliest" />
       )}
     </>
   );

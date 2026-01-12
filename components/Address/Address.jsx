@@ -1,26 +1,16 @@
 import { Button, Form } from 'react-bootstrap';
-
-import React from 'react';
-import Visits from '../Visit/Visits.jsx';
 import styles from './Address.module.scss';
 import { useWatch } from 'react-hook-form';
 
-export default function Address({ field, idx, register, errors, removeAddress, totalAddresses, contactName, control, onCalendarInvite, isSelected, onSelect }) {
+export default function Address({ field, idx, register, errors, removeAddress, totalAddresses, control }) {
   const watchedAddresses = useWatch({ control, name: 'addresses' });
   const address = watchedAddresses?.[idx]?.address || '';
 
-  function createCalendarInviteForVisit(visit) {
-    const calendarData = {
-      contactName,
-      visit,
-      address: address
-    };
-
-    return onCalendarInvite(calendarData);
-  }
-
   return (
-    <div key={field.id} className={styles['address-item']}>
+    <div
+      key={field.id}
+      className={styles['address-item']}>
+
       <div className={`${styles['address-row']} mb-2`}>
         <div className={styles['address-cell-main']}>
           <Form.Control
@@ -53,7 +43,7 @@ export default function Address({ field, idx, register, errors, removeAddress, t
           >
             🗺️
           </Button>
-          {totalAddresses > 1 && null}
+
           {totalAddresses > 1 && (
             <Button
               variant="danger"

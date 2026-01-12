@@ -43,17 +43,26 @@ export default function ContactsPage({ contacts = [], error = null }) {
             Search
           </Button>
           &nbsp;
-          <Link href="/contacts/create" passHref>
-            <Button variant="secondary" size="sm">Create</Button>
+          <Link
+            href="/contacts/create"
+            passHref>
+            <Button
+              variant="secondary"
+              size="sm">Create</Button>
           </Link>
         </ButtonGroup>
       </div>
 
       <div className={`${styles.filterCollapse} ${showSearch ? styles.filterCollapseOpen : ''}`}>
-        <ContactSearch search={search} reset={resetSearch} />
+        <ContactSearch
+          search={search}
+          reset={resetSearch} />
       </div>
 
-      <Contacts contacts={displayedContacts} error={error} onActivate={navigateToEdit} />
+      <Contacts
+        contacts={displayedContacts}
+        error={error}
+        onActivate={navigateToEdit} />
     </>
   );
 }

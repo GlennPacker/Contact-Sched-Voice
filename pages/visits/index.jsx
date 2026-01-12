@@ -19,7 +19,10 @@ export default function VisitsPage({ visits = [], error = null }) {
       {!visits.length ? (
         <Alert variant="info">No upcoming visits</Alert>
       ) : (
-        <VisitsTable visits={visits} dateField="visitDate" dateLabel="Date" />
+        <VisitsTable
+          visits={visits}
+          dateField="visitDate"
+          dateLabel="Date" />
       )}
     </>
   );

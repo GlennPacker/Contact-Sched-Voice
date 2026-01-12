@@ -67,7 +67,11 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 		<div className={styles['visits-root']}>
 			<div className={styles['visits-caption-row']}>
 				<span className={styles['visits-caption']}>Visits</span>
-				<Button variant="secondary" size="sm" type="button" onClick={addVisit}>
+				<Button
+					variant="secondary"
+					size="sm"
+					type="button"
+					onClick={addVisit}>
 					Add Visit
 				</Button>
 			</div>

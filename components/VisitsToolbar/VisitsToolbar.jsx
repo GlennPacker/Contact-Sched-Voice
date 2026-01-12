@@ -18,9 +18,19 @@ export default function VisitsToolbar() {
   return (
     <div className="d-flex">
       {toolbarItems.map(navigation => (
-        <Link key={navigation.href} href={navigation.href} passHref>
-          <Button variant="outline-secondary" className="me-2">
-            <img src={navigation.icon} alt={`${navigation.label} icon`} width="24" height="24" className="me-2 align-middle" />
+        <Link
+          key={navigation.href}
+          href={navigation.href}
+          passHref>
+          <Button
+            variant="outline-secondary"
+            className="me-2">
+            <img
+              src={navigation.icon}
+              alt={`${navigation.label} icon`}
+              width="24"
+              height="24"
+              className="me-2 align-middle" />
             {navigation.label}
           </Button>
         </Link>

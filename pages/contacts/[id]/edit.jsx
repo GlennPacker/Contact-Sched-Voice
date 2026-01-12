@@ -24,7 +24,10 @@ export default function EditContactPage({ initialValues = null, error = null, id
     return (
         <div>
             <h1>Edit Contact</h1>
-            <Contact initialValues={initialValues} submit={submit} priceReviewDateReadOnly={false} />
+            <Contact
+                initialValues={initialValues}
+                submit={submit}
+                priceReviewDateReadOnly={false} />
         </div>
     );
 }

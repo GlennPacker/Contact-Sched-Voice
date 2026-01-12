@@ -1,8 +1,8 @@
 import jsxA11yPlugin from 'eslint-plugin-jsx-a11y';
+import reactPlugin from 'eslint-plugin-react';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import noCommentsRule from './tools/eslint-rules/no-comments.js';
 import noNumberConstructorRule from './tools/eslint-rules/no-number-constructor.js';
-import reactHooksPlugin from 'eslint-plugin-react-hooks';
-import reactPlugin from 'eslint-plugin-react';
 
 export default [
   {
@@ -39,11 +39,14 @@ export default [
       'local/no-comments': 'error',
       'local/no-number-constructor': 'error',
       'semi': ['error', 'always'],
+      "react/jsx-max-props-per-line": ["error", { "maximum": 1 }],
+      'react/jsx-max-props-per-line': ['error', { maximum: 1 }],
+      'react/jsx-first-prop-new-line': ['error', 'multiline'],
       'arrow-parens': ['warn', 'as-needed'],
       'no-mixed-operators': 0,
       'no-unused-vars': 0,
       'semi-style': ['error', 'last'],
-      'object-curly-spacing': ["error", "always"],
+      'object-curly-spacing': ['error', 'always'],
     },
     settings: { react: { version: 'detect' } },
   },

@@ -45,7 +45,9 @@ export default function VisitsCalendarPage({ events = [] }) {
           popup
         />
       </div>
-      <CalendarToast onClose={() => setToastData(null)} data={toastData} />
+      <CalendarToast
+        onClose={() => setToastData(null)}
+        data={toastData} />
     </>
   );
 }
