@@ -12,9 +12,9 @@ import { getAddressesByIds } from '../../lib/addressService';
 import { getContactsByIds } from '../../lib/contactService';
 import getDay from 'date-fns/getDay';
 import { listVisits } from '../../lib/visitService';
-import { supabase } from '../../lib/supabaseClient';
 import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
+import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/router';
 
 const locales = { 'en-US': enUS };
