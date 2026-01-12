@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './CalendarToast.module.scss';
 import { useRouter } from 'next/router';
 
@@ -7,9 +7,35 @@ export default function CalendarToast({ onClose, data }) {
 
   const { contact, address, visit, futureVisits } = data;
   const router = useRouter();
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleEdit = () => {
+  const edit = () => {
     router.push(`/contacts/${contact.id}/edit`);
+  };
+
+  const cancel = async () => {
+    if (!visit || !visit.id) return;
+    setError(null);
+    setLoading(true);
+    try {
+      const res = await fetch('/api/calendar/cancelVisit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ visitId: visit.id, visitDate: visit.visitDate }),
+      });
+      const payload = await res.json();
+      if (!res.ok) {
+        setError(payload?.error || 'Failed to cancel visit');
+        setLoading(false);
+        return;
+      }
+      router.reload();
+    } catch (err) {
+      setError(err?.message || 'Network error');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,10 +51,15 @@ export default function CalendarToast({ onClose, data }) {
       </div>
 
       <div className={styles.toolbar}>
-        <button type="button" className="btn btn-sm btn-outline-primary me-2" onClick={handleEdit}>
+        <button type="button" className="btn btn-sm btn-outline-danger me-2" onClick={cancel} disabled={loading} aria-label="Cancel visit">
+          🗑 Cancel
+        </button>
+        <button type="button" className="btn btn-sm btn-outline-primary me-2" onClick={edit}>
           Edit
         </button>
       </div>
+
+      {error && <div className={styles.error}>{error}</div>}
 
       <div className={styles.toastBody}>
         <div className={styles.bodyTable}>
