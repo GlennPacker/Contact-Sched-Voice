@@ -66,7 +66,7 @@ export async function getServerSideProps() {
 
     return { props: { contacts: data, error: null } };
   } catch (err) {
-    return { props: { contacts: null, error: err?.message || 'Server error' } };
+    return { props: { contacts: [], error: 'Server error' } };
   }
 }
 

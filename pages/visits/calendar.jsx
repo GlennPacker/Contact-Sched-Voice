@@ -12,6 +12,7 @@ import { getAddressesByIds } from '../../lib/addressService';
 import { getContactsByIds } from '../../lib/contactService';
 import getDay from 'date-fns/getDay';
 import { listVisits } from '../../lib/visitService';
+import { supabase } from '../../lib/supabaseClient';
 import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
 import { useRouter } from 'next/router';
@@ -26,7 +27,9 @@ export default function VisitsCalendarPage({ events = [] }) {
 
   const handleSelectEvent = ({ resource }) => {
     if (!resource?.visit) return;
-    setToastData({ contact: resource.contact, address: resource.address, visit: resource.visit });
+    const futureVisits = resource.futureVisits ?? null;
+
+    setToastData({ contact: resource.contact, address: resource.address, visit: resource.visit, futureVisits });
   };
 
   return (
@@ -65,6 +68,21 @@ export async function getServerSideProps() {
     const addressMap = Object.fromEntries((addresses || []).map(a => [a.id, a]));
     const contactMap = Object.fromEntries((contacts || []).map(c => [c.id, c]));
 
+    const visitIds = (allVisits || []).map(v => v.id).filter(Boolean);
+    const { data: calRows = [] } = visitIds.length
+      ? await supabase.from('calendars').select('visitId,date').in('visitId', visitIds).gte('date', today).order('date', { ascending: true })
+      : { data: [] };
+
+    const addressCalendarMap = {};
+    for (const row of calRows || []) {
+      const vid = row.visitId;
+      const visitObj = (allVisits || []).find(x => x.id === vid);
+      const aid = visitObj ? visitObj.addressId : null;
+      if (!aid) continue;
+      addressCalendarMap[aid] = addressCalendarMap[aid] || [];
+      if (row.date) addressCalendarMap[aid].push(row.date);
+    }
+
     const events = (allVisits || []).map(v => {
       const addr = addressMap[v.addressId];
       const contact = addr ? contactMap[addr.contactId] : null;
@@ -73,7 +91,9 @@ export async function getServerSideProps() {
       const end = new Date(start);
       end.setDate(end.getDate() + 1);
 
-      return { title, start: start.toISOString(), end: end.toISOString(), allDay: true, resource: { visit: v, contact: contact || null, address: addr || null } };
+      const futureVisits = (addressCalendarMap[v.addressId] || []).filter(d => d > v.visitDate).sort().slice(0, 10);
+
+      return { title, start: start.toISOString(), end: end.toISOString(), allDay: true, resource: { visit: v, contact, address: addr, futureVisits } };
     });
 
     return { props: { events } };

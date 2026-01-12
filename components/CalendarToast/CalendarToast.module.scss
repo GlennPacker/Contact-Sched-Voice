@@ -46,6 +46,44 @@
   overflow: auto;
 }
 
+.bodyTable {
+  display: table;
+  width: 100%;
+  border-collapse: separate;
+}
+
+.leftCol {
+  display: table-cell;
+  vertical-align: top;
+  width: 60%;
+  padding-right: 16px;
+}
+
+.rightCol {
+  display: table-cell;
+  vertical-align: top;
+  width: 40%;
+  padding-left: 16px;
+  border-left: 1px solid rgba(0,0,0,0.04);
+}
+
+.upcomingList {
+  margin-top: 8px;
+}
+
+.upcomingItem {
+  padding: 6px 8px;
+  border-radius: 4px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.04);
+  margin-bottom: 6px;
+}
+
+.upcomingEmpty {
+  color: #666;
+  margin-top: 6px;
+}
+
 .row {
   margin-bottom: 8px;
 }
