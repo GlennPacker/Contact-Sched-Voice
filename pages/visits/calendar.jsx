@@ -1,8 +1,9 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
+import React, { useState } from 'react';
 
-import React from 'react';
+import CalendarToast from '../../components/CalendarToast/CalendarToast';
 import VisitsToolbar from '../../components/VisitsToolbar/VisitsToolbar';
 import calStyles from './Calendar.module.scss';
 import { enUS } from 'date-fns/locale';
@@ -21,9 +22,11 @@ const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales
 export default function VisitsCalendarPage({ events = [] }) {
   const router = useRouter();
 
-  const handleSelectEvent = event => {
-    const contactId = event.resource && event.resource.contactId;
-    if (contactId) router.push(`/contacts/${contactId}/edit`);
+  const [toastData, setToastData] = useState(null);
+
+  const handleSelectEvent = ({ resource }) => {
+    if (!resource?.visit) return;
+    setToastData({ contact: resource.contact, address: resource.address, visit: resource.visit });
   };
 
   return (
@@ -44,6 +47,7 @@ export default function VisitsCalendarPage({ events = [] }) {
           popup
         />
       </div>
+      <CalendarToast show={!!toastData} onClose={() => setToastData(null)} data={toastData} />
     </div>
   );
 }
@@ -69,11 +73,11 @@ export async function getServerSideProps() {
       const end = new Date(start);
       end.setDate(end.getDate() + 1);
 
-      return { title, start: start.toISOString(), end: end.toISOString(), allDay: true, resource: { visit: v, contactId: contact && contact.id } };
+      return { title, start: start.toISOString(), end: end.toISOString(), allDay: true, resource: { visit: v, contact: contact || null, address: addr || null } };
     });
 
     return { props: { events } };
   } catch (err) {
-    return { props: { events: [], error: err && err.message ? err.message : 'Server error' } };
+    return { props: { events: [], error: err?.message || 'Server error' } };
   }
 }
