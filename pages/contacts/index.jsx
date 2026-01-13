@@ -70,10 +70,9 @@ export default function ContactsPage({ contacts = [], error = null }) {
 export async function getServerSideProps() {
   try {
     const data = await listContacts();
-
     return { props: { contacts: data, error: null } };
   } catch (err) {
-    return { props: { contacts: [], error: 'Server error' } };
+    return { props: { contacts: null, error: err?.message || 'Server error' } };
   }
 }
 

@@ -1,8 +1,7 @@
-
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { cancelVisitApi, cancelFutureVisitsApi } from '../../lib/visitService';
-import MoveVisit from './MoveVisit';
+import MoveVisit from '../MoveVisit/MoveVisit';
 
 export default function CalendarToastToolbar({ visit, contactId }) {
   const [loading, setLoading] = useState(false);

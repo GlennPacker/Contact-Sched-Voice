@@ -1,7 +1,7 @@
 
 import React from 'react';
 import styles from './CalendarToast.module.scss';
-import CalendarToastToolbar from './CalendarToastToolbar';
+import CalendarToastToolbar from '../CalendarToastToolbar/CalendarToastToolbar';
 
 export default function CalendarToast({ onClose, data }) {
   if (!data) return null;

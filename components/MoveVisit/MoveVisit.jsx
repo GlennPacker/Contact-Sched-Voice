@@ -9,7 +9,6 @@ function MoveVisit({ visit, loading }) {
 
   useEffect(() => {
     if (!show) return;
-
     async function checkFuture() {
       const payload = await hasFutureDatesApi(visit.id, visit.visitDate);
       const exists = !!payload?.exists;
@@ -17,7 +16,6 @@ function MoveVisit({ visit, loading }) {
       setMoveFuture(exists);
       setMoveDate(visit.visitDate);
     }
-
     checkFuture();
   }, [show, visit.id, visit.visitDate]);
 

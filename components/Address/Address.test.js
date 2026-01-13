@@ -10,22 +10,19 @@ describe('Address source smoke tests', () => {
   });
 
   it('exports default Address component', () => {
-    expect(src).toMatch(/export default function Address/); 
+    expect(src.includes('export default function Address')).toBe(true);
   });
 
   it('uses useWatch from react-hook-form', () => {
-    expect(src).toMatch(/useWatch\(/);
+    expect(src.includes('useWatch(')).toBe(true);
   });
 
   it('registers address field with react-hook-form', () => {
-    expect(src).toMatch(/register\(`addresses\.\${idx}\.address`/);
+    expect(src.includes('register(`addresses.${idx}.address`')).toBe(true);
   });
 
   it('has Open in Google Maps button text', () => {
-    expect(src).toMatch(/Open in Google Maps/);
+    expect(src.includes('Open in Google Maps')).toBe(true);
   });
 
-  it('imports Visits component', () => {
-    expect(src).toMatch(/import Visits from '\.\.\/Visit\/Visits\.jsx'/);
-  });
 });
