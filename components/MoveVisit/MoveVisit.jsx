@@ -1,7 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { hasFutureDatesApi } from "../../lib/calendarService";
+import { updateVisitDate, updateFutureVisitDates } from "../../lib/visitService";
+import { updateVisitTableDate } from "../../lib/visitService";
 
 function MoveVisit({ visit, loading }) {
+  async function moveVisitDate() {
+    if (!moveFuture) {
+      await updateVisitDate(visit.id, moveDate);
+      await updateVisitTableDate(visit.id, visit.visitDate, moveDate);
+    } else {
+      const oldDate = new Date(visit.visitDate);
+      const newDate = new Date(moveDate);
+      const daysDiff = Math.round((newDate - oldDate) / (1000 * 60 * 60 * 24));
+      await updateFutureVisitDates(visit.id, daysDiff, visit.visitDate);
+    }
+    setShow(false);
+  }
+  
   const [show, setShow] = useState(false);
   const [hasFutureDates, setHasFutureDates] = useState(false);
   const [moveFuture, setMoveFuture] = useState(false);
@@ -62,6 +77,11 @@ function MoveVisit({ visit, loading }) {
                   value={moveDate}
                   onChange={e => setMoveDate(e.target.value)}
                   disabled={loading}
+                  min={(() => {
+                    const d = new Date();
+                    d.setDate(d.getDate() + 1);
+                    return d.toISOString().split('T')[0];
+                  })()}
                 />
                 {hasFutureDates && (
                   <div className="form-check">
@@ -94,7 +114,8 @@ function MoveVisit({ visit, loading }) {
                 <button
                   type="button"
                   className="btn btn-primary"
-                  disabled={loading}
+                  disabled={!moveDate}
+                  onClick={moveVisitDate}
                 >
                   Move
                 </button>

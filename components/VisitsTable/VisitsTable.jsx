@@ -6,6 +6,7 @@ import { Table } from 'react-bootstrap';
 import indexStyles from '../../pages/visits/Index.module.scss';
 
 export default function VisitsTable({ visits = [], dateField = 'visitDate', dateLabel = 'Date', onSortChange }) {
+  
   const [sortField, setSortField] = useState(null);
   const [sortDir, setSortDir] = useState('none');
   const [filters, setFilters] = useState({ name: '', address: '', notes: '', date: '', inside: '' });
@@ -34,7 +35,7 @@ export default function VisitsTable({ visits = [], dateField = 'visitDate', date
   };
 
   const uniqueNames = useMemo(() => {
-    return [...new Set((visits || []).map(v => v.contactName).filter(Boolean))].sort();
+    return [...new Set((visits || []).map(v => v.contactName).filter(n => !!n))].sort();
   }, [visits]);
 
   const uniqueAddressOptions = useMemo(() => {

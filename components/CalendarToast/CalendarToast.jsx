@@ -14,7 +14,9 @@ export default function CalendarToast({ onClose, data }) {
       role="dialog"
       aria-modal="true"
     >
-      <div className={styles.toastHeader}>
+      <div
+        className={styles.toastHeader}
+      >
         <strong>{contact.name}</strong>
         <div className={styles.sub}>{address.address}</div>
 
@@ -48,7 +50,12 @@ export default function CalendarToast({ onClose, data }) {
             <div className={styles.upcomingList}>
               {futureVisits?.length ? (
                 futureVisits.map((d, i) => (
-                  <div key={i} className={styles.upcomingItem}>{d}</div>
+                  <div
+                    key={i}
+                    className={styles.upcomingItem}
+                  >
+                    {d}
+                  </div>
                 ))
               ) : (
                 <div className={styles.upcomingEmpty}>No upcoming visits</div>

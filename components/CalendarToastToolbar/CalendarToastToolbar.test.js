@@ -35,7 +35,12 @@ describe('CalendarToastToolbar', () => {
 
   it('renders all action buttons', async () => {
     await act(async () => {
-      render(<CalendarToastToolbar visit={visit} contactId={contactId} />);
+      render(
+        <CalendarToastToolbar
+          visit={visit}
+          contactId={contactId}
+        />
+      );
     });
     expect(screen.getByRole('button', { name: /cancel visit/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /delete all future visits/i })).toBeInTheDocument();
@@ -44,10 +49,15 @@ describe('CalendarToastToolbar', () => {
   });
 
   it('disables buttons when loading', async () => {
-    const neverResolves = new Promise(() => {});
+    const neverResolves = new Promise(() => { });
     jest.spyOn(visitService, 'cancelVisitApi').mockImplementation(() => neverResolves);
     await act(async () => {
-      render(<CalendarToastToolbar visit={visit} contactId={contactId} />);
+      render(
+        <CalendarToastToolbar
+          visit={visit}
+          contactId={contactId}
+        />
+      );
     });
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: /cancel visit/i }));

@@ -65,7 +65,7 @@ export async function getServerSideProps() {
     const addressMap = Object.fromEntries((addresses || []).map(a => [a.id, a]));
     const contactMap = Object.fromEntries((contacts || []).map(c => [c.id, c]));
 
-    const visitIds = (allVisits || []).map(v => v.id).filter(Boolean);
+    const visitIds = (allVisits || []).map(v => v.id).filter(x => !!x);
     const { data: calRows = [] } = visitIds.length
       ? await supabase.from('calendars').select('visitId,date').in('visitId', visitIds).gte('date', today).order('date', { ascending: true })
       : { data: [] };
