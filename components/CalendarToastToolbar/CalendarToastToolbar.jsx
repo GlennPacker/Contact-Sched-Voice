@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { cancelVisitApi, cancelFutureVisitsApi } from '../../lib/visitService';
 import MoveVisit from '../MoveVisit/MoveVisit';
 
-export default function CalendarToastToolbar({ visit, contactId }) {
+export default function CalendarToastToolbar({ visit, contactId, onMoveComplete }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
@@ -56,6 +56,7 @@ export default function CalendarToastToolbar({ visit, contactId }) {
         <MoveVisit
           visit={visit}
           loading={loading}
+          onMoveComplete={onMoveComplete}
         />
       </div>
       {error && <div style={{ color: 'red', marginTop: 8 }}>{error}</div>}

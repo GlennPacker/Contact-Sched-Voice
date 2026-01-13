@@ -9,7 +9,7 @@ export default function VisitsToolbar() {
 
   const items = [
     { href: '/visits', label: 'Visits', icon: '/icons/visits.svg' },
-    { href: '/visits/calendar', label: 'Calendar', icon: '/icons/calendar.svg' },
+    { href: '/visits/calendar/current', label: 'Calendar', icon: '/icons/calendar.svg' },
     { href: '/visits/unscheduled', label: 'Unscheduled', icon: '/icons/unscheduled.svg' },
   ];
 

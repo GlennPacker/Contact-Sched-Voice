@@ -43,7 +43,7 @@ export default [
       "react/jsx-max-props-per-line": ["error", { "maximum": 1 }],
       'react/jsx-max-props-per-line': ['error', { maximum: 1 }],
       'react/jsx-first-prop-new-line': ['error', 'multiline'],
-      'arrow-parens': ['warn', 'as-needed'],
+      'arrow-parens': ['error', 'as-needed'],
       'no-mixed-operators': 0,
       'no-unused-vars': 0,
       'semi-style': ['error', 'last'],

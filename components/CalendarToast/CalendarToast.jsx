@@ -32,6 +32,7 @@ export default function CalendarToast({ onClose, data }) {
       <CalendarToastToolbar
         visit={visit}
         contactId={contact.id}
+        onMoveComplete={onClose}
       />
 
       <div

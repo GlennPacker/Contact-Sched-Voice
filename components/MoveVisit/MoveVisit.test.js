@@ -10,6 +10,13 @@ jest.mock('../../lib/visitService', () => ({
   updateFutureVisitDates: jest.fn(() => Promise.resolve())
 }));
 
+jest.mock('next/router', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+    reload: jest.fn(),
+  }),
+}));
+
 describe('MoveVisit', () => {
   const visit = { id: 1, visitDate: '2026-01-13' };
 

@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { hasFutureDatesApi } from "../../lib/calendarService";
-import { updateVisitDate, updateFutureVisitDates } from "../../lib/visitService";
-import { updateVisitTableDate } from "../../lib/visitService";
+import { moveVisitApi } from "../../lib/calendarService";
+import { updateVisitDate } from "../../lib/visitService";
+import { updateFutureVisitTableDates } from "../../lib/visitService";
+import { useRouter } from "next/router";
 
-function MoveVisit({ visit, loading }) {
+function MoveVisit({ visit, loading, onMoveComplete }) {
+  const router = useRouter();
   async function moveVisitDate() {
-    if (!moveFuture) {
-      await updateVisitDate(visit.id, moveDate);
-      await updateVisitTableDate(visit.id, visit.visitDate, moveDate);
-    } else {
-      const oldDate = new Date(visit.visitDate);
-      const newDate = new Date(moveDate);
-      const daysDiff = Math.round((newDate - oldDate) / (1000 * 60 * 60 * 24));
-      await updateFutureVisitDates(visit.id, daysDiff, visit.visitDate);
-    }
+    await moveVisitApi({
+      calendarId: visit.id,
+      visitId: visit.id,
+      newDate: moveDate,
+      moveFuture,
+      originalDate: visit.visitDate
+    });
+    const today = new Date();
+    const newVisitDate = new Date(moveDate);
+    let monthOffset = (newVisitDate.getFullYear() - today.getFullYear()) * 12 + (newVisitDate.getMonth() - today.getMonth());
+    let urlPart = monthOffset === 0 ? 'current' : String(monthOffset);
     setShow(false);
+    onMoveComplete();
+    router.push(`/visits/calendar/${urlPart}`);
   }
-  
+
   const [show, setShow] = useState(false);
   const [hasFutureDates, setHasFutureDates] = useState(false);
   const [moveFuture, setMoveFuture] = useState(false);
@@ -25,14 +32,14 @@ function MoveVisit({ visit, loading }) {
   useEffect(() => {
     if (!show) return;
     async function checkFuture() {
-      const payload = await hasFutureDatesApi(visit.id, visit.visitDate);
+      const payload = await hasFutureDatesApi(visit.visitId, visit.visitDate);
       const exists = !!payload?.exists;
       setHasFutureDates(exists);
       setMoveFuture(exists);
       setMoveDate(visit.visitDate);
     }
     checkFuture();
-  }, [show, visit.id, visit.visitDate]);
+  }, [show, visit.visitId, visit.visitDate]);
 
   return (
     <>
