@@ -32,7 +32,9 @@ export default function CalendarToast({ onClose, data }) {
         contactId={contact.id}
       />
 
-      <div className={styles.toastBody}>
+      <div
+        className={styles.toastBody}
+      >
         <div className={styles.bodyTable}>
           <div className={styles.leftCol}>
             <div className={styles.row}><strong>Date:</strong> {visit.visitDate}</div>

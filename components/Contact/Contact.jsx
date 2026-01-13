@@ -112,7 +112,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
             {CONTACT_TYPE_OPTIONS.map(opt => {
               const isEmail = opt.id === 'email';
               const isWhatsapp = opt.id === 'whatsapp';
-              const isSelected = Boolean(watchedTypes[opt.id]?.selected);
+              const isSelected = !!watchedTypes[opt.id]?.selected;
 
               return (
                 <div

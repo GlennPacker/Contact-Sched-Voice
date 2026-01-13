@@ -17,7 +17,7 @@ function MoveVisit({ visit, loading }) {
       setMoveFuture(exists);
       setMoveDate(visit.visitDate);
     }
-    
+
     checkFuture();
   }, [show, visit.id, visit.visitDate]);
 
@@ -43,67 +43,67 @@ function MoveVisit({ visit, loading }) {
             role="document"
           >
             <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Move Visit</h5>
-              <button
-                type="button"
-                className="btn-close"
-                aria-label="Close"
-                onClick={() => setShow(false)}
-              />
-            </div>
-            <div className="modal-body">
-              {hasFutureDates && (
-                <div className="alert alert-warning mb-2">This contact has future visits scheduled.</div>
-              )}
-              <label htmlFor="move-date">New Date</label>
-              <input
-                id="move-date"
-                type="date"
-                className="form-control mb-2"
-                value={moveDate}
-                onChange={e => setMoveDate(e.target.value)}
-                disabled={loading}
-              />
-              {hasFutureDates && (
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id="move-future"
-                    checked={moveFuture}
-                    onChange={e => setMoveFuture(e.target.checked)}
-                    disabled={loading}
-                  />
-                  <label
-                    className="form-check-label"
-                    htmlFor="move-future"
-                  >
-                    Move all future visits
-                  </label>
-                </div>
-              )}
-            </div>
-            <div className="modal-footer">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => setShow(false)}
-                disabled={loading}
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                className="btn btn-primary"
-                disabled={loading}
-              >
-                Move
-              </button>
+              <div className="modal-header">
+                <h5 className="modal-title">Move Visit</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  aria-label="Close"
+                  onClick={() => setShow(false)}
+                />
+              </div>
+              <div className="modal-body">
+                {hasFutureDates && (
+                  <div className="alert alert-warning mb-2">This contact has future visits scheduled.</div>
+                )}
+                <label htmlFor="move-date">New Date</label>
+                <input
+                  id="move-date"
+                  type="date"
+                  className="form-control mb-2"
+                  value={moveDate}
+                  onChange={e => setMoveDate(e.target.value)}
+                  disabled={loading}
+                />
+                {hasFutureDates && (
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      id="move-future"
+                      checked={moveFuture}
+                      onChange={e => setMoveFuture(e.target.checked)}
+                      disabled={loading}
+                    />
+                    <label
+                      className="form-check-label"
+                      htmlFor="move-future"
+                    >
+                      Move all future visits
+                    </label>
+                  </div>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShow(false)}
+                  disabled={loading}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  disabled={loading}
+                >
+                  Move
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
       )}
     </>
   );

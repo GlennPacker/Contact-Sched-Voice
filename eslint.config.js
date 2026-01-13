@@ -36,6 +36,7 @@ export default [
     rules: {
       'react/react-in-jsx-scope': 'off',
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      'no-restricted-globals': ['error', { name: 'Boolean', message: 'Avoid using Boolean(); use !! or explicit checks instead.' }],
       'local/no-comments': 'error',
       'local/no-number-constructor': 'error',
       'semi': ['error', 'always'],
