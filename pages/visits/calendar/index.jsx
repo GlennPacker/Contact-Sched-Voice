@@ -1,7 +1,11 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
+import * as addressService from '../../../lib/addressService';
+import { VisitTime } from '../../../lib/referenceDataService';
+
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import React, { useState } from 'react';
+import { addMonths, parseISO, startOfMonth } from 'date-fns';
 
 import CalendarKey from '../../../components/CalendarKey/CalendarKey';
 import CalendarToast from '../../../components/CalendarToast/CalendarToast';
@@ -9,7 +13,6 @@ import VisitsToolbar from '../../../components/VisitsToolbar/VisitsToolbar';
 import calStyles from './Calendar.module.scss';
 import { enUS } from 'date-fns/locale';
 import format from 'date-fns/format';
-import * as addressService from '../../../lib/addressService';
 import { getContactsByIds } from '../../../lib/contactService';
 import getDay from 'date-fns/getDay';
 import { listVisits } from '../../../lib/visitService';
@@ -17,7 +20,6 @@ import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
 import { supabase } from '../../../lib/supabaseClient';
 import { useRouter } from 'next/router';
-import { parseISO, addMonths, startOfMonth } from 'date-fns';
 
 const locales = { 'en-US': enUS };
 const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
@@ -61,6 +63,19 @@ export default function VisitsCalendarPage({ events = [] }) {
           onSelectEvent={handleSelectEvent}
           onNavigate={handleNavigate}
           popup
+          eventPropGetter={event => {
+            if (event.eventColor) {
+              return {
+                style: {
+                  backgroundColor: event.eventColor,
+                  color: event.eventColor === '#FFEB3B' ? '#333' : '#fff',
+                  borderRadius: '6px',
+                  border: 'none',
+                }
+              };
+            }
+            return {};
+          }}
         />
       </div>
       <CalendarToast
@@ -68,6 +83,19 @@ export default function VisitsCalendarPage({ events = [] }) {
         data={toastData} />
     </>
   );
+}
+
+function getVisitEventColor(v) {
+  if (v.time === VisitTime.TWO_HOUR) {
+    return '#444'; // charcoal/grey for 2 hour
+  } else if (v.time === VisitTime.HALF_DAY) {
+    return '#FF9800'; // orange for half day
+  } else if (!v.isInside) {
+    return '#2196F3'; // blue for outside
+  } else if (v.time === VisitTime.FULL_DAY) {
+    return '#9C27B0'; // purple for full day
+  }
+  return null;
 }
 
 export async function getServerSideProps(context) {
@@ -131,7 +159,8 @@ export async function getServerSideProps(context) {
           visit: v,
         },
         start: start.toISOString(),
-        title
+        title,
+        eventColor: getVisitEventColor(v),
       };
     });
 

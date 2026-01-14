@@ -1,5 +1,5 @@
 import { Button, Form } from 'react-bootstrap';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
 	defaultCollapsedFor,
 	getTomorrowMinDate,
@@ -15,6 +15,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	let fields = [];
 	let add = () => { };
 	let remove = () => { };
+	let insert = null;
 	const [localFields, setLocalFields] = useState([{ visitDate: null, notes: '' }]);
 	const addLocal = React.useCallback(item => setLocalFields(prev => (Array.isArray(prev) ? [item, ...prev] : [item])), [setLocalFields]);
 	const removeLocal = React.useCallback(idx => setLocalFields(prev => prev.filter((_, i) => i !== idx)), [setLocalFields]);
@@ -23,14 +24,21 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 		fields = res.fields;
 		add = res.append;
 		remove = res.remove;
+		insert = res.insert;
 	} else {
 		fields = localFields;
 		add = addLocal;
 		remove = removeLocal;
+		insert = (item) => setLocalFields(prev => {
+			const arr = [...prev];
+			arr.push(item);
+			return arr;
+		});
 	}
 	const [calendarError, setCalendarError] = useState({});
 	const watchedVisits = (control && typeof control._getFieldArray === 'function') ? useWatch({ control, name: `addresses.${nestIndex}.visits` }) : fields;
 	const [collapsed, setCollapsed] = useState(defaultCollapsedFor(fields.length));
+	const didOrder = useRef(false);
 
 	useEffect(() => {
 		if (!fields.length) {
@@ -45,6 +53,12 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 		});
 	}, [fields, add]);
 
+	let orderedVisits = fields.map((_, i) => i);
+	if (!didOrder.current) {
+		orderedVisits = orderVisits({ fields, watchedVisits, cutoffDays: 14 });
+		didOrder.current = true;
+	}
+
 	const toggleCollapse = idx => {
 		setCollapsed(prev => prev.map((_, i) => i === idx ? false : true));
 	};
@@ -53,15 +67,23 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 		setCollapsed(prev => prev.map(() => true));
 	};
 
+	const lastVisitRef = useRef(null);
 	const addVisit = () => {
 		const newVisit = makeNewVisitFromMostRecent(fields);
-		add(newVisit, { at: 0 });
-		setCollapsed(prev => [false, ...(Array.isArray(prev) ? prev.map(() => true) : [])]);
+		add(newVisit); // append to end
+		setCollapsed(prev => {
+			const arr = prev || [];
+			// Collapse all except the new one at the end
+			return arr.map(() => true).concat(false);
+		});
+		setTimeout(() => {
+			if (lastVisitRef.current) {
+				lastVisitRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+			}
+		}, 200);
 	};
 
 	const minDateStr = getTomorrowMinDate();
-
-	const orderedVisits = orderVisits({ fields, watchedVisits, cutoffDays: 14 });
 
 	return (
 		<div className={styles['visits-root']}>
@@ -76,9 +98,9 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 				</Button>
 			</div>
 			<div className={styles['visits-list-scroll']}>
-				{orderedVisits.map(idx => {
+				{orderedVisits.map((idx, i) => {
 					const field = fields[idx];
-
+					const isLast = i === orderedVisits.length - 1;
 					return (
 						<Visit
 							key={field.id || idx}
@@ -96,6 +118,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 							collapseAll={collapseAll}
 							minDateStr={minDateStr}
 							styles={styles}
+							ref={isLast ? lastVisitRef : undefined}
 						/>
 					);
 				})}

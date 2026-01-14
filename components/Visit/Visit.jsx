@@ -1,7 +1,8 @@
 import { Button, Form } from 'react-bootstrap';
-import React from 'react';
+import React, { forwardRef } from 'react';
+import { VisitTime } from '../../lib/referenceDataService';
 
-export default function Visit({
+const Visit = forwardRef(function Visit({
   field,
   idx,
   nestIndex,
@@ -16,7 +17,7 @@ export default function Visit({
   collapseAll,
   minDateStr,
   styles = {},
-}) {
+}, ref) {
   const calendarUrl = watched.visitDate && watched.time ? (createCalendarInvite?.(watched) || '') : '';
   const showCalendarError = calendarError && calendarError[idx];
 
@@ -33,6 +34,7 @@ export default function Visit({
               e.preventDefault();
               toggleCollapse(idx);
             }
+
           }}
           role="button"
           tabIndex={0}
@@ -64,7 +66,8 @@ export default function Visit({
   return (
     <div
       className={`mb-3 ${styles['visit-fields']}`}
-      key={field.id}>
+      key={field.id}
+      ref={ref}>
       <div className={styles['visit-fields-col']}>
         <Form.Group className={styles['visit-field-row']}>
           <Form.Label
@@ -102,10 +105,10 @@ export default function Visit({
             defaultValue={watched.time || ''}
           >
             <option value="">Select time</option>
-            <option value="full day">Full day</option>
-            <option value="1/2 day">1/2 day</option>
-            <option value="2 hours">2 hours</option>
-            <option value="multiday">Multiday</option>
+            <option value={VisitTime.FULL_DAY}>Full day</option>
+            <option value={VisitTime.HALF_DAY}>1/2 day</option>
+            <option value={VisitTime.TWO_HOUR}>2 hours</option>
+            <option value={VisitTime.MULTIDAY}>Multiday</option>
           </Form.Select>
         </Form.Group>
 
@@ -196,4 +199,6 @@ export default function Visit({
       </div>
     </div>
   );
-}
+});
+
+export default Visit;
