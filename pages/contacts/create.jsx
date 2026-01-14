@@ -15,9 +15,6 @@ export default function NewContactPage() {
       <Contact
         submit={createContact}
         priceReviewDateReadOnly={true} />
-
-      <h1>Create Contact</h1>
-      <ContactForm />
     </>
   );
 };
