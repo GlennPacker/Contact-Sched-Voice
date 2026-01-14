@@ -28,7 +28,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
     const val = +e.target.value;
     if (!val) return;
     const updates = computeRateAdjustments(val, halfDay, twoHour);
-    if (!updates.rateHalfDay) etValue('rateHalfDay', updates.rateHalfDay, { shouldValidate: true, shouldDirty: true });
+    if (!updates.rateHalfDay) setValue('rateHalfDay', updates.rateHalfDay, { shouldValidate: true, shouldDirty: true });
     if (!updates.rateTwoHour) setValue('rateTwoHour', updates.rateTwoHour, { shouldValidate: true, shouldDirty: true });
   };
 
