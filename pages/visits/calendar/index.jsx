@@ -3,6 +3,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import React, { useState } from 'react';
 
+import CalendarKey from '../../../components/CalendarKey/CalendarKey';
 import CalendarToast from '../../../components/CalendarToast/CalendarToast';
 import VisitsToolbar from '../../../components/VisitsToolbar/VisitsToolbar';
 import calStyles from './Calendar.module.scss';
@@ -50,6 +51,7 @@ export default function VisitsCalendarPage({ events = [] }) {
         <h1>Visits Calendar</h1>
         <VisitsToolbar />
       </div>
+      <CalendarKey />
       <div className={calStyles.calendarWrapper}>
         <Calendar
           localizer={localizer}

@@ -1,0 +1,27 @@
+.calendarKey {
+  margin-bottom: 1rem;
+}
+
+.keyRow {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.keyItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.colorSwatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  display: inline-block;
+}
+
+.description {
+  font-size: 0.95rem;
+}
