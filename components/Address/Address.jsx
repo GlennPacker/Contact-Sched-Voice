@@ -1,4 +1,5 @@
 import { Button, Form } from 'react-bootstrap';
+
 import styles from './Address.module.scss';
 import { useWatch } from 'react-hook-form';
 
@@ -48,6 +49,7 @@ export default function Address({ field, idx, register, errors, removeAddress, t
             <Button
               variant="danger"
               size="sm"
+              style={{ width: '100px' }}
               onClick={() => removeAddress(idx)}
               tabIndex={-1}
               aria-label={`Remove address ${idx + 1}`}
