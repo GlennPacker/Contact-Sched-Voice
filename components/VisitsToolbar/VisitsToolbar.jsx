@@ -13,7 +13,10 @@ export default function VisitsToolbar() {
     { href: '/visits/unscheduled', label: 'Unscheduled', icon: '/icons/unscheduled.svg' },
   ];
 
-  const toolbarItems = items.filter(navigation => navigation.href !== path);
+  const toolbarItems = items.filter(navigation =>
+    (navigation.label !== 'Calendar' || !path.startsWith('/visits/calendar')) &&
+    navigation.href !== path
+  );
 
   return (
     <div className="d-flex">
