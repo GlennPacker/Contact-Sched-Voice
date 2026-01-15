@@ -3,25 +3,40 @@ import styles from './CalendarKey.module.scss';
 
 // Example key data. You can update or pass this as props.
 const keyItems = [
-  { color: '#2ecc40', description: 'Inside (green border)' },
-  { color: '#0074d9', description: 'Outside (blue border)' },
-  { color: '#444', description: '2 hours (background)' },
-  { color: '#FF9800', description: 'Half Day (background)' },
-  { color: '#9C27B0', description: 'Full Day (background)' },
-  { color: '#FFEB3B', description: 'Personal/Away (background)' },
+  { color: '#2ecc40', description: 'Inside' },
+  { color: '#0074d9', description: 'Outside' },
+  { color: '#444', description: '2 hours' },
+  { color: '#FF9800', description: 'Half Day' },
+  { color: '#9C27B0', description: 'Full Day' },
+  { color: '#FFEB3B', description: 'Personal/Away' },
 ];
 
 const CalendarKey = () => (
   <div className={styles.calendarKey}>
-    <h4>Visit Colour Key</h4>
     <div className={styles.keyRow}>
-      {keyItems.map((item, idx) => (
+      {/* Border color items */}
+      {keyItems.slice(0, 2).map((item, idx) => (
         <div key={idx} className={styles.keyItem}>
           <span
             className={styles.colorSwatch}
             style={{
-              backgroundColor: ['#444', '#2196F3', '#FF9800', '#9C27B0', '#FFEB3B'].includes(item.color) ? item.color : 'transparent',
-              border: ['#2ecc40', '#0074d9'].includes(item.color) ? `2px solid ${item.color}` : 'none',
+              backgroundColor: 'transparent',
+              border: `2px solid ${item.color}`,
+            }}
+          />
+          <span className={styles.description}>{item.description}</span>
+        </div>
+      ))}
+      {/* Gap separator */}
+      <div style={{ height: '1.5rem' }} />
+      {/* Solid color items */}
+      {keyItems.slice(2).map((item, idx) => (
+        <div key={idx + 2} className={styles.keyItem}>
+          <span
+            className={styles.colorSwatch}
+            style={{
+              backgroundColor: item.color,
+              border: 'none',
             }}
           />
           <span className={styles.description}>{item.description}</span>

@@ -4,8 +4,9 @@
 
 .keyRow {
   display: flex;
-  gap: 1.5rem;
-  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
 }
 
 .keyItem {
