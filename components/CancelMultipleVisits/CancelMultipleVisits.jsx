@@ -9,7 +9,7 @@ export default function CancelMultipleVisits({ onCancelFuture, loading }) {
       disabled={loading}
       aria-label="Delete all future visits"
     >
-      🗑📅 Delete future
+      🗑 Delete future
     </button>
   );
 }

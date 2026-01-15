@@ -5,7 +5,11 @@ import { useRouter } from 'next/router';
 export default function NewContactPage() {
   const router = useRouter();
   const createContact = async contact => {
-    return await addContact(contact);
+    const result = await addContact(contact);
+    if (!result.error) {
+      router.push('/visits/calendar');
+    }
+    return result;
   };
 
   return (
@@ -17,4 +21,4 @@ export default function NewContactPage() {
         priceReviewDateReadOnly={true} />
     </>
   );
-};
+}

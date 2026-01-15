@@ -1,0 +1,15 @@
+.weather-tick-green {
+  color: #2ecc40 !important;
+  font-size: 18px;
+}
+.weather-cross-flash {
+  color: #e74c3c;
+  font-size: 18px;
+  animation: cross-flash 1.2s linear infinite alternate;
+}
+
+@keyframes cross-flash {
+  0% { opacity: 1; }
+  50% { opacity: 0.3; }
+  100% { opacity: 1; }
+}

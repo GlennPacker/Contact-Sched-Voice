@@ -1,10 +1,12 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
-import CalendarView, { getServerSideProps } from '../../../components/CalendarView/CalendarView';
+import CalendarView from '../../../components/CalendarView/CalendarView';
 import CalendarKey from '../../../components/CalendarKey/CalendarKey';
+import Weather from '../../../components/Weather/Weather';
 
-
+import { getCalendarEventsSSR } from '../../../lib/calendarServerService';
 import styles from './Calendar.module.scss';
+
 
 export default function VisitsCalendarPage(props) {
   return (
@@ -14,9 +16,21 @@ export default function VisitsCalendarPage(props) {
       </div>
       <div className={styles.gridKey}>
         <CalendarKey />
+        <div style={{ marginTop: 32 }}>
+          <Weather events={props.events || []} />
+        </div>
       </div>
     </div>
   );
 }
 
-export { getServerSideProps };
+
+export async function getServerSideProps(context) {
+  try {
+    const { month } = context.params || {};
+    const events = await getCalendarEventsSSR({ month });
+    return { props: { events } };
+  } catch (err) {
+    return { props: { events: [], error: err?.message || 'Server error' } };
+  }
+}

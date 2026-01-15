@@ -1,6 +1,7 @@
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
 import { buildPayloadFromForm, computeRateAdjustments, getDefaultFormValues, getEnvRates } from '../../lib/contactFormService';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 
 import Addresses from '../Address/Addresses';
@@ -8,6 +9,7 @@ import { contactCreateAppointment } from '../../lib/visitUtils';
 import styles from './Contact.module.scss';
 
 export default function Contact({ initialValues = null, submit, priceReviewDateReadOnly = false }) {
+  const router = useRouter();
   const defaultFormValues = getDefaultFormValues(initialValues);
 
   const {
@@ -81,6 +83,16 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
       setError(err.message || 'An unexpected error occurred');
     }
   };
+
+  // Redirect to calendar after successful save (for create page)
+  useEffect(() => {
+    if (success) {
+      const timeout = setTimeout(() => {
+        router.push('/visits/calendar');
+      }, 500);
+      return () => clearTimeout(timeout);
+    }
+  }, [success, router]);
 
   return (
     <>

@@ -56,12 +56,4 @@ export default function CalendarView({ events }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  try {
-    const { month } = context.params || {};
-    const events = await getCalendarEventsSSR({ month });
-    return { props: { events } };
-  } catch (err) {
-    return { props: { events: [], error: err?.message || 'Server error' } };
-  }
-}
+
