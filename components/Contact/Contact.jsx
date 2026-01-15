@@ -84,7 +84,7 @@ export default function Contact({ initialValues = null, submit, priceReviewDateR
     }
   };
 
-  // Redirect to calendar after successful save (for create page)
+
   useEffect(() => {
     if (success) {
       const timeout = setTimeout(() => {

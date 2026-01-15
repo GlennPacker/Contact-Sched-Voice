@@ -1,7 +1,6 @@
 import React from 'react';
 import styles from './CalendarKey.module.scss';
 
-// Example key data. You can update or pass this as props.
 const keyItems = [
   { color: '#2ecc40', description: 'Inside' },
   { color: '#0074d9', description: 'Outside' },
@@ -14,7 +13,6 @@ const keyItems = [
 const CalendarKey = () => (
   <div className={styles.calendarKey}>
     <div className={styles.keyRow}>
-      {/* Border color items */}
       {keyItems.slice(0, 2).map((item, idx) => (
         <div key={idx} className={styles.keyItem}>
           <span
@@ -27,9 +25,7 @@ const CalendarKey = () => (
           <span className={styles.description}>{item.description}</span>
         </div>
       ))}
-      {/* Gap separator */}
       <div style={{ height: '1.5rem' }} />
-      {/* Solid color items */}
       {keyItems.slice(2).map((item, idx) => (
         <div key={idx + 2} className={styles.keyItem}>
           <span

@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
+
 const IGNORED_DIRS = ['node_modules', '.next', 'coverage', 'dist', 'public'];
+const ALLOWED_EXTS = ['.js', '.jsx', '.ts', '.tsx', '.scss', '.css', '.json', '.md', '.html'];
 
 function walk(dir, fileList = []) {
   const files = fs.readdirSync(dir);
@@ -10,11 +12,11 @@ function walk(dir, fileList = []) {
     const stat = fs.statSync(full);
     if (stat.isDirectory()) {
       if (!IGNORED_DIRS.includes(f)) walk(full, fileList);
-    } else if (full.endsWith('.scss')) {
-      fileList.push(full);
+    } else {
+      const ext = path.extname(full).toLowerCase();
+      if (ALLOWED_EXTS.includes(ext)) fileList.push(full);
     }
   }
-
   return fileList;
 }
 

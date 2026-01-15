@@ -41,16 +41,16 @@ export default function CalendarView({ events: initialEvents }) {
     if (pendingMove && !loading) {
       setLoading(true);
       const { id: calendarId, visitDate, visitId } = pendingMove.event.resource.visit;
-      // Format newDate as YYYY-MM-DD in local time zone
       const pad = n => n.toString().padStart(2, '0');
       const d = pendingMove.start;
       const newDate = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
       try {
-        // Only move this instance, not future
         const mod = await import('../../lib/calendarService');
         await mod.moveVisitApi({ calendarId, visitId, newDate, moveFuture: false, originalDate: visitDate });
-        // Refetch events after move
+      
+        
+
         const { getCalendarEventsSSR } = await import('../../lib/calendarServerService');
         const refreshed = await getCalendarEventsSSR({ month: 'current' });
         setEvents(refreshed);

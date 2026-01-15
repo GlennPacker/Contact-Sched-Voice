@@ -4,13 +4,11 @@ import PropTypes from 'prop-types';
 import { addDays, format, startOfToday } from 'date-fns';
 import weatherStyles from './Weather.module.scss';
 
-// Helper to get 6 consecutive days (YYYY-MM-DD) starting today
 function getNext6Days() {
   const today = startOfToday();
   return Array.from({ length: 6 }, (_, i) => format(addDays(today, i), 'yyyy-MM-dd'));
 }
 
-// For each of the next 6 days, get the first visit or use default postcode
 function getVisitsOrDefault(visits) {
   const days = getNext6Days();
   const byDate = {};
@@ -21,7 +19,6 @@ function getVisitsOrDefault(visits) {
   }
   return days.map(date => {
     if (byDate[date]) return byDate[date];
-    // No visit: return dummy visit with default postcode
     return {
       visitDate: date,
       address: { postcode: '87370' },
@@ -30,21 +27,17 @@ function getVisitsOrDefault(visits) {
   });
 }
 
-// Helper to extract postcode (find 5-digit number in address string)
 function extractPostcode(address) {
   if (!address || typeof address.address !== 'string') return '87370';
   const match = address.address.match(/\b\d{5}\b/);
   return match ? match[0] : '87370';
 }
 
-
-// Fetch weather for a given postcode and date using OpenWeatherMap 3-hourly forecast API (9am-4pm)
 async function fetchWeather(postcode, date) {
   const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
   if (!apiKey) {
     return { rainChance: 0, summary: 'No API key' };
   }
-  // 1. Geocode postcode to lat/lon
   let lat, lon;
   try {
     const geoRes = await fetch(`https://api.openweathermap.org/geo/1.0/zip?zip=${postcode},FR&appid=${apiKey}`);
@@ -55,12 +48,11 @@ async function fetchWeather(postcode, date) {
   } catch (e) {
     return { rainChance: 0, summary: 'No location' };
   }
-  // 2. Fetch 3-hourly forecast (5 days)
   try {
     const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
     const weatherData = await weatherRes.json();
+
     if (!weatherData.list) throw new Error('No forecast data');
-    // Find all 3-hour slots for the requested date between 9am and 4pm local time
     const targetDate = new Date(date);
     const slots = weatherData.list.filter(item => {
       const d = new Date(item.dt * 1000);
@@ -73,17 +65,13 @@ async function fetchWeather(postcode, date) {
     let summary = 'No forecast';
     let icon = null;
     if (slots.length) {
-      // OpenWeatherMap's forecast API does not provide pop, but provides rain volume (mm)
-      // We'll use rain volume > 0 as a proxy for rain chance, or fallback to clouds/description
-      // If pop is present, use it; otherwise, use rain volume
       if (slots.some(s => typeof s.pop === 'number')) {
         rainChance = Math.round(Math.max(...slots.map(s => (s.pop || 0) * 100)));
       } else if (slots.some(s => s.rain && s.rain['3h'] > 0)) {
-        rainChance = 80; // If any slot has rain, set high chance
+        rainChance = 80;
       } else {
         rainChance = 0;
       }
-      // Use the most frequent weather description/icon in the window
       const weatherCounts = {};
       slots.forEach(s => {
         const key = s.weather && s.weather[0] ? s.weather[0].description : 'No summary';
@@ -105,7 +93,6 @@ async function fetchWeather(postcode, date) {
 export default function Weather({ events }) {
   const [weatherData, setWeatherData] = useState([]);
 
-  // Extract visits from events (first visit per day, with address)
   const visits = (events || [])
     .map(e => e.resource?.visit && e.resource.address ? {
       ...e.resource.visit,
@@ -137,7 +124,6 @@ export default function Weather({ events }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: 220 }}>
-      {/* Header Row */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, borderBottom: '1px solid #ccc', paddingBottom: 4 }}>
         <span style={{ minWidth: 50 }}>Day</span>
         <span style={{ minWidth: 32 }}>Good</span>
@@ -145,7 +131,6 @@ export default function Weather({ events }) {
         <span style={{ minWidth: 60 }}>Rain</span>
       </div>
       {weatherData.map((w, idx) => {
-        // Determine inside/outside icon
         let insideCell = null;
         if (!w.isDefault) {
           if (typeof w.isInside !== 'undefined' && !w.isInside && w.rainChance >= 30) {
@@ -173,7 +158,6 @@ export default function Weather({ events }) {
             <span style={{ minWidth: 32, textAlign: 'center' }}>{insideCell}</span>
             {w.icon && <img src={w.icon} alt="Weather icon" style={{ width: 32, height: 32, marginRight: 4 }} />}
             <span style={{ marginLeft: 8, fontSize: 12, minWidth: 60 }}>Rain: {w.rainChance}%</span>
-            {/* No (default) label shown for days with no visit */}
           </div>
         );
       })}

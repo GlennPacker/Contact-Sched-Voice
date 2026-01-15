@@ -70,10 +70,9 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	const lastVisitRef = useRef(null);
 	const addVisit = () => {
 		const newVisit = makeNewVisitFromMostRecent(fields);
-		add(newVisit); // append to end
+		add(newVisit); 
 		setCollapsed(prev => {
 			const arr = prev || [];
-			// Collapse all except the new one at the end
 			return arr.map(() => true).concat(false);
 		});
 		setTimeout(() => {
