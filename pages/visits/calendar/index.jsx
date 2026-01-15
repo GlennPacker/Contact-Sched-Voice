@@ -1,7 +1,6 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 import * as addressService from '../../../lib/addressService';
-import { VisitTime } from '../../../lib/referenceDataService';
 
 import { Calendar, dateFnsLocalizer } from 'react-big-calendar';
 import React, { useState } from 'react';
@@ -9,6 +8,7 @@ import { addMonths, parseISO, startOfMonth } from 'date-fns';
 
 import CalendarKey from '../../../components/CalendarKey/CalendarKey';
 import CalendarToast from '../../../components/CalendarToast/CalendarToast';
+import { VisitTime } from '../../../lib/referenceDataService';
 import VisitsToolbar from '../../../components/VisitsToolbar/VisitsToolbar';
 import calStyles from './Calendar.module.scss';
 import { enUS } from 'date-fns/locale';
@@ -22,7 +22,12 @@ import { supabase } from '../../../lib/supabaseClient';
 import { useRouter } from 'next/router';
 
 const locales = { 'en-US': enUS };
-const localizer = dateFnsLocalizer({ format, parse, startOfWeek, getDay, locales });
+// Force week to start on Monday
+function startOfWeekMonday(date, options) {
+  // 1 = Monday
+  return startOfWeek(date, { weekStartsOn: 1, ...options });
+}
+const localizer = dateFnsLocalizer({ format, parse, startOfWeek: startOfWeekMonday, getDay, locales });
 
 export default function VisitsCalendarPage({ events = [] }) {
   const router = useRouter();
@@ -64,17 +69,19 @@ export default function VisitsCalendarPage({ events = [] }) {
           onNavigate={handleNavigate}
           popup
           eventPropGetter={event => {
-            if (event.eventColor) {
-              return {
-                style: {
-                  backgroundColor: event.eventColor,
-                  color: event.eventColor === '#FFEB3B' ? '#333' : '#fff',
-                  borderRadius: '6px',
-                  border: 'none',
-                }
-              };
+            const visit = event.resource?.visit;
+            let borderColor = 'transparent';
+            if (visit) {
+              borderColor = visit.isInside ? '#2ecc40' : '#0074d9';
             }
-            return {};
+            return {
+              style: {
+                backgroundColor: event.eventColor,
+                color: event.eventColor === '#FFEB3B' ? '#333' : '#fff',
+                borderRadius: '6px',
+                border: `4px solid ${borderColor}`,
+              }
+            };
           }}
         />
       </div>
@@ -90,8 +97,6 @@ function getVisitEventColor(v) {
     return '#444'; // charcoal/grey for 2 hour
   } else if (v.time === VisitTime.HALF_DAY) {
     return '#FF9800'; // orange for half day
-  } else if (!v.isInside) {
-    return '#2196F3'; // blue for outside
   } else if (v.time === VisitTime.FULL_DAY) {
     return '#9C27B0'; // purple for full day
   }

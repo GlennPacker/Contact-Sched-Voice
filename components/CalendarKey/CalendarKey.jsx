@@ -3,11 +3,12 @@ import styles from './CalendarKey.module.scss';
 
 // Example key data. You can update or pass this as props.
 const keyItems = [
-  { color: '#444', description: '2 hours' },
-  { color: '#2196F3', description: 'Outside' },
-  { color: '#FF9800', description: 'Half Day' },
-  { color: '#9C27B0', description: 'Full Day' },
-  { color: '#FFEB3B', description: 'Personal/Away' },
+  { color: '#2ecc40', description: 'Inside (green border)' },
+  { color: '#0074d9', description: 'Outside (blue border)' },
+  { color: '#444', description: '2 hours (background)' },
+  { color: '#FF9800', description: 'Half Day (background)' },
+  { color: '#9C27B0', description: 'Full Day (background)' },
+  { color: '#FFEB3B', description: 'Personal/Away (background)' },
 ];
 
 const CalendarKey = () => (
@@ -18,7 +19,10 @@ const CalendarKey = () => (
         <div key={idx} className={styles.keyItem}>
           <span
             className={styles.colorSwatch}
-            style={{ backgroundColor: item.color }}
+            style={{
+              backgroundColor: ['#444', '#2196F3', '#FF9800', '#9C27B0', '#FFEB3B'].includes(item.color) ? item.color : 'transparent',
+              border: ['#2ecc40', '#0074d9'].includes(item.color) ? `2px solid ${item.color}` : 'none',
+            }}
           />
           <span className={styles.description}>{item.description}</span>
         </div>

@@ -34,7 +34,6 @@ const Visit = forwardRef(function Visit({
               e.preventDefault();
               toggleCollapse(idx);
             }
-
           }}
           role="button"
           tabIndex={0}
