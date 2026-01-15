@@ -36,7 +36,7 @@ function extractPostcode(address) {
 async function fetchWeather(postcode, date) {
   const apiKey = process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY;
   if (!apiKey) {
-    return { rainChance: 0, summary: 'No API key' };
+    return { rainChance: 999 };
   }
   let lat, lon;
   try {
@@ -46,7 +46,7 @@ async function fetchWeather(postcode, date) {
     lon = geoData.lon;
     if (!lat || !lon) throw new Error('No lat/lon');
   } catch (e) {
-    return { rainChance: 0, summary: 'No location' };
+    return { rainChance: 999 };
   }
   try {
     const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
@@ -62,7 +62,6 @@ async function fetchWeather(postcode, date) {
         d.getHours() >= 9 && d.getHours() <= 16;
     });
     let rainChance = 0;
-    let summary = 'No forecast';
     let icon = null;
     if (slots.length) {
       if (slots.some(s => typeof s.pop === 'number')) {
@@ -73,20 +72,14 @@ async function fetchWeather(postcode, date) {
         rainChance = 0;
       }
       const weatherCounts = {};
-      slots.forEach(s => {
-        const key = s.weather && s.weather[0] ? s.weather[0].description : 'No summary';
-        weatherCounts[key] = (weatherCounts[key] || 0) + 1;
-      });
-      summary = Object.entries(weatherCounts).sort((a, b) => b[1] - a[1])[0][0];
       icon = slots[0].weather && slots[0].weather[0] ? `https://openweathermap.org/img/wn/${slots[0].weather[0].icon}@2x.png` : null;
     }
     return {
       rainChance,
-      summary: summary.charAt(0).toUpperCase() + summary.slice(1),
       icon,
     };
   } catch (e) {
-    return { rainChance: 0, summary: 'No forecast' };
+    return { rainChance: 0 };
   }
 }
 
@@ -99,7 +92,7 @@ export default function Weather({ events }) {
       address: e.resource.address,
       isInside: typeof e.resource.visit.isInside !== 'undefined' ? e.resource.visit.isInside : undefined
     } : null)
-    .filter(Boolean);
+    .filter(x => x);
 
   useEffect(() => {
     async function loadWeather() {
@@ -118,6 +111,7 @@ export default function Weather({ events }) {
         })
       );
       setWeatherData(results);
+
     }
     loadWeather();
   }, [events]);
@@ -134,29 +128,51 @@ export default function Weather({ events }) {
         let insideCell = null;
         if (!w.isDefault) {
           if (typeof w.isInside !== 'undefined' && !w.isInside && w.rainChance >= 30) {
-            insideCell = <span title="Outside, rain likely" className={weatherStyles['weather-cross-flash']}>❌</span>;
+            insideCell = <span
+              title="Outside, rain likely"
+              className={weatherStyles['weather-cross-flash']}>❌</span>;
           } else {
             insideCell = (
-              <span title="Visit scheduled" className={weatherStyles['weather-tick-green']} style={{ display: 'inline-flex', alignItems: 'center' }}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block' }}>
-                  <path d="M6 13L11 18L20 7" stroke="#2ecc40" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              <span
+                title="Visit scheduled"
+                className={weatherStyles['weather-tick-green']}
+                style={{ display: 'inline-flex', alignItems: 'center' }}>
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ display: 'block' }}>
+                  <path
+                    d="M6 13L11 18L20 7"
+                    stroke="#2ecc40"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round" />
                 </svg>
               </span>
             );
           }
         }
         return (
-          <div key={w.date || idx} style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: w.isDefault ? 0.7 : 1 }}>
-            <span style={{
-              color: w.rainChance > 30 ? 'red' : 'green',
-              fontWeight: 600,
-              minWidth: 50,
-              textTransform: 'capitalize'
-            }}>
+          <div
+            key={w.date || idx}
+            style={{ display: 'flex', alignItems: 'center', gap: 8, opacity: w.isDefault ? 0.7 : 1 }}>
+            <span
+              style={{
+                color: w.rainChance > 30 ? 'red' : 'green',
+                fontWeight: 600,
+                minWidth: 50,
+                textTransform: 'capitalize'
+              }}>
               {format(new Date(w.date), 'EEE')}
             </span>
             <span style={{ minWidth: 32, textAlign: 'center' }}>{insideCell}</span>
-            {w.icon && <img src={w.icon} alt="Weather icon" style={{ width: 32, height: 32, marginRight: 4 }} />}
+            {w.icon && <img
+              src={w.icon}
+              alt="Weather icon"
+              style={{ width: 32, height: 32, marginRight: 4 }} />}
             <span style={{ marginLeft: 8, fontSize: 12, minWidth: 60 }}>Rain: {w.rainChance}%</span>
           </div>
         );

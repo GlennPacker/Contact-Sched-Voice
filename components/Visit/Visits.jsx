@@ -29,7 +29,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 		fields = localFields;
 		add = addLocal;
 		remove = removeLocal;
-		insert = (item) => setLocalFields(prev => {
+		insert = item => setLocalFields(prev => {
 			const arr = [...prev];
 			arr.push(item);
 			return arr;

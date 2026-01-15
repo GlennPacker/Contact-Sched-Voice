@@ -27,7 +27,9 @@ const CalendarKey = () => (
       ))}
       <div style={{ height: '1.5rem' }} />
       {keyItems.slice(2).map((item, idx) => (
-        <div key={idx + 2} className={styles.keyItem}>
+        <div
+          key={idx + 2}
+          className={styles.keyItem}>
           <span
             className={styles.colorSwatch}
             style={{
