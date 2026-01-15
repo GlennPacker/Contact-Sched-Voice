@@ -18,7 +18,7 @@ function MoveVisit({ visit, loading, onMoveComplete }) {
     const today = new Date();
     const newVisitDate = new Date(moveDate);
     let monthOffset = (newVisitDate.getFullYear() - today.getFullYear()) * 12 + (newVisitDate.getMonth() - today.getMonth());
-    let urlPart = monthOffset === 0 ? 'current' : String(monthOffset);
+    let urlPart = !monthOffset ? 'current' : monthOffset;
     setShow(false);
     onMoveComplete();
     router.push(`/visits/calendar/${urlPart}`);

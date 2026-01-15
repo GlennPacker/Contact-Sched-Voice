@@ -3,10 +3,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import CalendarView from '../../../components/CalendarView/CalendarView';
 import CalendarKey from '../../../components/CalendarKey/CalendarKey';
 import Weather from '../../../components/Weather/Weather';
-
 import { getCalendarEventsSSR } from '../../../lib/calendarServerService';
 import styles from './Calendar.module.scss';
-
 
 export default function VisitsCalendarPage(props) {
   return (
@@ -23,7 +21,6 @@ export default function VisitsCalendarPage(props) {
     </div>
   );
 }
-
 
 export async function getServerSideProps(context) {
   try {
