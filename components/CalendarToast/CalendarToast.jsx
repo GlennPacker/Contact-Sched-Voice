@@ -1,7 +1,6 @@
-
+import CalendarToastToolbar from '../CalendarToastToolbar/CalendarToastToolbar';
 import React from 'react';
 import styles from './CalendarToast.module.scss';
-import CalendarToastToolbar from '../CalendarToastToolbar/CalendarToastToolbar';
 
 export default function CalendarToast({ onClose, data }) {
   if (!data) return null;
@@ -45,6 +44,16 @@ export default function CalendarToast({ onClose, data }) {
             <div className={styles.row}><strong>Recurrence:</strong> {visit.recurrence}</div>
             <div className={styles.row}><strong>Notes:</strong></div>
             <div className={styles.notes}>{visit.notes}</div>
+          </div>
+          <div className={styles.middleCol}>
+            <div className={styles.row}><strong>Rates:</strong></div>
+            <div className={styles.ratesList}>
+              <div><strong>Full day:</strong> €{visit.rateFullDay}</div>
+              <div><strong>Half day:</strong> €{visit.rateHalfDay}</div>
+              <div><strong>2 hour:</strong> €{visit.rateTwoHour}</div>
+              <div><strong>Hour:</strong> €{visit.rateHour}</div>
+              <div><strong>Job:</strong> €{visit.rateJob}</div>
+            </div>
           </div>
           <div className={styles.rightCol}>
             <strong>Upcoming visits</strong>

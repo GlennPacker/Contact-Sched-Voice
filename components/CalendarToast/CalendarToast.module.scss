@@ -46,6 +46,7 @@
   overflow: auto;
 }
 
+
 .bodyTable {
   display: table;
   width: 100%;
@@ -55,8 +56,26 @@
 .leftCol {
   display: table-cell;
   vertical-align: top;
-  width: 60%;
+  width: 40%;
   padding-right: 16px;
+}
+
+.middleCol {
+.middleCol {
+  display: table-cell;
+  vertical-align: top;
+  width: 20%;
+  padding: 0 8px;
+  border-left: 1px solid rgba(0,0,0,0.04);
+  border-right: 1px solid rgba(0,0,0,0.04);
+}
+
+.ratesList {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
 }
 
 .rightCol {
