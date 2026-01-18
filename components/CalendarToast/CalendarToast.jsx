@@ -29,8 +29,7 @@ export default function CalendarToast({ onClose, data }) {
       </div>
 
       <CalendarToastToolbar
-        visit={visit}
-        contactId={contact.id}
+        data={data}
         onMoveComplete={onClose}
       />
 
@@ -48,11 +47,11 @@ export default function CalendarToast({ onClose, data }) {
           <div className={styles.middleCol}>
             <div className={styles.row}><strong>Rates:</strong></div>
             <div className={styles.ratesList}>
-              <div><strong>Full day:</strong> €{visit.rateFullDay}</div>
-              <div><strong>Half day:</strong> €{visit.rateHalfDay}</div>
-              <div><strong>2 hour:</strong> €{visit.rateTwoHour}</div>
-              <div><strong>Hour:</strong> €{visit.rateHour}</div>
-              <div><strong>Job:</strong> €{visit.rateJob}</div>
+              <div><strong>Full day:</strong> €{contact.rateFullDay}</div>
+              <div><strong>Half day:</strong> €{contact.rateHalfDay}</div>
+              <div><strong>2 hour:</strong> €{contact.rateTwoHour}</div>
+              <div><strong>Hour:</strong> €{contact.rateHour}</div>
+              <div><strong>Job:</strong> €{contact.rateJob}</div>
             </div>
           </div>
           <div className={styles.rightCol}>

@@ -13,33 +13,46 @@ const keyItems = [
 const CalendarKey = () => (
   <div className={styles.calendarKey}>
     <div className={styles.keyRow}>
-      {keyItems.slice(0, 2).map((item, idx) => (
-        <div key={idx} className={styles.keyItem}>
-          <span
-            className={styles.colorSwatch}
-            style={{
-              backgroundColor: 'transparent',
-              border: `2px solid ${item.color}`,
-            }}
-          />
-          <span className={styles.description}>{item.description}</span>
-        </div>
-      ))}
-      <div style={{ height: '1.5rem' }} />
-      {keyItems.slice(2).map((item, idx) => (
-        <div
-          key={idx + 2}
-          className={styles.keyItem}>
-          <span
-            className={styles.colorSwatch}
-            style={{
-              backgroundColor: item.color,
-              border: 'none',
-            }}
-          />
-          <span className={styles.description}>{item.description}</span>
-        </div>
-      ))}
+      <>
+        {keyItems.slice(0, 2).map((item, idx) => (
+          <div
+            key={idx}
+            className={styles.keyItem}
+          >
+            <span
+              className={styles.colorSwatch}
+              style={{
+                backgroundColor: 'transparent',
+                border: `2px solid ${item.color}`
+              }}
+            />
+            <span
+              className={styles.description}
+            >
+              {item.description}
+            </span>
+          </div>
+        ))}
+        <div style={{ height: '1.5rem' }} />
+        {keyItems.slice(2).map((item, idx) => (
+          <div
+            key={idx + 2}
+            className={styles.keyItem}>
+            <span
+              className={styles.colorSwatch}
+              style={{
+                backgroundColor: item.color,
+                border: 'none',
+              }}
+            />
+            <span
+              className={styles.description}
+            >
+              {item.description}
+            </span>
+          </div>
+        ))}
+      </>
     </div>
   </div>
 );

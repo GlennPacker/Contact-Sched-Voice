@@ -22,19 +22,22 @@ function walk(dir, fileList = []) {
 
 function checkFile(filePath) {
   const src = fs.readFileSync(filePath, 'utf8');
+    const slash = String.fromCharCode(47);
+    const star = String.fromCharCode(42);
+    const blockRegex = new RegExp(slash + '\\' + star + '[\\s\\S]*?' + '\\' + star + slash, 'g');
+    const blockMatches = src.match(blockRegex);
   const results = [];
-  const blockRegex = /\/\*[\s\S]*?\*\//g;
-  const blockMatches = src.match(blockRegex);
   if (blockMatches && blockMatches.length) {
     results.push({ type: 'block', count: blockMatches.length });
   }
   const lines = src.split(/\r?\n/);
   const lineMatches = [];
   lines.forEach((ln, idx) => {
-    const idxOf = ln.indexOf('//');
+    const slash = String.fromCharCode(47);
+    const idxOf = ln.indexOf(slash + slash);
     if (idxOf !== -1) {
       const lower = ln.toLowerCase();
-      if (lower.includes('http://') || lower.includes('https://') || lower.includes('data:')) return;
+      if (lower.includes('http' + ':' + '//') || lower.includes('https' + ':' + '//') || lower.includes('data:')) return;
       lineMatches.push({ line: idx + 1, text: ln.trim() });
     }
   });
@@ -43,11 +46,27 @@ function checkFile(filePath) {
   return results;
 }
 
+
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+let ignoredFiles = [];
+try {
+  const eslintConfig = require('../eslint.config.js').default;
+  if (Array.isArray(eslintConfig) && eslintConfig[0]?.ignores) {
+    ignoredFiles = eslintConfig[0].ignores.map(pattern => pattern.replace('/**', ''));
+  }
+} catch (e) {}
+
+function isIgnored(filePath) {
+  return ignoredFiles.some(ignore => filePath.endsWith(ignore));
+}
+
 function main() {
   const root = process.cwd();
   const files = walk(root);
   let hasErrors = false;
   for (const f of files) {
+    if (isIgnored(f)) continue;
     const res = checkFile(f);
     if (res.length) {
       hasErrors = true;

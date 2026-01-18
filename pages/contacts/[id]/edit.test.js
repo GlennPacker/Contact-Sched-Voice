@@ -2,7 +2,13 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
+
 import EditContactPage, { getServerSideProps } from './edit';
+
+
+import mockRouter from 'next-router-mock';
+
+jest.mock('next/router', () => require('next-router-mock'));
 
 jest.mock('../../../lib/contactService', () => ({
     getContact: jest.fn(),
@@ -30,6 +36,8 @@ describe('Edit contact page', () => {
         expect(props.initialValues).toBeDefined();
         expect(props.initialValues.name).toBe('Alice');
 
+
+        mockRouter.push('/contacts/1/edit');
         render(<EditContactPage {...props} />);
 
         const nameInput = screen.getByPlaceholderText('Full name');

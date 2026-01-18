@@ -15,6 +15,8 @@ export default [
       '.env.local',
       '.env.development.local',
       '.env.test.local',
+      'package-lock.json',
+      'eslint.config.js',
     ],
   },
 

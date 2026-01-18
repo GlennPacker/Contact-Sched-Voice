@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import { cancelVisitApi, cancelFutureVisitsApi } from '../../lib/visitService';
-import MoveVisit from '../MoveVisit/MoveVisit';
+import { cancelFutureVisitsApi, cancelVisitApi } from '../../lib/visitService';
 
-export default function CalendarToastToolbar({ visit, contactId, onMoveComplete }) {
+import MoveVisit from '../MoveVisit/MoveVisit';
+import { VisitTime } from '../../lib/referenceDataService';
+import { loadInvoiceData } from '../../lib/invoiceLoaderService';
+import { useRouter } from 'next/router';
+
+export default function CalendarToastToolbar({ data, onMoveComplete }) {
+  const { visit, contact } = data || {};
+  const contactId = contact?.id;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const router = useRouter();
 
-  async function makeApiCall(apiFn) {
+  const makeApiCall = async apiFn => {
     setError(null);
     setLoading(true);
     try {
@@ -19,11 +24,19 @@ export default function CalendarToastToolbar({ visit, contactId, onMoveComplete 
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   return (
     <>
       <div style={{ paddingLeft: '1rem' }}>
+        <button
+          type="button"
+          className="btn btn-sm btn-outline-success me-2"
+          onClick={() => loadInvoiceData(data)}
+          aria-label="Load invoice data"
+        >
+          📄 Load invoice data
+        </button>
         <button
           type="button"
           className="btn btn-sm btn-outline-danger me-2"
@@ -41,7 +54,7 @@ export default function CalendarToastToolbar({ visit, contactId, onMoveComplete 
           disabled={loading}
           aria-label="Delete all future visits"
         >
-          🗑📅 Delete future
+          📅 Delete future
         </button>
 
         <button
@@ -63,3 +76,5 @@ export default function CalendarToastToolbar({ visit, contactId, onMoveComplete 
     </>
   );
 }
+
+

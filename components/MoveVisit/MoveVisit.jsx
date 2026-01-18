@@ -7,13 +7,14 @@ import { useRouter } from "next/router";
 
 function MoveVisit({ visit, loading, onMoveComplete }) {
   const router = useRouter();
-  async function moveVisitDate() {
+  const safeVisit = visit ?? {};
+  const moveVisitDate = async () => {
     await moveVisitApi({
-      calendarId: visit.id,
-      visitId: visit.id,
+      calendarId: safeVisit.id,
+      visitId: safeVisit.id,
       newDate: moveDate,
       moveFuture,
-      originalDate: visit.visitDate
+      originalDate: safeVisit.visitDate
     });
     const today = new Date();
     const newVisitDate = new Date(moveDate);
@@ -22,24 +23,24 @@ function MoveVisit({ visit, loading, onMoveComplete }) {
     setShow(false);
     onMoveComplete();
     router.push(`/visits/calendar/${urlPart}`);
-  }
+  };
 
   const [show, setShow] = useState(false);
   const [hasFutureDates, setHasFutureDates] = useState(false);
   const [moveFuture, setMoveFuture] = useState(false);
-  const [moveDate, setMoveDate] = useState(visit.visitDate || "");
+  const [moveDate, setMoveDate] = useState(safeVisit.visitDate || "");
 
   useEffect(() => {
     if (!show) return;
-    async function checkFuture() {
-      const payload = await hasFutureDatesApi(visit.visitId, visit.visitDate);
+    const checkFuture = async () => {
+      const payload = await hasFutureDatesApi(safeVisit.visitId, safeVisit.visitDate);
       const exists = !!payload?.exists;
       setHasFutureDates(exists);
       setMoveFuture(exists);
-      setMoveDate(visit.visitDate);
-    }
+      setMoveDate(safeVisit.visitDate);
+    };
     checkFuture();
-  }, [show, visit.visitId, visit.visitDate]);
+  }, [show, safeVisit.visitId, safeVisit.visitDate]);
 
   return (
     <>

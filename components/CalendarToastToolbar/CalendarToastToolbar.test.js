@@ -31,21 +31,22 @@ jest.mock('../../lib/calendarService', () => ({
 
 describe('CalendarToastToolbar', () => {
   const visit = { id: 1, visitDate: '2026-01-13' };
-  const contactId = 123;
+  const contact = { id: 123 };
+  const data = { visit, contact };
 
   it('renders all action buttons', async () => {
     await act(async () => {
       render(
         <CalendarToastToolbar
-          visit={visit}
-          contactId={contactId}
+          data={data}
         />
       );
     });
-    expect(screen.getByRole('button', { name: /cancel visit/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /delete all future visits/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /edit/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /move dates/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Load invoice data' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cancel visit' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Delete all future visits' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Edit' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'move dates' })).toBeInTheDocument();
   });
 
   it('disables buttons when loading', async () => {
@@ -54,16 +55,15 @@ describe('CalendarToastToolbar', () => {
     await act(async () => {
       render(
         <CalendarToastToolbar
-          visit={visit}
-          contactId={contactId}
+          data={data}
         />
       );
     });
     await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: /cancel visit/i }));
+      fireEvent.click(screen.getByRole('button', { name: 'Cancel visit' }));
     });
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /cancel visit/i })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Cancel visit' })).toBeDisabled();
     });
   });
 });
