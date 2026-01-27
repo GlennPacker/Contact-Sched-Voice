@@ -117,10 +117,11 @@ export default function Weather({ events }) {
   }, [events]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: 220 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: 252 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, borderBottom: '1px solid #ccc', paddingBottom: 4 }}>
         <span style={{ minWidth: 50 }}>Day</span>
         <span style={{ minWidth: 32 }}>Good</span>
+        <span style={{ minWidth: 32 }}></span>
         <span style={{ width: 32 }}></span>
         <span style={{ minWidth: 60 }}>Rain</span>
       </div>
@@ -169,6 +170,11 @@ export default function Weather({ events }) {
               {format(new Date(w.date), 'EEE')}
             </span>
             <span style={{ minWidth: 32, textAlign: 'center' }}>{insideCell}</span>
+            <span style={{ minWidth: 32, textAlign: 'center' }}>
+              {typeof w.isInside === 'boolean' ? (
+                w.isInside ? 'Inside' : ''
+              ) : ''}
+            </span>
             {w.icon && <img
               src={w.icon}
               alt="Weather icon"
