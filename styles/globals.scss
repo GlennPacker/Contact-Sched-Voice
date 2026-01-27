@@ -1,6 +1,3 @@
-
-
- 
 html, body, #__next {
   height: 100%;
 }
@@ -22,7 +19,11 @@ body > div.app-frame, #__next > div.app-frame {
 .app-container {
 	width: 80vw;
 }
- 
 
- 
- 
+.clickable {
+  cursor: pointer;
+}
+
+
+
+

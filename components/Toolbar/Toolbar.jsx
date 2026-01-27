@@ -33,10 +33,10 @@ export default function Toolbar() {
                 <Nav.Link>List Contacts</Nav.Link>
               </Link>
               <Link
-                href="/contacts/create"
+                href="/"
                 passHref
                 legacyBehavior>
-                <Nav.Link>Create Contact</Nav.Link>
+                <Nav.Link className={styles.mobileOnly}>Next Working Day</Nav.Link>
               </Link>
             </Nav>
           </Navbar.Collapse>
