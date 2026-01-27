@@ -1,0 +1,84 @@
+.contactName {
+  font-size: 1em;
+  color: #333;
+  margin-left: 0.5em;
+  font-weight: 500;
+}
+.gmapsButton {
+  display: inline-block;
+  margin-left: 0.5em;
+  padding: 0.2em 0.7em;
+  background: #4285f4;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.95em;
+  text-decoration: none;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.gmapsButton:hover {
+  background: #3367d6;
+}
+
+.addressRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  flex-wrap: wrap;
+}
+
+.multilineNote {
+  white-space: pre-line;
+  display: inline-block;
+  margin-top: 0.2em;
+}
+.visitsList {
+  width: 100%;
+  padding: 0;
+}
+
+.visitListItem {
+  list-style: none;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.visitDetails {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.visitDetailsCard {
+  margin-bottom: 16px;
+  padding: 8px;
+  background: #fff;
+  border-radius: 6px;
+  box-shadow: 0 1px 2px #eee;
+}
+
+.mobileHomeContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #f7f7fa;
+  min-height: 100vh;
+  padding: 1rem 0.5rem 2rem 0.5rem;
+}
+
+.error {
+  color: #c00;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.mobileHomeContainer h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.mobileHomeContainer p {
+  font-size: 1.2rem;
+  color: #555;
+}
