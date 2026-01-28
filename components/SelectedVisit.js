@@ -7,7 +7,7 @@ const SelectedVisit = ({ visit }) => (
     <div className={styles.addressRow}>
       <b>Contact:</b>{' '}
       <Link
-        href={`/contacts/${visit.addresses.contacts.id}`}
+        href={`/contacts/${visit.addresses.contacts.id}/edit`}
         className={styles.contactName}
       >
         {visit.addresses.contacts.name}
