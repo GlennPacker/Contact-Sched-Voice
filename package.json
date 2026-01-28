@@ -7,10 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prepare": "husky install",
     "lint": "npm run lint:scss && node scripts/run-eslint.js",
     "lint:scss": "node ./tools/no-scss-comments.js",
-    "lint:fix": "node scripts/run-eslint.js --fix",
+    "lint:fix": "node ./scripts/run-eslint.js --fix",
     "test": "jest --coverage --runInBand"
   },
   "dependencies": {
@@ -41,21 +40,5 @@
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^30.2.0",
     "next-router-mock": "^1.0.5"
-  },
-  "lint-staged": {
-    "*.{js,jsx}": [
-      "npm run lint:fix",
-      "git add"
-    ],
-    "*.{scss,css}": [
-      "npm run lint:scss",
-      "git add"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npx --no-install lint-staged"
-    }
-  },
-  "huskyDep": "0"
+  }
 }
