@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, act } from '@testing-library/react';
+import { useForm } from 'react-hook-form';
 import Visit from './Visit.jsx';
 
 describe('Visit component', () => {
@@ -27,7 +28,14 @@ describe('Visit component', () => {
     'calendar-error': 'cerr',
   };
 
-  it('renders collapsed summary and toggles collapse on click', () => {
+  function VisitWithForm(props) {
+    const { control, register } = useForm({
+      defaultValues: { addresses: [{ visits: [{}] }] },
+    });
+    return <Visit {...props} control={control} register={register} />;
+  }
+
+  it('renders collapsed summary and toggles collapse on click', async () => {
     const toggleCollapse = jest.fn();
     const remove = jest.fn();
     const props = {
@@ -47,14 +55,18 @@ describe('Visit component', () => {
       styles: baseStyles,
     };
 
-    const { getByText } = render(<Visit {...props} />);
+    let utils;
+    await act(async () => {
+      utils = render(<VisitWithForm {...props} />);
+    });
+    const { getByText } = utils;
     const button = getByText('abc').closest('[role="button"]');
     fireEvent.click(button);
     expect(toggleCollapse).toHaveBeenCalledWith(0);
     expect(getByText('abc')).toBeTruthy();
   });
 
-  it('renders expanded view, remove and calendar error behavior', () => {
+  it('renders expanded view, remove and calendar error behavior', async () => {
     const remove = jest.fn();
     const setCalendarError = jest.fn();
     const props = {
@@ -74,7 +86,11 @@ describe('Visit component', () => {
       styles: baseStyles,
     };
 
-    const { getByLabelText, getByText } = render(<Visit {...props} />);
+    let utils2;
+    await act(async () => {
+      utils2 = render(<VisitWithForm {...props} />);
+    });
+    const { getByLabelText, getByText } = utils2;
     const removeBtn = getByLabelText('Remove visit 2');
     fireEvent.click(removeBtn);
     expect(remove).toHaveBeenCalledWith(1);

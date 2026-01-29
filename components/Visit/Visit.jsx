@@ -1,6 +1,10 @@
+
 import { Button, Form } from 'react-bootstrap';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { VisitTime } from '../../lib/referenceDataService';
+import { getVisitTypes } from '../../lib/visitTypesApi';
+import { Controller } from 'react-hook-form';
+
 
 const Visit = forwardRef(function Visit({
   field,
@@ -11,6 +15,7 @@ const Visit = forwardRef(function Visit({
   toggleCollapse,
   remove,
   register,
+  control,
   createCalendarInvite,
   calendarError = {},
   setCalendarError,
@@ -20,6 +25,27 @@ const Visit = forwardRef(function Visit({
 }, ref) {
   const calendarUrl = watched.visitDate && watched.time ? (createCalendarInvite?.(watched) || '') : '';
   const showCalendarError = calendarError && calendarError[idx];
+
+  // Visit Types dropdown state
+  const [visitTypes, setVisitTypes] = useState([]);
+  const [loadingVisitTypes, setLoadingVisitTypes] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    async function loadTypes() {
+      setLoadingVisitTypes(true);
+      try {
+        const types = await getVisitTypes();
+        setVisitTypes(types);
+      } catch (e) {
+        setError("Failed to load visit types");
+      } finally {
+        setLoadingVisitTypes(false);
+      }
+    }
+    loadTypes();
+    return () => { mounted = false; };
+  }, []);
 
   if (collapsed) {
     return (
@@ -68,6 +94,30 @@ const Visit = forwardRef(function Visit({
       key={field.id}
       ref={ref}>
       <div className={styles['visit-fields-col']}>
+        {error && <div style={{ color: 'red', marginTop: 8 }}>{error}</div>}
+        <Form.Group className={styles['visit-field-row']}>
+          <Form.Label className={styles['visit-label']}>Tooling</Form.Label>
+          <Controller
+            control={control}
+            name={`addresses.${nestIndex}.visits.${idx}.visitTypeId`}
+            render={({ field: { value, onChange } }) => (
+              <Form.Select
+                className={styles['visit-type']}
+                disabled={loadingVisitTypes}
+                value={value == null ? '__none__' : String(value)}
+                onChange={e => {
+                  const v = e.target.value;
+                  onChange(v === '__none__' ? null : Number(v));
+                }}
+              >
+                <option value="__none__">Select type</option>
+                {visitTypes.map(vt => (
+                  <option key={vt.id} value={String(vt.id)}>{vt.name}</option>
+                ))}
+              </Form.Select>
+            )}
+          />
+        </Form.Group>
         <Form.Group className={styles['visit-field-row']}>
           <Form.Label
             className={`${styles['visit-label']} ${styles['visit-cursor-pointer']}`}

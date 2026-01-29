@@ -3,9 +3,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { addMonths, startOfMonth } from 'date-fns';
 import CalendarToast from '../CalendarToast/CalendarToast';
-import { VisitTime } from '../../lib/referenceDataService';
 import VisitsToolbar from '../VisitsToolbar/VisitsToolbar';
 import calStyles from '../../pages/visits/calendar/Calendar.module.scss';
 import { enGB } from 'date-fns/locale';
@@ -13,7 +11,6 @@ import format from 'date-fns/format';
 import getDay from 'date-fns/getDay';
 import parse from 'date-fns/parse';
 import startOfWeek from 'date-fns/startOfWeek';
-import { getCalendarEventsSSR } from '../../lib/calendarServerService';
 import React, { useState } from 'react';
 
 const locales = { 'en-GB': enGB };
@@ -31,7 +28,7 @@ export default function CalendarView({ events: initialEvents }) {
   const [pendingMove, setPendingMove] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSelectEvent = ({ resource }) => setToastData(resource);
+  const selectCalendarAppointment = ({ resource }) => setToastData(resource);
 
   const handleEventDrop = ({ event, start, end, allDay }) => {
     setPendingMove({ event, start, end, allDay });
@@ -77,7 +74,7 @@ export default function CalendarView({ events: initialEvents }) {
           events={events.map(e => ({ ...e, start: new Date(e.start), end: new Date(e.end) }))}
           startAccessor="start"
           endAccessor="end"
-          onSelectEvent={handleSelectEvent}
+          onSelectEvent={selectCalendarAppointment}
           onEventDrop={handleEventDrop}
           popup
           eventPropGetter={event => {

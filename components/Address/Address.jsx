@@ -4,7 +4,7 @@ import styles from './Address.module.scss';
 import { useWatch } from 'react-hook-form';
 
 export default function Address({ field, idx, register, errors, removeAddress, totalAddresses, control }) {
-  const watchedAddresses = useWatch({ control, name: 'addresses' });
+  const watchedAddresses = useWatch({ control, name: 'addresses', defaultValue: [] });
   const address = watchedAddresses?.[idx]?.address || '';
 
   return (

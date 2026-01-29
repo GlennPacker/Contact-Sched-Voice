@@ -1,11 +1,34 @@
+
 import CalendarToastToolbar from '../CalendarToastToolbar/CalendarToastToolbar';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './CalendarToast.module.scss';
+import { getVisitTypes } from '../../lib/visitTypesApi';
 
 export default function CalendarToast({ onClose, data }) {
   if (!data) return null;
 
   const { contact, address, visit, futureVisits } = data;
+
+  // Tooling label logic
+  const [visitTypeName, setVisitTypeName] = useState();
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    async function fetchType() {
+      if (visit?.visitTypeId) {
+        try {
+          const types = await getVisitTypes();
+          const found = types.find(t => t.id === visit.visitTypeId);
+          setVisitTypeName(found?.name || '');
+        } catch {
+          setError('Failed to fetch visit types');
+        }
+      } else {
+        setVisitTypeName('');
+      }
+    }
+    fetchType();
+  }, [visit?.visitTypeId]);
 
   return (
     <div
@@ -39,6 +62,7 @@ export default function CalendarToast({ onClose, data }) {
         <div className={styles.bodyTable}>
           <div className={styles.leftCol}>
             <div className={styles.row}><strong>Date:</strong> {visit.visitDate}</div>
+            <div className={styles.row}><strong>Tooling:</strong> {visitTypeName}</div>
             <div className={styles.row}><strong>Time:</strong> {visit.time}</div>
             <div className={styles.row}><strong>Recurrence:</strong> {visit.recurrence}</div>
             <div className={styles.row}><strong>Notes:</strong></div>

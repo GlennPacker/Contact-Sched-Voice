@@ -20,7 +20,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	const addLocal = React.useCallback(item => setLocalFields(prev => (Array.isArray(prev) ? [item, ...prev] : [item])), [setLocalFields]);
 	const removeLocal = React.useCallback(idx => setLocalFields(prev => prev.filter((_, i) => i !== idx)), [setLocalFields]);
 	if (control && typeof control._getFieldArray === 'function') {
-		const res = useFieldArray({ control, name: `addresses.${nestIndex}.visits` });
+		const res = useFieldArray({ control, name: `addresses.${nestIndex}.visits`, keyName: 'fieldKey' });
 		fields = res.fields;
 		add = res.append;
 		remove = res.remove;
@@ -43,7 +43,6 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	useEffect(() => {
 		if (!fields.length) {
 			add({ visitDate: null, notes: '' });
-
 			return;
 		}
 		setCollapsed(prev => {
@@ -70,7 +69,7 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 	const lastVisitRef = useRef(null);
 	const addVisit = () => {
 		const newVisit = makeNewVisitFromMostRecent(fields);
-		add(newVisit); 
+		add(newVisit);
 		setCollapsed(prev => {
 			const arr = prev || [];
 			return arr.map(() => true).concat(false);
@@ -102,11 +101,12 @@ export default function Visits({ nestIndex, control, register, errors, createCal
 					const isLast = i === orderedVisits.length - 1;
 					return (
 						<Visit
-							key={field.id || idx}
+							key={field.fieldKey || idx}
 							field={field}
 							idx={idx}
 							nestIndex={nestIndex}
-							watched={watchedVisits?.[idx] || {}}
+							control={control}
+							watched={watchedVisits?.[idx] || field || {}}
 							collapsed={collapsed[idx]}
 							toggleCollapse={toggleCollapse}
 							remove={remove}

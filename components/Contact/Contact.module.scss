@@ -13,11 +13,16 @@
 	margin-bottom: 0;
 	margin-left: 0;
 	text-align: left;
-	padding-top: 1rem;
 	padding-bottom: 1rem;
 }
 
-.form-grid {
+.headerGrid {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 1rem 1.5rem;
+}
+
+.formGrid {
 	display: grid;
 	grid-template-columns: 200px 1fr;
 	gap: 1rem 1.5rem;
@@ -27,16 +32,16 @@
 	grid-column: 2;
 }
 
-.form-grid__col1 {
+.formGridCol1 {
 	grid-column: 1;
 	grid-row: 1;
 	align-self: start;
 	display: flex;
 	flex-direction: column;
-	gap: 0.75rem;
+	gap: 0.5rem;
 }
 
-.form-grid__col2 {
+.formGridCol2 {
 	grid-column: 2;
 	grid-row: 1;
 	align-self: start;
@@ -80,10 +85,6 @@
 	background-color: transparent !important;
 	box-shadow: none !important;
 	cursor: default !important;
-}
-
-.form-grid__actions {
-	grid-column: 1 / -1;
 }
 
 @media (max-width: 767px) {

@@ -28,10 +28,10 @@ export default function Addresses({ addressFields, register, removeAddress, appe
       <div className="d-flex align-items-center gap-3">
         <span className={styles['section-title']}>Addresses *</span>
         <Button
-variant="secondary"
-size="sm"
-type="button"
-onClick={() => addAddress({ address: '' })}>
+          variant="secondary"
+          size="sm"
+          type="button"
+          onClick={() => addAddress({ address: '' })}>
           Add Address
         </Button>
       </div>
@@ -71,18 +71,18 @@ onClick={() => addAddress({ address: '' })}>
 
       {addressFields.length > 1 && (
         <Tabs
-activeKey={selectedIndex}
-onSelect={k => setSelectedIndex(+k)}
-className="mt-3">
+          activeKey={selectedIndex}
+          onSelect={k => setSelectedIndex(+k)}
+          className="mt-3">
           {addressFields.map((field, idx) => {
             const addressText = (watchedAddresses?.[idx]?.address || '').trim();
             const title = addressText ? (addressText.length > 25 ? `${addressText.slice(0, 25)}…` : addressText) : `Address ${idx + 1}`;
 
             return (
               <Tab
-eventKey={idx}
-title={title}
-key={field.id}>
+                eventKey={idx}
+                title={title}
+                key={field.id}>
                 <div className="mt-3">
                   <Visits
                     nestIndex={idx}

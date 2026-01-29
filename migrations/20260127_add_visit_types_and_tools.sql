@@ -15,4 +15,4 @@ CREATE TABLE IF NOT EXISTS tools (
 
 
 -- Add visittypeids to visits table (CSV-style, no FK)
-ALTER TABLE visits ADD COLUMN visittypeids text;
+ALTER TABLE visits ADD COLUMN visitTypeId numeric;

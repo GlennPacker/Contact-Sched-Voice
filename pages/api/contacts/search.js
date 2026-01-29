@@ -3,8 +3,8 @@ import { listContacts } from '../../../lib/contactService';
 export default async function handler(req, res) {
   try {
     const { name = '', address = '' } = req.query;
-    const nameTerm = String(name || '').trim().toLowerCase();
-    const addressTerm = String(address || '').trim().toLowerCase();
+    const nameTerm = (name || '').trim().toLowerCase();
+    const addressTerm = (address || '').trim().toLowerCase();
 
     const data = await listContacts({ limit: 1000 });
     const list = Array.isArray(data) ? data : [];
