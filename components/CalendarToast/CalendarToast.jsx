@@ -9,7 +9,6 @@ export default function CalendarToast({ onClose, data }) {
 
   const { contact, address, visit, futureVisits } = data;
 
-  // Tooling label logic
   const [visitTypeName, setVisitTypeName] = useState();
   const [error, setError] = useState();
 

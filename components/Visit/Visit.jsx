@@ -26,7 +26,6 @@ const Visit = forwardRef(function Visit({
   const calendarUrl = watched.visitDate && watched.time ? (createCalendarInvite?.(watched) || '') : '';
   const showCalendarError = calendarError && calendarError[idx];
 
-  // Visit Types dropdown state
   const [visitTypes, setVisitTypes] = useState([]);
   const [loadingVisitTypes, setLoadingVisitTypes] = useState(false);
   const [error, setError] = useState(null);

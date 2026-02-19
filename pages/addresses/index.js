@@ -10,7 +10,6 @@ export default function AddressListPage() {
   );
 }
 
-// Disable static generation for this page since it requires client-side data
 export async function getServerSideProps() {
   return { props: {} };
 }
