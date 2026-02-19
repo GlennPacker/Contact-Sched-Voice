@@ -30,6 +30,13 @@ export default function CalendarView({ events: initialEvents }) {
 
   const selectCalendarAppointment = ({ resource }) => setToastData(resource);
 
+  const handleSelectSlot = ({ start }) => {
+    const pad = n => n.toString().padStart(2, '0');
+    const d = start;
+    const dateStr = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    window.location.href = `/contacts/create?visitDate=${dateStr}`;
+  };
+
   const handleEventDrop = ({ event, start, end, allDay }) => {
     setPendingMove({ event, start, end, allDay });
   };
@@ -79,6 +86,8 @@ export default function CalendarView({ events: initialEvents }) {
           startAccessor="start"
           endAccessor="end"
           onSelectEvent={selectCalendarAppointment}
+          onSelectSlot={handleSelectSlot}
+          selectable
           onEventDrop={handleEventDrop}
           popup
           eventPropGetter={event => {
