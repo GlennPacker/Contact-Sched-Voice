@@ -88,7 +88,7 @@ const Visit = forwardRef(function Visit({
 
   return (
     <div
-      className={`mb-3 ${styles['visit-fields']}`}
+      className={`mb-2 ${styles['visit-fields']}`}
       key={field.id}
       ref={ref}>
       <div className={styles['visit-fields-col']}>

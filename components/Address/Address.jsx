@@ -14,17 +14,28 @@ export default function Address({ field, idx, register, errors, removeAddress, t
 
       <div className={`${styles['address-row']} mb-2`}>
         <div className={styles['address-cell-main']}>
-          <Form.Control
-            {...register(`addresses.${idx}.address`, { required: 'Address is required' })}
-            placeholder={`Address #${idx + 1}`}
-            className={styles['address-input-field']}
-            isInvalid={!!errors?.addresses?.[idx]?.address}
-          />
-          {errors?.addresses?.[idx]?.address && (
-            <Form.Control.Feedback type="invalid">
-              {errors.addresses[idx].address.message}
-            </Form.Control.Feedback>
-          )}
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'start' }}>
+            <div style={{ flex: 1 }}>
+              <Form.Control
+                {...register(`addresses.${idx}.address`, { required: 'Address is required' })}
+                placeholder={`Address #${idx + 1}`}
+                className={styles['address-input-field']}
+                isInvalid={!!errors?.addresses?.[idx]?.address}
+              />
+              {errors?.addresses?.[idx]?.address && (
+                <Form.Control.Feedback type="invalid">
+                  {errors.addresses[idx].address.message}
+                </Form.Control.Feedback>
+              )}
+            </div>
+            <Form.Control
+              {...register(`addresses.${idx}.note`)}
+              placeholder="Note"
+              className={styles['address-input-field']}
+              style={{ width: '200px', fontSize: '0.875rem' }}
+              maxLength={50}
+            />
+          </div>
         </div>
         <div className={styles['address-cell-actions']}>
           <Button
