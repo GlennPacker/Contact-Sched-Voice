@@ -71,7 +71,11 @@ export default function CalendarView({ events: initialEvents }) {
       <div className={calStyles.calendarWrapper}>
         <DnDCalendar
           localizer={localizer}
-          events={events}
+          events={events.map(e => ({
+            ...e,
+            start: new Date(e.start),
+            end: new Date(e.end)
+          }))}
           startAccessor="start"
           endAccessor="end"
           onSelectEvent={selectCalendarAppointment}
