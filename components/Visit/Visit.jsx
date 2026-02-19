@@ -44,7 +44,6 @@ const Visit = forwardRef(function Visit({
       }
     }
     loadTypes();
-    return () => { mounted = false; };
   }, []);
 
   if (collapsed) {
