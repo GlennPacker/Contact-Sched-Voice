@@ -62,6 +62,12 @@ export default function Contact({ initialValues = null, submit, title, priceRevi
     setSuccess(null);
     setWarnings([]);
 
+    const hasContactType = Object.values(formData.contactTypes || {}).some(ct => ct.selected);
+    if (!hasContactType) {
+      setError('At least one contact type is required');
+      return;
+    }
+
     try {
       const payload = buildPayloadFromForm(formData);
       const result = await submit(payload);
@@ -142,10 +148,24 @@ export default function Contact({ initialValues = null, submit, title, priceRevi
               controlId="contactTypes">
               <Form.Label className={styles['section-title']}>Contact types *</Form.Label>
               {CONTACT_TYPE_OPTIONS.map(opt => {
-                const isEmail = opt.id === 'email';
-                const isWhatsapp = opt.id === 'whatsapp';
-                const isPhone = opt.id === 'phone';
                 const isSelected = !!watchedTypes[opt.id]?.selected;
+                const requiresMetadata = ['email', 'whatsapp', 'phone', 'facebookHandyman', 'facebookGlenn'].includes(opt.id);
+                const placeholders = {
+                  email: 'name@example.com',
+                  whatsapp: 'WhatsApp number or handle',
+                  phone: 'Phone number',
+                  facebookHandyman: 'Additional information',
+                  facebookGlenn: 'Additional information',
+                };
+                const inputTypes = {
+                  email: 'email',
+                  phone: 'tel',
+                };
+                const validations = {
+                  email: {
+                    pattern: { value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/, message: 'Invalid email address' },
+                  },
+                };
 
                 return (
                   <div
@@ -156,46 +176,13 @@ export default function Contact({ initialValues = null, submit, title, priceRevi
                       id={`ct-${opt.id}`}
                       label={opt.label}
                       {...register(`contactTypes.${opt.id}.selected`)} />
-                    {isSelected && isEmail && (
+                    {isSelected && requiresMetadata && (
                       <>
                         <Form.Control
                           className="mt-2"
-                          type="email"
-                          placeholder="name@example.com"
-                          {...register(`contactTypes.${opt.id}.metadata`, {
-                            required: 'Email is required',
-                            pattern: { value: /^[^@\s]+@[^@\s]+\.[^@\s]+$/, message: 'Invalid email address' },
-                          })}
-                        />
-                        {errors?.contactTypes?.[opt.id]?.metadata && (
-                          <Form.Text className="text-danger">{errors.contactTypes[opt.id].metadata.message}</Form.Text>
-                        )}
-                      </>
-                    )}
-                    {isSelected && isWhatsapp && (
-                      <>
-                        <Form.Control
-                          className="mt-2"
-                          type="text"
-                          placeholder="WhatsApp number or handle"
-                          {...register(`contactTypes.${opt.id}.metadata`, {
-                            required: 'WhatsApp is required',
-                          })}
-                        />
-                        {errors?.contactTypes?.[opt.id]?.metadata && (
-                          <Form.Text className="text-danger">{errors.contactTypes[opt.id].metadata.message}</Form.Text>
-                        )}
-                      </>
-                    )}
-                    {isSelected && isPhone && (
-                      <>
-                        <Form.Control
-                          className="mt-2"
-                          type="tel"
-                          placeholder="Phone number"
-                          {...register(`contactTypes.${opt.id}.metadata`, {
-                            required: 'Phone number is required',
-                          })}
+                          type={inputTypes[opt.id] || 'text'}
+                          placeholder={placeholders[opt.id]}
+                          {...register(`contactTypes.${opt.id}.metadata`, validations[opt.id])}
                         />
                         {errors?.contactTypes?.[opt.id]?.metadata && (
                           <Form.Text className="text-danger">{errors.contactTypes[opt.id].metadata.message}</Form.Text>
